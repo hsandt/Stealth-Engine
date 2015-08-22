@@ -8,8 +8,8 @@
 
 #include "enum/Button.h"
 #include "enum/ButtonState.h"
-#include "service/Locator.h"
-#include "service/InputManager.h"
+#include "Locator.h"
+#include "InputManager.h"
 
 #include "HumanController.h"
 

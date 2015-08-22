@@ -11,7 +11,7 @@
 #include <memory>
 #include <map>
 
-#include "entity/GameObject.h"
+#include "GameObject.h"
 
 class Scene
 {
