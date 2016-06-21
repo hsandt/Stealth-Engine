@@ -25,7 +25,7 @@ public:
 
     virtual void update(double dt) override;
 
-    virtual void render(SDL_Renderer* renderer) override;
+    virtual void render(Renderer *renderer) override;
 
 protected:
     std::unique_ptr<Controller> controller = nullptr;

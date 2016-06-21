@@ -37,19 +37,19 @@ void HumanController::setIntention() {
     double moveIntentionX = 0;
     double moveIntentionY = 0;
 
-    if (inputManager->isPressedOrDown(Button::LEFT)) {
-        moveIntentionX = -1;
-    }
-    else if (inputManager->isPressedOrDown(Button::RIGHT)) {
-        moveIntentionX = 1;
-    }
-
-    if (inputManager->isPressedOrDown(Button::UP)) {
-        moveIntentionY = -1;
-    }
-    else if (inputManager->isPressedOrDown(Button::DOWN)) {
-        moveIntentionY = 1;
-    }
+//    if (inputManager->isPressedOrDown(Button::LEFT)) {
+//        moveIntentionX = -1;
+//    }
+//    else if (inputManager->isPressedOrDown(Button::RIGHT)) {
+//        moveIntentionX = 1;
+//    }
+//
+//    if (inputManager->isPressedOrDown(Button::UP)) {
+//        moveIntentionY = -1;
+//    }
+//    else if (inputManager->isPressedOrDown(Button::DOWN)) {
+//        moveIntentionY = 1;
+//    }
 
     intention.move = {moveIntentionX, moveIntentionY, 0};
 

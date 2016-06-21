@@ -9,14 +9,14 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
-#include <boost/format.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/chrono/floor.hpp>
+//#include <boost/format.hpp>
+//#include <boost/log/trivial.hpp>
+//#include <boost/chrono/floor.hpp>
 
 #include "Scene.h"
 
 using namespace std;
-using namespace boost::log;
+//using namespace boost::log;
 
 Scene::Scene()
 {

@@ -9,7 +9,8 @@
 #pragma once
 
 #include <string>
-#include <SDL2/SDL_render.h>
+
+#include <renderer/Renderer.h>
 
 #include "geometry/Point3.h"
 
@@ -33,7 +34,7 @@ public:
     virtual void update(double dt) {}
 
     // render
-    virtual void render(SDL_Renderer* renderer) {}
+    virtual void render(Renderer *renderer) {}
 
 
     std::string getName() const {

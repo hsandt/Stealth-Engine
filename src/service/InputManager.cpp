@@ -7,18 +7,19 @@
 //
 
 #include <utility>
-#include <SDL2/SDL.h>
+#include "GLFW/glfw3.h"
 
+#include "enum/KeyDynamicState.h"
 #include "enum/Button.h"
 #include "InputManager.h"
 
 using namespace std;
 
-InputManager::InputManager()
+InputManager::InputManager(GLFWwindow *window) : window(window)
 {
-    for (Button button : allButtons) {
-        buttonStateMap.emplace(button, make_pair(ButtonState::UP, ButtonEvent::NONE));
-    }
+//    for (Button button : allButtons) {
+//        buttonStateMap.emplace(button, make_pair(ButtonState::UP, ButtonEvent::NONE));
+//    }
 
 }
 
@@ -26,86 +27,62 @@ InputManager::~InputManager()
 {
 }
 
+
+
 void InputManager::processInputs() {
 
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
-            switch (event.key.keysym.sym) {
-                case SDLK_UP:
-                    processButton(Button::UP, event.type);
-                    break;
-                case SDLK_DOWN:
-                    processButton(Button::DOWN, event.type);
-                    break;
-                case SDLK_LEFT:
-                    processButton(Button::LEFT, event.type);
-                    break;
-                case SDLK_RIGHT:
-                    processButton(Button::RIGHT, event.type);
-                    break;
-                case SDLK_ESCAPE:
-                    processButton(Button::QUIT, event.type);
-            }
-        } else if (event.type == SDL_QUIT) {
-            // trick to simulate ESCAPE key press; FIXME: prefer high-level "actions"
-            processButton(Button::QUIT, SDL_KEYDOWN);
-                break;
-        }
-    }
+    // GLFW only provides a function to get the static state of a key (pressed or released)
+    // In order to track the dynamic state of a key (just pressed, down, just release, up), we need to monitor
+    // the evolution of its static state
 
-    // if a button has not been processed during this frame, and it had just been pressed
-    // or released in the last frame, update the state accordingly
-    for (auto &buttonPair : buttonStateMap) {
-        if (buttonPair.second.second == ButtonEvent::NONE) {
-            if (buttonPair.second.first == ButtonState::PRESSED || buttonPair.second.first == ButtonState::RELEASED_PRESSED) {
-                buttonPair.second.first = ButtonState::DOWN;
-            } else if (buttonPair.second.first == ButtonState::RELEASED || buttonPair.second.first == ButtonState::PRESSED_RELEASED) {
-                buttonPair.second.first = ButtonState::UP;
-            }
-            // else the button was UP or DOWN and there were no further input, so don't do anything
-        } else {
-            // the button has been flagged pressed or released, clear it before next frame
-            buttonPair.second.second = ButtonEvent::NONE;
-        }
+    // array of keys for which we track the state
+    int keys[] = {GLFW_KEY_LEFT, GLFW_KEY_RIGHT, GLFW_KEY_DOWN, GLFW_KEY_UP, GLFW_KEY_ESCAPE};
+
+	// update dynamic state of all keys, including switching from pressed to down and released to up
+    for (int key : keys) {
+        int staticState = glfwGetKey(window, key);
+		processKey(key, staticState);
     }
 }
 
-ButtonState InputManager::getButtonState(Button const button) const {
-    return buttonStateMap.at(button).first;
+bool InputManager::isKeyDown(int key) const {
+	KeyDynamicState dynamicState = keyDynamicStateMap.at(key);
+	return dynamicState == KeyDynamicState::PRESSED || dynamicState == KeyDynamicState::DOWN;
 }
+
+//ButtonState InputManager::getButtonState(Button const button) const {
+//    return buttonStateMap.at(button).first;
+//}
 
 // TODO: add is pressed or released_pressed, etc. methods
 
-bool InputManager::isPressedOrDown(Button const button) const {
-    ButtonState buttonPair = buttonStateMap.at(button).first;
-    return buttonPair != ButtonState::UP && buttonPair != ButtonState::RELEASED;
-}
+//bool InputManager::isPressedOrDown(Button const button) const {
+//    ButtonState buttonPair = buttonStateMap.at(button).first;
+//    return buttonPair != ButtonState::UP && buttonPair != ButtonState::RELEASED;
+//}
 
-void InputManager::processButton(Button const button, Uint32 const eventType) {
+void InputManager::processKey(int key, int newState) {
     // TODO: replace button pair with a clearer struct, OR use 2 distinct maps
-    pair<ButtonState, ButtonEvent> &buttonPair = buttonStateMap.at(button);
+	// Previous key state
+	KeyDynamicState &keyState = keyDynamicStateMap.at(key);
 
     // in order to get references instead of getting the element from the key twice
-    switch (eventType) {
-    case SDL_KEYDOWN:
-        if (buttonPair.second == ButtonEvent::RELEASE) {
-            // the button was already released on this frame
-            buttonPair.first = ButtonState::RELEASED_PRESSED;
-        } else {
-            // first event processed for this button (or we repeat press, but unlikely)
-            // implicit pair construction
-            buttonPair = {ButtonState::PRESSED, ButtonEvent::PRESS};
-        }
-        break;
-    case SDL_KEYUP:
-        if (buttonPair.second == ButtonEvent::PRESS) {
-            // the button was already pressed on this frame
-            buttonPair.first = ButtonState::PRESSED_RELEASED;
-        } else {
-            // first event processed for this button (or we repeat release, but unlikely)
-            buttonPair = {ButtonState::RELEASED, ButtonEvent::RELEASE};
-        }
-        break;
-    }
+    if (keyState == KeyDynamicState::RELEASED)
+	{
+		if (newState == GLFW_RELEASE) keyState = KeyDynamicState::UP;
+		else keyState = KeyDynamicState::PRESSED;
+	}
+	else if (keyState == KeyDynamicState::UP)
+	{
+		if (newState == GLFW_PRESS) keyState = KeyDynamicState::PRESSED;
+	}
+	else if (keyState == KeyDynamicState::PRESSED)
+	{
+		if (newState == GLFW_PRESS) keyState = KeyDynamicState::DOWN;
+		else keyState = KeyDynamicState::RELEASED;
+	}
+	else
+	{
+		if (newState == GLFW_RELEASE) keyState = KeyDynamicState::RELEASED;
+	}
 }
