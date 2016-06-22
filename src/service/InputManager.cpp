@@ -9,7 +9,7 @@
 #include <utility>
 #include "GLFW/glfw3.h"
 
-#include "enum/KeyDynamicState.h"
+#include "../../include/enum/KeyDynamicState.h"
 #include "enum/Button.h"
 #include "InputManager.h"
 

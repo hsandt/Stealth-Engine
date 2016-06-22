@@ -10,7 +10,7 @@
 
 #include <string>
 
-#include <renderer/Renderer.h>
+#include "Renderer.h"
 
 #include "geometry/Point3.h"
 

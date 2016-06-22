@@ -5,8 +5,11 @@
 
 #include <iostream>
 
+// Engine
+#include "InputManager.h"
+
+// Game
 #include "application/GameApplication.h"
-#include "service/InputManager.h"
 
 #include "Locator.h"
 
