@@ -8,10 +8,6 @@
 
 class Renderer {
 
-#if SDL2
-
-#else
-#endif
 
 };
 

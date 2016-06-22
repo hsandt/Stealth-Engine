@@ -9,7 +9,10 @@
 #pragma once
 
 #include <map>
+
+#include "GL/glew.h"
 #include "GLFW/glfw3.h"
+
 
 #include "enum/KeyDynamicState.h"
 #include "enum/Button.h"

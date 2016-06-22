@@ -12,8 +12,10 @@
 //#include <boost/format.hpp>
 //#include <boost/log/trivial.hpp>
 //#include <boost/chrono/floor.hpp>
-
 #include "Scene.h"
+
+#include "entity/Guard.h"
+#include "entity/Spy.h"
 
 using namespace std;
 //using namespace boost::log;
@@ -57,3 +59,10 @@ void Scene::removeGameObject(weak_ptr<GameObject> &weakGo) {
         }
     }
 }
+
+void Scene::init() {
+    // T* &&arg did not work well, so to ensure I don't keep a ref of the GO I use only unique_ptr
+	addGameObject(unique_ptr<GameObject> {new Guard("Guard", {0, 20, 0})});  // use rhs or move only
+	addGameObject(unique_ptr<GameObject> {new Spy("Spy", {50., 50., 0.})});
+}
+

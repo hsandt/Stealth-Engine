@@ -22,6 +22,7 @@ public:
     // getter
     std::map<int, std::shared_ptr<GameObject>> getGameObjects() const;
 
+    void init();
     void addGameObject(std::unique_ptr<GameObject> go);
     void addGameObject(GameObject &&go);
     void removeGameObject(std::weak_ptr<GameObject> &go);
