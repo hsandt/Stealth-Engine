@@ -21,6 +21,10 @@ InputManager::InputManager(GLFWwindow *window) : window(window)
 //        buttonStateMap.emplace(button, make_pair(ButtonState::UP, ButtonEvent::NONE));
 //    }
 
+	for (int key : allKeys) {
+		keyDynamicStateMap.emplace(key, KeyDynamicState::UP);
+	}
+
 }
 
 InputManager::~InputManager()
