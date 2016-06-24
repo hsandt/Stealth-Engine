@@ -2,14 +2,27 @@
 // Created by acro_ on 2016/06/21.
 //
 
-#ifndef STEALTH_CPP_RENDERER_H
-#define STEALTH_CPP_RENDERER_H
+#pragma once
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-class Renderer {
+#include <utils/Color.h>
 
+class Renderer
+{
+public:
+	Renderer(GLFWwindow *window) : window(window) { }
 
+	/// Clear screen buffer
+	void clear () const;
+
+	void render();
+
+	void drawSquare(float x, float y, float w, float h);
+
+private:
+	GLFWwindow *window = nullptr;
+	Color backgroundColor = {0, 0, 0.2, 1};  // dark blue
 };
 
-
-#endif //STEALTH_CPP_RENDERER_H

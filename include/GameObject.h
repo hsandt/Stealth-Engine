@@ -20,7 +20,7 @@ class GameObject
 public:
     static int last_id;
 
-    GameObject(const std::string &name, Point3d const &pos = {0, 0, 0});
+    GameObject(const std::string &name, Point3f const &pos = {0, 0, 0});
     virtual ~GameObject();
     GameObject(const GameObject &) = delete;
     GameObject &operator=(const GameObject &) & = delete;
@@ -42,17 +42,17 @@ public:
     }
 
 
-    Point3d getPosition() const {
+    Point3f getPosition() const {
         return position;
     }
 
-    void setPosition(const Point3d &pos) {
+    void setPosition(const Point3f &pos) {
         GameObject::position = pos;
     }
 
 protected:
     int id;
     std::string name;
-    Point3d position = {0, 0, 0};  // must initialize, else garbage
+    Point3f position = {0, 0, 0};  // must initialize, else garbage
 
 };
