@@ -34,8 +34,8 @@ void HumanController::setIntention() {
 
     // TODO: improve by giving priority to last direction pressed (snap)
     // set move intention based on directional keys pressed (origin at top-left)
-    double moveIntentionX = 0;
-    double moveIntentionY = 0;
+    float moveIntentionX = 0;
+    float moveIntentionY = 0;
 
     if (inputManager->isKeyDown(GLFW_KEY_LEFT)) {
         moveIntentionX = -1;
