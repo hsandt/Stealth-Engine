@@ -12,7 +12,7 @@
 
 #include "Renderer.h"
 
-#include "geometry/Point3.h"
+#include "geometry/Vec3.h"
 
 class GameObject
 {
