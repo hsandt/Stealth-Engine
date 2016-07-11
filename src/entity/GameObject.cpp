@@ -14,7 +14,7 @@
 
 int GameObject::last_id = 0;
 
-GameObject::GameObject(const std::string &name, Point3f const &pos) :
+GameObject::GameObject(const std::string &name, Vec3f const &pos) :
         id(++last_id), name(name), position(pos)
 {
     //id = ++last_id;

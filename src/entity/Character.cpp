@@ -13,7 +13,7 @@
 
 using namespace std;
 
-Character::Character(std::string const &name, Point3f const &pos) : GameObject(name, pos)
+Character::Character(std::string const &name, Vec3f const &pos) : GameObject(name, pos)
 {
 }
 

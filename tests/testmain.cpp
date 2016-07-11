@@ -6,5 +6,4 @@
 // This should be done only once with the whole test project, to avoid recompiling
 // the whole header of Catch when small changes occur (so this file must never change)
 
-
 #include "catch_with_main.hpp"
