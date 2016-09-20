@@ -17,7 +17,7 @@
 class Character : public Actor
 {
 public:
-    Character(const int id, std::string const &name);
+    Character(std::string const &name, Vec3f const &pos);
     virtual ~Character();
     Character(const Character &) = delete;
     Character &operator=(const Character &) & = delete;

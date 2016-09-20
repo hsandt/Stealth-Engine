@@ -6,6 +6,9 @@
 //  Copyright (c) 27 Heisei L Nguyen Huu. All rights reserved.
 //
 
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
+
 #include "Character.h"
 
 using namespace std;
@@ -36,16 +39,11 @@ void Character::update(double dt) {
 void Character::render(Renderer *renderer) {
      //cout << "rendering at " << go -> GetPosition().x() << endl;
         //BOOST_LOG_TRIVIAL(warning) << "test";
-#if SDL2
-    SDL_Rect r;
-    //int w = 640, h = 480;
 
-    r.w = 20;
-    r.h = 20;
-    r.x = getPosition().x();
-    r.y = getPosition().y();
+    float w = 20, h = 20;
 
-    SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0, 0xff);
-    SDL_RenderDrawRect(renderer, &r);
-#endif
+    float x = getPosition().x();
+    float y = getPosition().y();
+    renderer->drawSquare(x - w / 2, y - h / 2, w, h);
+
 }

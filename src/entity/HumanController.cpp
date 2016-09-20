@@ -25,7 +25,7 @@ HumanController::~HumanController() {
 
 void HumanController::setIntention() {
     //weak_ptr<InputManager> wim = Locator::weakGetInputManager();
-    shared_ptr<InputManager> inputManager = Locator::getInputManager();
+    InputManager *inputManager = Locator::getInputManager();
     //shared_ptr<InputManager> inputManager = wim.lock();
     if (!inputManager) {
         cout << "HumanController: couldd not get shared pointer to InputManager" << endl;
@@ -34,22 +34,22 @@ void HumanController::setIntention() {
 
     // TODO: improve by giving priority to last direction pressed (snap)
     // set move intention based on directional keys pressed (origin at top-left)
-    double moveIntentionX = 0;
-    double moveIntentionY = 0;
+    float moveIntentionX = 0;
+    float moveIntentionY = 0;
 
-//    if (inputManager->isPressedOrDown(Button::LEFT)) {
-//        moveIntentionX = -1;
-//    }
-//    else if (inputManager->isPressedOrDown(Button::RIGHT)) {
-//        moveIntentionX = 1;
-//    }
-//
-//    if (inputManager->isPressedOrDown(Button::UP)) {
-//        moveIntentionY = -1;
-//    }
-//    else if (inputManager->isPressedOrDown(Button::DOWN)) {
-//        moveIntentionY = 1;
-//    }
+    if (inputManager->isKeyDown(GLFW_KEY_LEFT)) {
+        moveIntentionX = -1;
+    }
+    else if (inputManager->isKeyDown(GLFW_KEY_RIGHT)) {
+        moveIntentionX = 1;
+    }
+
+    if (inputManager->isKeyDown(GLFW_KEY_DOWN)) {
+        moveIntentionY = -1;
+    }
+    else if (inputManager->isKeyDown(GLFW_KEY_UP)) {
+        moveIntentionY = 1;
+    }
 
     intention.move = {moveIntentionX, moveIntentionY, 0};
 

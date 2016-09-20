@@ -5,7 +5,6 @@
 #pragma once
 
 class GameApplication;
-class GameObjectFactory;
 class InputManager;
 
 class Locator {
@@ -14,13 +13,11 @@ public:
 
 	Locator() = delete;
 
-    static std::shared_ptr<GameApplication> getGameApplication();
-    static std::shared_ptr<InputManager> getInputManager();
-    static std::shared_ptr<GameObjectFactory> getGameObjectFactory();
+    static GameApplication* getGameApplication();
+    static InputManager* getInputManager();
 
 private:
-	static std::weak_ptr<GameApplication> gameApplication;
-    static std::weak_ptr<InputManager> inputManager;
-    static std::weak_ptr<GameObjectFactory> gameObjectFactory;
+	static GameApplication *gameApplication;
+    static InputManager *inputManager;
 
 };

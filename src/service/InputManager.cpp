@@ -7,9 +7,10 @@
 //
 
 #include <utility>
+#include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
-#include "enum/KeyDynamicState.h"
+#include "../../include/enum/KeyDynamicState.h"
 #include "enum/Button.h"
 #include "InputManager.h"
 
@@ -20,6 +21,10 @@ InputManager::InputManager(GLFWwindow *window) : window(window)
 //    for (Button button : allButtons) {
 //        buttonStateMap.emplace(button, make_pair(ButtonState::UP, ButtonEvent::NONE));
 //    }
+
+	for (int key : allKeys) {
+		keyDynamicStateMap.emplace(key, KeyDynamicState::UP);
+	}
 
 }
 

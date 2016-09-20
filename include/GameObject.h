@@ -13,7 +13,7 @@
 #include <vector>
 #include <renderer/Renderer.h>
 
-#include "geometry/Point3.h"
+#include "geometry/Vec3.h"
 
 class Component;
 
@@ -46,12 +46,12 @@ public:
     template<class T>
     T GetComponent();
 
-    // prefer transform component
-    Point3d getPosition() const {
+
+    Vec3f getPosition() const {
         return position;
     }
 
-    void setPosition(const Point3d &pos) {
+    void setPosition(const Vec3f &pos) {
         GameObject::position = pos;
     }
 
@@ -59,6 +59,6 @@ protected:
     const int id;
     std::string name;
     std::vector<std::shared_ptr<Component>> components;
-    Point3d position = {0, 0, 0};  // must initialize, else garbage
+    Vec3f position = {0, 0, 0};  // must initialize, else garbage
 
 };

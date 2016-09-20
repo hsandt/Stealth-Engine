@@ -9,13 +9,24 @@
 #pragma once
 
 #include <map>
+
+#include "GL/glew.h"
 #include "GLFW/glfw3.h"
+
 
 #include "enum/KeyDynamicState.h"
 #include "enum/Button.h"
 #include "enum/ButtonState.h"
 #include "enum/ButtonEvent.h"
 
+//constexpr std::array<int, static_cast<int>(Button::COUNTER)> allKeys = {
+constexpr int allKeys[] = {
+    GLFW_KEY_LEFT,
+    GLFW_KEY_RIGHT,
+    GLFW_KEY_DOWN,
+    GLFW_KEY_UP,
+    GLFW_KEY_ESCAPE
+};
 
 class InputManager
 {

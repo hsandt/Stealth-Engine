@@ -9,11 +9,10 @@
 #include <iostream>
 #include "Component.h"
 #include "RenderComponent.h"
-#include "geometry/Point3.h"
+#include "geometry/Vec3.h"
 
 #include "GameObject.h"
 
-using namespace std;
 
 GameObject::GameObject(const int id, const std::string &name) :
         id(id), name(name) // opt. since init in header
