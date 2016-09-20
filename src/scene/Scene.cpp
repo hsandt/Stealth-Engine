@@ -9,14 +9,14 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
-#include <boost/format.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/chrono/floor.hpp>
+//#include <boost/format.hpp>
+//#include <boost/log/trivial.hpp>
+//#include <boost/chrono/floor.hpp>
 
 #include "Scene.h"
 
 using namespace std;
-using namespace boost::log;
+//using namespace boost::log;
 
 Scene::Scene()
 {
@@ -28,15 +28,15 @@ Scene::~Scene()
 }
 
 std::map<int, std::shared_ptr<GameObject>> Scene::getGameObjects() const {
-	return gameObjects;
+    return gameObjects;
 }
 
 void Scene::addGameObject(unique_ptr<GameObject> go) {
-    
+
     shared_ptr<GameObject> shGo{move(go)};
-    
+
     //cout << "Adding object at " << sGo -> GetPosition().x() << " from unique_ptr &go" << endl;
-    
+
     auto emplacePair = gameObjects.emplace(shGo->ID(), shGo);
     if (emplacePair.second) {
         cout << "[SCENE] Added game object #" << shGo->ID() << " " << shGo->getName() << endl;
@@ -68,4 +68,3 @@ void Scene::removeGameObject(weak_ptr<GameObject> &weakGo) {
         }
     }
 }
-

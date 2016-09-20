@@ -11,7 +11,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <SDL2/SDL_render.h>
+#include <renderer/Renderer.h>
 
 #include "geometry/Point3.h"
 
@@ -32,6 +32,9 @@ public:
     // update
     virtual void update(double dt) {}
 
+    // render (will soon be replaced by Component render)
+    virtual void render(Renderer *renderer) {}
+
 
     std::string getName() const {
         return name;
@@ -43,8 +46,19 @@ public:
     template<class T>
     T GetComponent();
 
+    // prefer transform component
+    Point3d getPosition() const {
+        return position;
+    }
+
+    void setPosition(const Point3d &pos) {
+        GameObject::position = pos;
+    }
+
 protected:
     const int id;
     std::string name;
     std::vector<std::shared_ptr<Component>> components;
+    Point3d position = {0, 0, 0};  // must initialize, else garbage
+
 };

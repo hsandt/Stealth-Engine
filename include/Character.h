@@ -26,15 +26,16 @@ public:
 
     virtual void update(double dt) override;
 
-    virtual void render(SDL_Renderer* renderer) override;
+    virtual void render(Renderer *renderer) override;
 
+    /*
     Point3d getPosition() const {
         return position;
     }
 
     void setPosition(const Point3d &pos) {
         position = pos;
-    }
+    }*/
 
 protected:
     std::unique_ptr<Controller> controller = nullptr;

@@ -9,8 +9,9 @@
 #pragma once
 
 #include <map>
-#include <SDL2/SDL.h>
+#include "GLFW/glfw3.h"
 
+#include "enum/KeyDynamicState.h"
 #include "enum/Button.h"
 #include "enum/ButtonState.h"
 #include "enum/ButtonEvent.h"
@@ -19,24 +20,32 @@
 class InputManager
 {
 public:
-    InputManager();
+    InputManager(GLFWwindow *window);
     virtual ~InputManager();
     
     InputManager(const InputManager &) = delete;
     InputManager &operator=(const InputManager &) & = delete;
     InputManager(InputManager&&) = delete;
     InputManager &operator=(InputManager&&) & = delete;
-    
+
+    /// Update key dynamic states based on static state changes from last frame
     void processInputs();
-    ButtonState getButtonState(Button const button) const;
+    bool isKeyDown(int key) const;
+//    ButtonState getButtonState(Button const button) const;
     // return true if the button has been pressed or down during this frame
-    bool isPressedOrDown(const Button button) const;
+//    bool isPressedOrDown(const Button button) const;
 
 private:
-    // map of button -> (button state, first event handled on this frame) (only in processButton)
-    std::map<Button, std::pair<ButtonState, ButtonEvent>> buttonStateMap;
+    /// Application window
+    GLFWwindow *window;
+
+    // map of key -> button state (only in processKey)
+    std::map<int, KeyDynamicState> keyDynamicStateMap;
+
+    // map of button -> button state (only in processKey)
+//    std::map<Button, ButtonState> buttonStateMap;
 
     // update the button state in the map based on whether it is pressed or released
-    void processButton(Button const button, Uint32 const eventType);
+    void processKey(int key, int newState);
 };
 

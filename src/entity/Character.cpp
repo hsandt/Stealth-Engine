@@ -33,9 +33,10 @@ void Character::update(double dt) {
     }
 }
 
-void Character::render(SDL_Renderer *renderer) {
+void Character::render(Renderer *renderer) {
      //cout << "rendering at " << go -> GetPosition().x() << endl;
         //BOOST_LOG_TRIVIAL(warning) << "test";
+#if SDL2
     SDL_Rect r;
     //int w = 640, h = 480;
 
@@ -46,4 +47,5 @@ void Character::render(SDL_Renderer *renderer) {
 
     SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0, 0xff);
     SDL_RenderDrawRect(renderer, &r);
+#endif
 }
