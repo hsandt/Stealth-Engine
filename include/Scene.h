@@ -23,6 +23,7 @@ public:
     std::map<int, std::shared_ptr<GameObject>> getGameObjects() const;
 
     void addGameObject(std::unique_ptr<GameObject> go);
+    void addGameObject(std::shared_ptr<GameObject> go);
     void addGameObject(GameObject &&go);
     void removeGameObject(std::weak_ptr<GameObject> &go);
 

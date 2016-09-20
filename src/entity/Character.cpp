@@ -10,7 +10,8 @@
 
 using namespace std;
 
-Character::Character(std::string const &name, Point3d const &pos) : GameObject(name, pos)
+Character::Character(const int id, std::string const &name) :
+        Actor(id, name)
 {
 }
 

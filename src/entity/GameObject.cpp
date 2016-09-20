@@ -7,17 +7,16 @@
 //
 
 #include <iostream>
-
+#include "Component.h"
+#include "RenderComponent.h"
 #include "geometry/Point3.h"
 
 #include "GameObject.h"
 
+using namespace std;
 
-
-int GameObject::last_id = 0;
-
-GameObject::GameObject(const std::string &name, Point3d const &pos) :
-        id(++last_id), name(name), position(pos)
+GameObject::GameObject(const int id, const std::string &name) :
+        id(id), name(name) // opt. since init in header
 {
     //id = ++last_id;
 }
@@ -29,4 +28,33 @@ GameObject::~GameObject()
 
 int GameObject::ID() const {
     return id;
+}
+
+template<class T>
+void GameObject::AddComponent() {
+    cout << "AddComponent<T>" << endl;
+}
+
+template<>
+void GameObject::AddComponent<Component>() {
+    cout << "AddComponent<Component>" << endl;
+    // TODO
+}
+
+template<class T>
+T GameObject::GetComponent() {
+    cout << "GetComponent<T>" << endl;
+    return nullptr;
+}
+
+template<>
+Component GameObject::GetComponent<Component>() {
+    cout << "GetComponent<Component>" << endl;
+    return nullptr;
+}
+
+template<>
+RenderComponent GameObject::GetComponent<RenderComponent>() {
+    cout << "GetComponent<RenderComponent>" << endl;
+    return nullptr;
 }

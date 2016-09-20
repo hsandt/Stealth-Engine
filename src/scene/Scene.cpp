@@ -24,6 +24,7 @@ Scene::Scene()
 
 Scene::~Scene()
 {
+    std::cout << "[SCENE] Scene destroyed" << std::endl;
 }
 
 std::map<int, std::shared_ptr<GameObject>> Scene::getGameObjects() const {
@@ -36,7 +37,7 @@ void Scene::addGameObject(unique_ptr<GameObject> go) {
     
     //cout << "Adding object at " << sGo -> GetPosition().x() << " from unique_ptr &go" << endl;
     
-    auto emplacePair = gameObjects.emplace(shGo-> ID(), shGo);
+    auto emplacePair = gameObjects.emplace(shGo->ID(), shGo);
     if (emplacePair.second) {
         cout << "[SCENE] Added game object #" << shGo->ID() << " " << shGo->getName() << endl;
     }
@@ -45,6 +46,16 @@ void Scene::addGameObject(unique_ptr<GameObject> go) {
 //        BOOST_LOG_VERSION_NAMESPACE;
 //        BOOST_LOG_TRIVIAL(warning) << boost::format("Could not add game object with id %d: game object with same ID already exists in the scene.") % go -> ID();
 //        BOOST_CHRONO_STATIC;
+    }
+}
+
+void Scene::addGameObject(std::shared_ptr<GameObject> go) {
+    auto emplacePair = gameObjects.emplace(go->ID(), go);
+    if (emplacePair.second) {
+        cout << "[SCENE] Added game object #" << go->ID() << " " << go->getName() << endl;
+    }
+    else {
+        cout << "Could not add game object with id: " << go->ID() << ": game object with same ID already exists in the scene." << endl;
     }
 }
 
@@ -57,3 +68,4 @@ void Scene::removeGameObject(weak_ptr<GameObject> &weakGo) {
         }
     }
 }
+

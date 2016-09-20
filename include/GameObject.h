@@ -8,23 +8,23 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
+#include <vector>
 #include <SDL2/SDL_render.h>
 
 #include "geometry/Point3.h"
 
+class Component;
+
 class GameObject
 {
-    
-public:
-    static int last_id;
 
-    GameObject(const std::string &name, Point3d const &pos = {0, 0, 0});
+public:
+    GameObject(const int id, const std::string &name);
     virtual ~GameObject();
     GameObject(const GameObject &) = delete;
     GameObject &operator=(const GameObject &) & = delete;
-    GameObject(GameObject&&) = delete;
-    GameObject &operator=(GameObject&&) & = delete;
 
     // id
     int ID() const;
@@ -32,26 +32,19 @@ public:
     // update
     virtual void update(double dt) {}
 
-    // render
-    virtual void render(SDL_Renderer* renderer) {}
-
 
     std::string getName() const {
         return name;
     }
 
+    template<class T>
+    void AddComponent();
 
-    Point3d getPosition() const {
-        return position;
-    }
-
-    void setPosition(const Point3d &pos) {
-        GameObject::position = pos;
-    }
+    template<class T>
+    T GetComponent();
 
 protected:
-    int id;
+    const int id;
     std::string name;
-    Point3d position = {0, 0, 0};  // must initialize, else garbage
-
+    std::vector<std::shared_ptr<Component>> components;
 };
