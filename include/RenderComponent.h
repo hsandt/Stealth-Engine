@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include <SDL2/SDL.h>
 #include "Component.h"
+#include "Renderer.h"
 
 class GameObject;
 
@@ -13,7 +13,7 @@ class RenderComponent : public Component {
 public:
     RenderComponent(std::shared_ptr<GameObject> gameObject);
 
-    virtual void render(SDL_Renderer* renderer) = 0;
+    virtual void render(Renderer* renderer) = 0;
 
 };
 

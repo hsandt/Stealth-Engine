@@ -13,6 +13,7 @@
 
 #include "GameObject.h"
 
+using namespace std;
 
 GameObject::GameObject(const int id, const std::string &name) :
         id(id), name(name) // opt. since init in header
@@ -29,31 +30,33 @@ int GameObject::ID() const {
     return id;
 }
 
-template<class T>
-void GameObject::AddComponent() {
-    cout << "AddComponent<T>" << endl;
-}
+//template<class T>
+//void GameObject::AddComponent() {
+//    cout << "AddComponent<T>" << endl;
+//}
 
-template<>
-void GameObject::AddComponent<Component>() {
-    cout << "AddComponent<Component>" << endl;
-    // TODO
-}
+//template<>
+//void GameObject::AddComponent<Component>() {
+//    cout << "AddComponent<Component>" << endl;
+//    // TODO
+//}
 
+// REFACTOR: prefer shared pointers?
 template<class T>
-T GameObject::GetComponent() {
+T* GameObject::GetComponent() {
     cout << "GetComponent<T>" << endl;
     return nullptr;
 }
 
+// NOT NEEDED?
 template<>
-Component GameObject::GetComponent<Component>() {
+Component* GameObject::GetComponent<Component>() {
     cout << "GetComponent<Component>" << endl;
     return nullptr;
 }
 
 template<>
-RenderComponent GameObject::GetComponent<RenderComponent>() {
+RenderComponent* GameObject::GetComponent<RenderComponent>() {
     cout << "GetComponent<RenderComponent>" << endl;
     return nullptr;
 }

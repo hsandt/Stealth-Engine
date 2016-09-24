@@ -11,9 +11,13 @@
 
 #include "Character.h"
 
+#include "Renderer.h"
+#include "RenderComponent.h"
+#include "geometry/Vec3.h"
+
 using namespace std;
 
-Character::Character(const int id, std::string const &name) :
+Character::Character(const int id, string const &name) :
         Actor(id, name)
 {
 }
@@ -39,11 +43,5 @@ void Character::update(double dt) {
 void Character::render(Renderer *renderer) {
      //cout << "rendering at " << go -> GetPosition().x() << endl;
         //BOOST_LOG_TRIVIAL(warning) << "test";
-
-    float w = 20, h = 20;
-
-    float x = getPosition().x();
-    float y = getPosition().y();
-    renderer->drawSquare(x - w / 2, y - h / 2, w, h);
-
+    GetComponent<RenderComponent>()->render(renderer);
 }

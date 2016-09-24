@@ -11,7 +11,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <renderer/Renderer.h>
+#include "Renderer.h"
 
 #include "geometry/Vec3.h"
 
@@ -40,11 +40,11 @@ public:
         return name;
     }
 
-    template<class T>
-    void AddComponent();
+//    template<class T>
+//    void AddComponent();
 
     template<class T>
-    T GetComponent();
+    T* GetComponent();
 
 
     Vec3f getPosition() const {

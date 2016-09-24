@@ -2,6 +2,7 @@
 // Created by wing on 15/10/13.
 //
 
+#include "Renderer.h"
 #include "RenderComponent.h"
 
 #include "SquareRenderComponent.h"
@@ -10,22 +11,14 @@
 
 using namespace std;
 
-void SquareRenderComponent::render(SDL_Renderer *renderer) {
+SquareRenderComponent::SquareRenderComponent(shared_ptr<GameObject> gameObject) : RenderComponent(gameObject) {}
+
+void SquareRenderComponent::render(Renderer *renderer) {
     shared_ptr<GameObject> sp_GameObject = gameObject.lock();
-    
-    //cout << "rendering at " << go -> GetPosition().x() << endl;
-    //BOOST_LOG_TRIVIAL(warning) << "test";
-    SDL_Rect r;
-    //int w = 640, h = 480;
 
-    sp_GameObject->GetComponent<RenderComponent>();
+    float w = 20, h = 20;
 
-    r.w = 20;
-    r.h = 20;
-    // iterate on actors only or check for rendering component?
-//    r.x = sp_GameObject.transform.position.x();
-//    r.y = sp_GameObject.transform.position.y();
-
-    SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0, 0xff);
-    SDL_RenderDrawRect(renderer, &r);
+    float x = sp_GameObject->getPosition().x();
+    float y = sp_GameObject->getPosition().y();
+    renderer->drawSquare(x - w / 2, y - h / 2, w, h);
 }

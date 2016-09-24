@@ -28,7 +28,7 @@ void HumanController::setIntention() {
     InputManager *inputManager = Locator::getInputManager();
     //shared_ptr<InputManager> inputManager = wim.lock();
     if (!inputManager) {
-        cout << "HumanController: couldd not get shared pointer to InputManager" << endl;
+        cout << "HumanController: could not get shared pointer to InputManager" << endl;
         return;
     }
 

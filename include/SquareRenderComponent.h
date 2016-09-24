@@ -7,5 +7,9 @@
 #include "RenderComponent.h"
 
 class SquareRenderComponent : public RenderComponent {
-    virtual void render(SDL_Renderer *renderer) override;
+public:
+    SquareRenderComponent(std::shared_ptr<GameObject> gameObject);
+
+private:
+    virtual void render(Renderer *renderer) override;
 };

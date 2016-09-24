@@ -6,6 +6,7 @@
 
 class GameApplication;
 class InputManager;
+class GameObjectFactory;
 
 class Locator {
 public:
@@ -15,9 +16,11 @@ public:
 
     static GameApplication* getGameApplication();
     static InputManager* getInputManager();
+    static GameObjectFactory* getGameObjectFactory();
 
 private:
 	static GameApplication *gameApplication;
     static InputManager *inputManager;
+    static GameObjectFactory *gameObjectFactory;
 
 };

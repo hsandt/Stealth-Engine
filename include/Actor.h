@@ -18,9 +18,9 @@ public:
     Actor &operator=(const Actor &) & = delete;
 
     // render
-    virtual void render(SDL_Renderer* renderer) {}
+    virtual void render(Renderer* renderer) {}
 
 protected:
-    Point3d position = {0, 0, 0};  // must initialize, else garbage
+    Vec3f position = {0, 0, 0};  // must initialize, else garbage
 
 };

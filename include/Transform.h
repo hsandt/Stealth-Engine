@@ -14,5 +14,5 @@ public:
     Transform(std::shared_ptr<GameObject> gameObject) : Component(gameObject) {}
     virtual ~Transform();
 
-    Point3d position;
+    Vec3f position;
 };

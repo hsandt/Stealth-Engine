@@ -17,7 +17,7 @@
 class Character : public Actor
 {
 public:
-    Character(std::string const &name, Vec3f const &pos);
+    Character(const int id, std::string const &name);
     virtual ~Character();
     Character(const Character &) = delete;
     Character &operator=(const Character &) & = delete;
@@ -39,6 +39,6 @@ public:
 
 protected:
     std::unique_ptr<Controller> controller = nullptr;
-    double speed = 5.0;
+    float speed = 5.0;
 };
 

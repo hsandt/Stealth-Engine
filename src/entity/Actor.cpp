@@ -3,13 +3,14 @@
 //
 
 #include "Actor.h"
+#include "GameObject.h"
 
 #include "Transform.h"
 
 Actor::Actor(const int id, const std::string &name) :
     GameObject(id, name)
 {
-    AddComponent<Transform>();
+//    AddComponent<Transform>();
 }
 
 Actor::~Actor() {
