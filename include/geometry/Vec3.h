@@ -146,9 +146,6 @@ template<class FLTYPE>
 Vec3<FLTYPE> operator*(const FLTYPE s, Vec3<FLTYPE> const &p);
 
 template<class FLTYPE>
-Vec3<FLTYPE> operator*(Vec3<FLTYPE> const &p, const FLTYPE s);
-
-template<class FLTYPE>
 FLTYPE Length(Vec3<FLTYPE> const &p);
 
 template<class FLTYPE>
@@ -164,25 +161,27 @@ template<class FLTYPE>
 Vec3<FLTYPE> &RotateZ(Vec3<FLTYPE> &p, FLTYPE _angle);
 
 
-
 typedef Vec3<short> Vec3s;
 typedef Vec3<int> Vec3i;
 typedef Vec3<float> Vec3f;
 typedef Vec3<double> Vec3d;
 
-inline void glVertex(Vec3<int> const &v) { glVertex3iv(v.coords);}
-inline void glVertex(Vec3<short> const &v) { glVertex3sv(v.coords);}
-inline void glVertex(Vec3<float> const &v) { glVertex3fv(v.coords);}
-inline void glVertex(Vec3<double> const &v) { glVertex3dv(v.coords);}
-inline void glNormal(Vec3<int> const &v) { glNormal3iv(v.coords);}
-inline void glNormal(Vec3<short> const &v) { glNormal3sv(v.coords);}
-inline void glNormal(Vec3<float> const & v) { glNormal3fv(v.coords);}
-inline void glNormal(Vec3<double> const & v){ glNormal3dv(v.coords);}
-inline void glTexCoord(Vec3<int> const & v)   { glTexCoord3iv(v.coords);}
-inline void glTexCoord(Vec3<short> const & v) { glTexCoord3sv(v.coords);}
-inline void glTexCoord(Vec3<float> const & v) { glTexCoord3fv(v.coords);}
-inline void glTexCoord(Vec3<double> const & v){ glTexCoord3dv(v.coords);}
-inline void glTranslate(Vec3<float> const & v) { glTranslatef(v.coords[0],v.coords[1],v.coords[2]);}
-inline void glTranslate(Vec3<double> const & v){ glTranslated(v.coords[0],v.coords[1],v.coords[2]);}
-inline void glScale(Vec3<float> const & v) { glScalef(v.coords[0],v.coords[1],v.coords[2]);}
-inline void glScale(Vec3<double> const & v){ glScaled(v.coords[0],v.coords[1],v.coords[2]);}
+inline void glVertex(Vec3<int> const &v);
+inline void glVertex(Vec3<short> const &v);
+inline void glVertex(Vec3<float> const &v);
+inline void glVertex(Vec3<double> const &v);
+inline void glNormal(Vec3<int> const &v);
+inline void glNormal(Vec3<short> const &v);
+inline void glNormal(Vec3<float> const & v);
+inline void glNormal(Vec3<double> const & v);
+inline void glTexCoord(Vec3<int> const & v);
+inline void glTexCoord(Vec3<short> const & v);
+inline void glTexCoord(Vec3<float> const & v);
+inline void glTexCoord(Vec3<double> const & v);
+inline void glTranslate(Vec3<float> const & v);
+inline void glTranslate(Vec3<double> const & v);
+inline void glScale(Vec3<float> const & v);
+inline void glScale(Vec3<double> const & v);
+
+// One way to solve the "undefined template specialization" problem
+#include "Vec3_impl.h"

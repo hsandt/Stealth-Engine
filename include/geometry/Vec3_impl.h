@@ -138,11 +138,6 @@ Vec3<FLTYPE> operator*(const FLTYPE s, Vec3<FLTYPE> const &p) {
 }
 
 template<class FLTYPE>
-Vec3<FLTYPE> operator*(Vec3<FLTYPE> const &p, const FLTYPE s) {
-    return s * p;
-}
-
-template<class FLTYPE>
 FLTYPE Length(Vec3<FLTYPE> const &p) {
     return sqrt(p.coords[0] * p.coords[0] + p.coords[1] * p.coords[1] + p.coords[2] * p.coords[2]);
 }
@@ -174,3 +169,19 @@ Vec3<FLTYPE> &RotateZ(Vec3<FLTYPE> &p, FLTYPE _angle) {
     return p;
 }
 
+void glVertex(Vec3<int> const &v) { glVertex3iv(v.coords);}
+void glVertex(Vec3<short> const &v) { glVertex3sv(v.coords);}
+void glVertex(Vec3<float> const &v) { glVertex3fv(v.coords);}
+void glVertex(Vec3<double> const &v) { glVertex3dv(v.coords);}
+void glNormal(Vec3<int> const &v) { glNormal3iv(v.coords);}
+void glNormal(Vec3<short> const &v) { glNormal3sv(v.coords);}
+void glNormal(Vec3<float> const & v) { glNormal3fv(v.coords);}
+void glNormal(Vec3<double> const & v){ glNormal3dv(v.coords);}
+void glTexCoord(Vec3<int> const & v)   { glTexCoord3iv(v.coords);}
+void glTexCoord(Vec3<short> const & v) { glTexCoord3sv(v.coords);}
+void glTexCoord(Vec3<float> const & v) { glTexCoord3fv(v.coords);}
+void glTexCoord(Vec3<double> const & v){ glTexCoord3dv(v.coords);}
+void glTranslate(Vec3<float> const & v) { glTranslatef(v.coords[0],v.coords[1],v.coords[2]);}
+void glTranslate(Vec3<double> const & v){ glTranslated(v.coords[0],v.coords[1],v.coords[2]);}
+void glScale(Vec3<float> const & v) { glScalef(v.coords[0],v.coords[1],v.coords[2]);}
+void glScale(Vec3<double> const & v){ glScaled(v.coords[0],v.coords[1],v.coords[2]);}
