@@ -14,7 +14,8 @@ using namespace std;
 
 GameApplication *Locator::gameApplication;  // default initialization to nullptr for static (required)
 InputManager *Locator::inputManager;
-GameObjectFactory *Locator::gameObjectFactory;
+Renderer *Locator::renderer;
+Factory *Locator::factory;
 
 // maybe return a shared_ptr for faster processing
 GameApplication* Locator::getGameApplication() {
@@ -25,6 +26,10 @@ InputManager* Locator::getInputManager() {
     return inputManager;
 }
 
-GameObjectFactory* Locator::getGameObjectFactory() {
-    return gameObjectFactory;
+Renderer* Locator::getRenderer() {
+    return renderer;
+}
+
+Factory* Locator::getFactory() {
+    return factory;
 }

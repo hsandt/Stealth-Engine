@@ -6,7 +6,7 @@
 
 #include "Scene.h"
 #include "GameObject.h"
-#include "GameObjectFactory.h"
+#include "Factory.h"
 #include "UnitTest++/UnitTest++.h"
 
 using namespace std;

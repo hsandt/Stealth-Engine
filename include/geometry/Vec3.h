@@ -4,36 +4,31 @@
 #include <assert.h>
 #include <cmath>
 #include <iosfwd>
-#include <GL/glew.h>
 
 #include "utils/infix_iterator.h"
 
-// REFACTOR: put definitions in cpp to avoid multiple definition
-// (despite header guard, since we have different compilation units)
-
-template<typename FLTYPE>
-class Vec3
+class Vector3
 {
 public:
-	FLTYPE coords[3] = {0, 0, 0};
+	float coords[3] = {0, 0, 0};
 
-	Vec3<FLTYPE>() {}
+	Vector3() {}
 
-	Vec3<FLTYPE>(const FLTYPE nx, const FLTYPE ny, const FLTYPE nz)
+	Vector3(const float nx, const float ny, const float nz)
 	{
 		coords[0] = nx;
 		coords[1] = ny;
 		coords[2] = nz;
 	}
 
-	Vec3<FLTYPE>(Vec3<FLTYPE> const &v)
+	Vector3(Vector3 const &v)
 	{
 		coords[0] = v.coords[0];
 		coords[1] = v.coords[1];
 		coords[2] = v.coords[2];
 	}
 
-	Vec3<FLTYPE> &operator=(Vec3<FLTYPE> const &v)
+	Vector3 &operator=(Vector3 const &v)
 	{
 		coords[0] = v.coords[0];
 		coords[1] = v.coords[1];
@@ -42,146 +37,224 @@ public:
 	}
 
 	// Coordinate reference getter
-	FLTYPE &x() { return coords[0]; };
+	float &x() { return coords[0]; };
 
-	FLTYPE &y() { return coords[1]; };
+	float &y() { return coords[1]; };
 
-	FLTYPE &z() { return coords[2]; };
+	float &z() { return coords[2]; };
 
 	// Index getter
-	FLTYPE &operator[](const int i)
+	inline float &operator[](const int i)
 	{
 		assert(i >= 0 && i < 3);
 		return coords[i];
 	}
 
 	// Index getter const
-	const FLTYPE &operator[](const int i) const
+	inline const float &operator[](const int i) const
 	{
 		assert(i >= 0 && i < 3);
 		return coords[i];
 	}
 
 	// Element-wise operations
-	Vec3<FLTYPE> operator+(Vec3<FLTYPE> const &v) const;
+	inline Vector3 operator+(Vector3 const &v) const
+	{
+		return Vector3(coords[0] + v.coords[0], coords[1] + v.coords[1], coords[2] + v.coords[2]);
+	}
 
-	Vec3<FLTYPE> operator-(Vec3<FLTYPE> const &v) const;
+	inline Vector3 operator-(Vector3 const &v) const
+	{
+		return Vector3(coords[0] - v.coords[0], coords[1] - v.coords[1], coords[2] - v.coords[2]);
+	}
 
-	Vec3<FLTYPE> operator*(const FLTYPE s) const;
+	inline Vector3 operator*(const float s) const
+	{
+		return Vector3(coords[0] * s, coords[1] * s, coords[2] * s);
+	}
 
-	Vec3<FLTYPE> operator/(const FLTYPE s) const;
+	inline Vector3 operator/(const float s) const
+	{
+		return Vector3(coords[0] / s, coords[1] / s, coords[2] / s);
+	}
 
 	/// Scalar product
-	FLTYPE operator*(Vec3<FLTYPE> const &v) const;
+	inline float operator*(Vector3 const &v) const
+	{
+		return (coords[0] * v.coords[0] + coords[1] * v.coords[1] + coords[2] * v.coords[2]);
+	}
 
 	/// Cross product
-	Vec3<FLTYPE> operator^(Vec3<FLTYPE> const &v) const;
+	inline Vector3 operator^(Vector3 const &v) const
+	{
+		return Vector3(
+				coords[1] * v.coords[2] - coords[2] * v.coords[1],
+				coords[2] * v.coords[0] - coords[0] * v.coords[2],
+				coords[0] * v.coords[1] - coords[1] * v.coords[0]
+		);
+	}
 
 	// Element-wise in-place operations
-	Vec3<FLTYPE> &operator+=(Vec3<FLTYPE> const &v);
+	inline Vector3 &operator+=(Vector3 const &v)
+	{
+		coords[0] += v.coords[0];
+		coords[1] += v.coords[1];
+		coords[2] += v.coords[2];
+		return *this;
+	}
 
-	Vec3<FLTYPE> &operator-=(Vec3<FLTYPE> const &v);
+	inline Vector3 &operator-=(Vector3 const &v)
+	{
+		coords[0] -= v.coords[0];
+		coords[1] -= v.coords[1];
+		coords[2] -= v.coords[2];
+		return *this;
+	}
 
-	Vec3<FLTYPE> &operator*=(const FLTYPE s);
+	inline Vector3 &operator*=(const float s)
+	{
+		coords[0] *= s;
+		coords[1] *= s;
+		coords[2] *= s;
+		return *this;
+	}
 
-	Vec3<FLTYPE> &operator/=(const FLTYPE s);
+	inline Vector3 &operator/=(const float s)
+	{
+		coords[0] /= s;
+		coords[1] /= s;
+		coords[2] /= s;
+		return *this;
+	}
 
 	/// Return norm
-	FLTYPE Length() const;
+	inline float Length() const
+	{
+		return (float) sqrt(coords[0] * coords[0] + coords[1] * coords[1] + coords[2] * coords[2]);
+	}
 
 	/// Return squared norm
-	FLTYPE LengthSquared() const;
+	inline float LengthSquared() const
+	{
+		return coords[0] * coords[0] + coords[1] * coords[1] + coords[2] * coords[2];
+	}
 
-	Vec3<FLTYPE> &Normalize();
+	inline Vector3 &Normalize()
+	{
+		float n = Length();
+		if (n > 0) {
+			coords[0] /= n;
+			coords[1] /= n;
+			coords[2] /= n;
+		}
+		return *this;
+	}
 
-	bool operator==(Vec3<FLTYPE> const &v) const;
+	inline bool operator==(Vector3 const &v) const
+	{
+		return coords[0] == v.coords[0] && coords[1] == v.coords[1] && coords[2] == v.coords[2];
+	}
 
-	bool operator!=(Vec3<FLTYPE> const &v) const;
+	inline bool operator!=(Vector3 const &v) const
+	{
+		return !(coords == v.coords);
+	}
 
 	// Comparisons with higher priority on higher index values (not used)
-//    bool operator <(Vec3<FLTYPE> const & p) const {
+//    inline bool operator <(Vector3 const & p) const {
 //        return	(v[2] != p.v[2]) ? (v[2] < p.v[2]):
 //                (v[1] != p.v[1]) ? (v[1 ]< p.v[1]):
 //                        (v[0] < p.v[0]);
 //    }
-//    bool operator >(Vec3<FLTYPE> const & p) const {
+//    inline bool operator >(Vector3 const & p) const {
 //        return	(v[2] != p.v[2]) ? (v[2] > p.v[2]):
 //                (v[1] != p.v[1]) ? (v[1] > p.v[1]):
 //                        (v[0] > p.v[0]);
 //    }
 //
-//    bool operator <=(Vec3<FLTYPE> const & p) const {
+//    inline bool operator <=(Vector3 const & p) const {
 //        return	(v[2] != p.v[2])?(v[2] < p.v[2]):
 //                (v[1] != p.v[1])?(v[1] < p.v[1]):
 //                        (v[0] <= p.v[0]);
 //    }
 //
-//    bool operator >=(Vec3<FLTYPE> const & p ) const {
+//    inline bool operator >=(Vector3 const & p ) const {
 //        return	(v[2] != p.v[2]) ? (v[2] > p.v[2]):
 //                (v[1] != p.v[1]) ? (v[1] > p.v[1]):
 //                        (v[0] >= p.v[0]);
 //    }
 
 	/// Return the distance with another vector
-	FLTYPE Distance(Vec3<FLTYPE> const &v) const;
+	inline float Distance(Vector3 const &v) const
+	{
+		return (*this - v).Length();
+	}
 
 	/// Return the squared distance with another vector
-	FLTYPE SquaredDistance(Vec3<FLTYPE> const &v) const;
+	inline float SquaredDistance(Vector3 const &v) const
+	{
+		return (*this - v).LengthSquared();
+	}
 
 }; // end class definition
 
 // To string
-template<class FLTYPE>
-std::ostream& operator<<(std::ostream &stream, const Vec3<FLTYPE> &v);
+inline std::ostream& operator<<(std::ostream &stream, const Vector3 &v)
+{
+	stream << "Vector3(";
+	std::copy(v.coords, v.coords + 3, infix_ostream_iterator<float>(stream, ", "));
+	return stream << ")";
+}
 
+inline float Angle(Vector3 const &p1, Vector3 const &p2)
+{
+	return (float) acos((p1 * p2) / (p1.Length() * p2.Length()));
+}
 
+inline Vector3 operator-(Vector3 const &p)
+{
+	return Vector3(-p.coords[0], -p.coords[1], -p.coords[2]);
+}
 
-template<class FLTYPE>
-FLTYPE Angle(Vec3<FLTYPE> const &p1, Vec3<FLTYPE> const &p2);
+inline Vector3 operator*(const float s, Vector3 const &p)
+{
+	return Vector3(p.coords[0] * s, p.coords[1] * s, p.coords[2] * s);
+}
 
-template<class FLTYPE>
-Vec3<FLTYPE> operator-(Vec3<FLTYPE> const &p);
+inline float Length(Vector3 const &p)
+{
+	return sqrt(p.coords[0] * p.coords[0] + p.coords[1] * p.coords[1] + p.coords[2] * p.coords[2]);
+}
 
-template<class FLTYPE>
-Vec3<FLTYPE> operator*(const FLTYPE s, Vec3<FLTYPE> const &p);
+inline float LengthSquared(Vector3 const &p)
+{
+	return (p.coords[0] * p.coords[0] + p.coords[1] * p.coords[1] + p.coords[2] * p.coords[2]);
+}
 
-template<class FLTYPE>
-FLTYPE Length(Vec3<FLTYPE> const &p);
+inline Vector3 &Normalize(Vector3 &p)
+{
+	float n = Length(p);
+	if (n > 0.0) p /= n;
+	return p;
+}
 
-template<class FLTYPE>
-FLTYPE LengthSquared(Vec3<FLTYPE> const &p);
+inline float Distance(Vector3 const &p1, Vector3 const &p2)
+{
+	return Length(p1 - p2);
+}
 
-template<class FLTYPE>
-Vec3<FLTYPE> &Normalize(Vec3<FLTYPE> &p);
+inline Vector3 &RotateZ(Vector3 &p, float _angle)
+{
+	float c = (float) cos(_angle);
+	float s = (float) sin(_angle);
+	float cx = c * p.x() - s * p.y();
+	p.y() = s * p.x() + c * p.y();
+	p.x() = cx;
+	return p;
+}
 
-template<class FLTYPE>
-FLTYPE Distance(Vec3<FLTYPE> const &p1, Vec3<FLTYPE> const &p2);
-
-template<class FLTYPE>
-Vec3<FLTYPE> &RotateZ(Vec3<FLTYPE> &p, FLTYPE _angle);
-
-
-typedef Vec3<short> Vec3s;
-typedef Vec3<int> Vec3i;
-typedef Vec3<float> Vec3f;
-typedef Vec3<double> Vec3d;
-
-inline void glVertex(Vec3<int> const &v);
-inline void glVertex(Vec3<short> const &v);
-inline void glVertex(Vec3<float> const &v);
-inline void glVertex(Vec3<double> const &v);
-inline void glNormal(Vec3<int> const &v);
-inline void glNormal(Vec3<short> const &v);
-inline void glNormal(Vec3<float> const & v);
-inline void glNormal(Vec3<double> const & v);
-inline void glTexCoord(Vec3<int> const & v);
-inline void glTexCoord(Vec3<short> const & v);
-inline void glTexCoord(Vec3<float> const & v);
-inline void glTexCoord(Vec3<double> const & v);
-inline void glTranslate(Vec3<float> const & v);
-inline void glTranslate(Vec3<double> const & v);
-inline void glScale(Vec3<float> const & v);
-inline void glScale(Vec3<double> const & v);
-
-// One way to solve the "undefined template specialization" problem
-#include "Vec3_impl.h"
+void glVertex(Vector3 const &v);
+void glNormal(Vector3 const & v);
+void glTexCoord(Vector3 const & v);
+void glTranslate(Vector3 const & v);
+void glScale(Vector3 const & v);

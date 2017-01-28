@@ -7,13 +7,22 @@
 #include <iostream>
 #include <memory>
 #include "Locator.h"
-#include "GameObjectFactory.h"
+#include "Factory.h"
 // Locator uses class forward declaration, safer to include
 #include "GameApplication.h"
 
+// REFACTOR: prefer direct access to Locator, or use namespace for better static method calls
+
 template<class T>
 std::shared_ptr<T> CreateGameObject() {
-    std::shared_ptr<GameObjectFactory> factory = Locator::getGameObjectFactory();
+    Factory* factory = Locator::getFactory();
     // even if not used, RETURN game object! else UB
-    return factory->Create<T>();
+    return factory->CreateGameObject<T>();
+}
+
+template<class T>
+std::shared_ptr<T> CreateComponent() {
+	Factory* factory = Locator::getFactory();
+    // even if not used, RETURN game object! else UB
+    return factory->CreateComponent<T>();
 }

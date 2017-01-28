@@ -17,16 +17,18 @@
 class Character : public Actor
 {
 public:
-    Character(const int id, std::string const &name);
+    Character(std::string const &name);
     virtual ~Character();
     Character(const Character &) = delete;
     Character &operator=(const Character &) & = delete;
     Character(Character&&) = delete;
     Character &operator=(Character&&) & = delete;
 
-    virtual void update(double dt) override;
+	virtual void init() override;
 
-    virtual void render(Renderer *renderer) override;
+	virtual void update(double dt) override;
+
+//    virtual void render(Renderer *renderer) override;
 
     /*
     Point3d getPosition() const {

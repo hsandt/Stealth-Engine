@@ -4,14 +4,19 @@
 
 #pragma once
 
+#include <memory>
+
 #include "Component.h"
-#include "Renderer.h"
 
 class GameObject;
+class Renderer;
 
 class RenderComponent : public Component {
 public:
-    RenderComponent(std::shared_ptr<GameObject> gameObject);
+    RenderComponent();
+	virtual ~RenderComponent();
+
+    virtual void onAddedToGameObject(std::shared_ptr<GameObject> gameObject) override;
 
     virtual void render(Renderer* renderer) = 0;
 

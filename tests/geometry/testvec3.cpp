@@ -6,11 +6,11 @@
 
 #include "geometry/Vec3.h"
 
-TEST_CASE( "Test Vec3f comparison", "[geometry]" )
+TEST_CASE( "Test Vector3 comparison", "[geometry]" )
 {
-	Vec3f a(1, 2, 3);
-	Vec3f b(1, 2, 3);
-	Vec3f c(2, 3, 4);
+	Vector3 a(1, 2, 3);
+	Vector3 b(1, 2, 3);
+	Vector3 c(2, 3, 4);
 
 	SECTION("Equality")
 	{

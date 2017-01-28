@@ -7,8 +7,8 @@
 
 #include "Transform.h"
 
-Actor::Actor(const int id, const std::string &name) :
-    GameObject(id, name)
+Actor::Actor(const std::string &name) :
+    GameObject(name)
 {
 //    AddComponent<Transform>();
 }

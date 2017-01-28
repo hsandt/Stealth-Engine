@@ -7,18 +7,17 @@
 //
 
 #include <iostream>
+#include "FactoryUtils.h"
 #include "Component.h"
-#include "RenderComponent.h"
-#include "geometry/Vec3.h"
 
 #include "GameObject.h"
 
+
 using namespace std;
 
-GameObject::GameObject(const int id, const std::string &name) :
-        id(id), name(name) // opt. since init in header
+GameObject::GameObject(const std::string &name) :
+	name(name) // opt. since init in header
 {
-    //id = ++last_id;
 }
 
 GameObject::~GameObject()
@@ -26,37 +25,8 @@ GameObject::~GameObject()
     std::cout << "[GAMEOBJECT] GameObject #" << id << " " << name << " destroyed" << std::endl;
 }
 
-int GameObject::ID() const {
-    return id;
-}
 
-//template<class T>
-//void GameObject::AddComponent() {
-//    cout << "AddComponent<T>" << endl;
-//}
 
-//template<>
-//void GameObject::AddComponent<Component>() {
-//    cout << "AddComponent<Component>" << endl;
-//    // TODO
-//}
-
-// REFACTOR: prefer shared pointers?
-template<class T>
-T* GameObject::GetComponent() {
-    cout << "GetComponent<T>" << endl;
-    return nullptr;
-}
-
-// NOT NEEDED?
-template<>
-Component* GameObject::GetComponent<Component>() {
-    cout << "GetComponent<Component>" << endl;
-    return nullptr;
-}
-
-template<>
-RenderComponent* GameObject::GetComponent<RenderComponent>() {
-    cout << "GetComponent<RenderComponent>" << endl;
-    return nullptr;
+void GameObject::onAddedToScene(std::shared_ptr<Scene> newScene) {
+	scene = newScene;
 }

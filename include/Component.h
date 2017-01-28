@@ -6,15 +6,24 @@
 
 #include <memory>
 
+#include "Object.h"
+
 class GameObject;
 
-class Component {
+class Component : public Object {
 public:
-    Component(std::shared_ptr<GameObject> gameObject);
-    virtual ~Component() = 0;
+    Component();
+    virtual ~Component();
     Component(Component const &) = delete;
     Component &operator=(Component const &) = delete;
 
+	std::shared_ptr<GameObject> getGameObject() const;
+
+	virtual void onAddedToGameObject(std::shared_ptr<GameObject> gameObject) {}
+
 protected:
     std::weak_ptr<GameObject> gameObject;
+
+	// friendship is not inherited, we can safely give access to GameObject
+	friend class GameObject;
 };

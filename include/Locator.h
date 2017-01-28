@@ -6,21 +6,25 @@
 
 class GameApplication;
 class InputManager;
-class GameObjectFactory;
+class Renderer;
+class Factory;
 
 class Locator {
 public:
-	friend class GameApplication; // does not compile, add class or import
-
 	Locator() = delete;
+
+	// NATIVE POINTERS: we delete the objects in GameApplication destructor
 
     static GameApplication* getGameApplication();
     static InputManager* getInputManager();
-    static GameObjectFactory* getGameObjectFactory();
+    static Renderer* getRenderer();
+    static Factory* getFactory();
 
 private:
 	static GameApplication *gameApplication;
     static InputManager *inputManager;
-    static GameObjectFactory *gameObjectFactory;
+    static Renderer *renderer;
+    static Factory *factory;
 
+	friend class GameApplication;
 };

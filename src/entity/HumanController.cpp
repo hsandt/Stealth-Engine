@@ -37,6 +37,7 @@ void HumanController::setIntention() {
     float moveIntentionX = 0;
     float moveIntentionY = 0;
 
+	// REFACTOR: layer on top of GLFW for custom enum keys (Input)
     if (inputManager->isKeyDown(GLFW_KEY_LEFT)) {
         moveIntentionX = -1;
     }

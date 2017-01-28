@@ -13,17 +13,32 @@
 
 #include "Renderer.h"
 #include "RenderComponent.h"
+#include "SquareRenderComponent.h"
 #include "geometry/Vec3.h"
+
+#include <memory>
 
 using namespace std;
 
-Character::Character(const int id, string const &name) :
-        Actor(id, name)
+Character::Character(string const &name) :
+        Actor(name)
 {
+	// ERROR: using shared pointer of object in creation! still locked
+//	components.push_back(make_shared<SquareRenderComponent>(shared_from_this()));
+//	components.push_back(make_shared<SquareRenderComponent>());
 }
 
 Character::~Character()
 {
+}
+
+void Character::init () {
+	Actor::init();
+
+	// add components here, not in constructor,
+	// since component requires a ref to the shared_ptr of the actor
+	// to use shared_from_this, and we need to finish the make_shared construction first
+	addComponent<SquareRenderComponent>();
 }
 
 void Character::update(double dt) {
@@ -40,8 +55,14 @@ void Character::update(double dt) {
     }
 }
 
+/*
 void Character::render(Renderer *renderer) {
      //cout << "rendering at " << go -> GetPosition().x() << endl;
         //BOOST_LOG_TRIVIAL(warning) << "test";
-    GetComponent<RenderComponent>()->render(renderer);
+	shared_ptr<RenderComponent> renderComponent = GetComponent<RenderComponent>();
+	if (renderComponent != nullptr)
+		render(renderer);
+	else
+		cout << "No render component on character " << name << endl;
 }
+*/

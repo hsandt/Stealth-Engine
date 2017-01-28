@@ -11,9 +11,11 @@
 #include <memory>
 #include <map>
 
-#include "GameObject.h"
+//#include "GameObject.h"
 
-class Scene
+class GameObject;
+
+class Scene : public std::enable_shared_from_this<Scene>
 {
 public:
     Scene();
@@ -23,9 +25,9 @@ public:
     std::map<int, std::shared_ptr<GameObject>> getGameObjects() const;
 
     void init();
-    void addGameObject(std::unique_ptr<GameObject> go);
+//    void addGameObject(std::unique_ptr<GameObject>&& go);
     void addGameObject(std::shared_ptr<GameObject> go);
-    void addGameObject(GameObject &&go);
+//    void addGameObject(GameObject &&go);
     void removeGameObject(std::weak_ptr<GameObject> &go);
 
 private:

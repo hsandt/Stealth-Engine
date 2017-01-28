@@ -5,7 +5,28 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <memory>
+#include <iostream>
+
 #include "Renderer.h"
+#include "RenderComponent.h"
+
+using namespace std;
+
+// REGISTER
+
+void Renderer::registerRenderComponent(std::shared_ptr<RenderComponent> renderComponent) {
+//void Renderer::registerRenderComponent(RenderComponent* renderComponent) {
+//	renderComponents.emplace_back(renderComponent);  // shared to weak pointer conversion
+	auto wk_RC = weak_ptr<RenderComponent>(renderComponent);
+//	shared_ptr<RenderComponent> sh_RC(wk_RC);
+//	renderComponents.push_back(renderComponent);  // shared to weak pointer conversion
+	renderComponents.push_back(wk_RC);  // shared to weak pointer conversion
+//	renderComponents.push_back(sh_RC);  // shared to weak pointer conversion
+//	renderComponents.emplace_back(wk_RC);  // shared to weak pointer conversion
+}
+
+// RENDER
 
 void Renderer::clear() const {
 	glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
@@ -13,7 +34,15 @@ void Renderer::clear() const {
 }
 
 void Renderer::render() {
-
+	for (auto renderComponent : renderComponents) {
+		cout << "render" << endl;
+		if (shared_ptr<RenderComponent> sp_RenderComponent = renderComponent.lock()) {
+			cout << "R" << endl;
+			sp_RenderComponent->render(this);
+		}
+//		cout << "R" << endl;
+//		renderComponent->render(this);
+	}
 }
 
 void Renderer::drawSquare(float x, float y, float w, float h) {
