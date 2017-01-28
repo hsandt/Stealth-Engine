@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <memory>
-
 #include "Component.h"
 
 class GameObject;
@@ -16,7 +14,7 @@ public:
     RenderComponent();
 	virtual ~RenderComponent();
 
-    virtual void onAddedToGameObject(std::shared_ptr<GameObject> gameObject) override;
+    virtual void onAddedToGameObject() override;
 
     virtual void render(Renderer* renderer) = 0;
 

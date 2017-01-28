@@ -13,15 +13,23 @@ Component::Component() {
 }
 
 Component::~Component() {
-
+	if (gameObject != nullptr) {
+		cout << "Component destroyed (as part of game object)" << endl;
+	} else {
+		cout << "Component destroyed (first removed)" << endl;
+	}
 }
 
-shared_ptr<GameObject> Component::getGameObject() const {
-	if (shared_ptr<GameObject> sp_GameObject = gameObject.lock()) {
-		return sp_GameObject;
+GameObject* Component::getGameObject() const {
+	if (gameObject != nullptr) {
+		return gameObject;
 	}
 	else {
 		cout << "Game object has expired, don't create game object" << endl;
 		return nullptr;
 	}
+}
+
+void Component::detachFromGameObject() {
+	gameObject = nullptr;
 }

@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <memory>
-
 #include "Object.h"
 
 class GameObject;
@@ -17,12 +15,14 @@ public:
     Component(Component const &) = delete;
     Component &operator=(Component const &) = delete;
 
-	std::shared_ptr<GameObject> getGameObject() const;
+	GameObject* getGameObject() const;
 
-	virtual void onAddedToGameObject(std::shared_ptr<GameObject> gameObject) {}
+	virtual void onAddedToGameObject() {}
+
+	void detachFromGameObject();
 
 protected:
-    std::weak_ptr<GameObject> gameObject;
+    GameObject* gameObject;
 
 	// friendship is not inherited, we can safely give access to GameObject
 	friend class GameObject;

@@ -8,27 +8,27 @@
 
 #pragma once
 
-#include <memory>
 #include <map>
 
 //#include "GameObject.h"
 
 class GameObject;
 
-class Scene : public std::enable_shared_from_this<Scene>
+class Scene
 {
 public:
     Scene();
     virtual ~Scene();
     
     // getter
-    std::map<int, std::shared_ptr<GameObject>> getGameObjects() const;
+    std::map<int, GameObject*> getGameObjects() const;
 
     void init();
 //    void addGameObject(std::unique_ptr<GameObject>&& go);
-    void addGameObject(std::shared_ptr<GameObject> go);
+    void addGameObject(GameObject* go);
 //    void addGameObject(GameObject &&go);
-    void removeGameObject(std::weak_ptr<GameObject> &go);
+    /// Remove game object from the scene (caution: this does not delete the game object)
+    void removeGameObject(GameObject* go);
 
 private:
     Scene(const Scene &) = delete;
@@ -36,7 +36,7 @@ private:
     Scene(Scene&&) = delete;
     Scene &operator=(Scene&&) & = delete;
 
-    std::map<int, std::shared_ptr<GameObject>> gameObjects;
+    std::map<int, GameObject*> gameObjects;
 
 };
 

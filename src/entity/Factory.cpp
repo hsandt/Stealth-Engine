@@ -10,7 +10,6 @@
 #include "GameObject.h"
 #include "Character.h"
 
-#include <memory>
 #include <iostream>
 
 using namespace std;
@@ -18,15 +17,17 @@ using namespace std;
 int Factory::last_id = 0;
 
 Factory::Factory() {
-    gameObjectCreator = make_unique<GameObjectCreator>();
-    componentCreator = make_unique<ComponentCreator>();
+    gameObjectCreator = new GameObjectCreator();
+    componentCreator = new ComponentCreator();
 }
 
 Factory::~Factory() {
+    delete gameObjectCreator;
+    delete componentCreator;
     std::cout << "[FACTORY] Factory destroyed" << std::endl;
 }
 
-void Factory::ChangeCurrentScene(std::shared_ptr<Scene> scene) {
+void Factory::ChangeCurrentScene(Scene* scene) {
     gameObjectCreator->ChangeCurrentScene(scene);
 }
 

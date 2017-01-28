@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include <memory>
 #include "GameObject.h"
 #include "Actor.h"
 #include "Controller.h"
@@ -40,7 +39,7 @@ public:
     }*/
 
 protected:
-    std::unique_ptr<Controller> controller = nullptr;
+    Controller* controller = nullptr;
     float speed = 5.0;
 };
 

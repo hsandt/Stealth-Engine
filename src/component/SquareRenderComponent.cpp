@@ -15,12 +15,12 @@ using namespace std;
 SquareRenderComponent::SquareRenderComponent() : RenderComponent() {}
 
 void SquareRenderComponent::render(Renderer *renderer) {
-    if (shared_ptr<GameObject> sp_GameObject = gameObject.lock())
+    if (gameObject != nullptr)
     {
 	    float w = 20, h = 20;
 
-	    float x = sp_GameObject->getPosition().x();
-	    float y = sp_GameObject->getPosition().y();
+	    float x = gameObject->getPosition().x();
+	    float y = gameObject->getPosition().y();
 	    renderer->drawSquare(x - w / 2, y - h / 2, w, h);
     }
     else

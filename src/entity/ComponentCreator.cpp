@@ -2,7 +2,6 @@
 // Created by wing on 17/01/14.
 //
 
-#include <memory>
 #include <iostream>
 
 #include "ComponentCreator.h"

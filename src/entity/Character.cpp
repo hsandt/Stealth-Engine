@@ -16,8 +16,6 @@
 #include "SquareRenderComponent.h"
 #include "geometry/Vec3.h"
 
-#include <memory>
-
 using namespace std;
 
 Character::Character(string const &name) :
@@ -30,6 +28,7 @@ Character::Character(string const &name) :
 
 Character::~Character()
 {
+	delete controller;
 }
 
 void Character::init () {

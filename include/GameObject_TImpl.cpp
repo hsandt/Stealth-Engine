@@ -26,7 +26,7 @@ using namespace std;
 
 // REFACTOR: prefer shared pointers?
 template<class T>
-shared_ptr<T> GameObject::GetComponent() {
+T* GameObject::GetComponent() {
 	// TODO: static test with is_base_of,
 	// iterating on all components
     cout << "GetComponent<T>" << endl;
@@ -34,12 +34,11 @@ shared_ptr<T> GameObject::GetComponent() {
 }
 
 template<class T>
-std::shared_ptr<T> GameObject::addComponent () {
-	std::shared_ptr<T> component = CreateComponent<T>();
-	auto sp_ThisGO = static_pointer_cast<GameObject>(shared_from_this());
-	component->gameObject = sp_ThisGO;  // implicit shared to weak pointer conversion
+T* GameObject::addComponent () {
+	T* component = CreateComponent<T>();
+	component->gameObject = this;
 	components.push_back(component);
-	component->onAddedToGameObject(sp_ThisGO);
+	component->onAddedToGameObject();
 }
 
 

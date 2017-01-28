@@ -10,7 +10,7 @@
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
-#include "../../include/enum/KeyDynamicState.h"
+#include "enum/KeyDynamicState.h"
 #include "enum/Button.h"
 #include "InputManager.h"
 
@@ -31,8 +31,6 @@ InputManager::InputManager(GLFWwindow *window) : window(window)
 InputManager::~InputManager()
 {
 }
-
-
 
 void InputManager::processInputs() {
 

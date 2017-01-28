@@ -37,28 +37,28 @@ public:
 	// definition in header to avoid undefined reference on non-specialized template
 
 	template<class T>
-	std::shared_ptr<T> CreateGameObject() {
-		std::shared_ptr<T> newGameObject = gameObjectCreator->Create<T>(last_id);
+	T* CreateGameObject() {
+		T* newGameObject = gameObjectCreator->Create<T>(last_id);
 //		newGameObject->id = last_id;
 		++last_id;
 		return newGameObject;
 	}
 
 	template<class T>
-	std::shared_ptr<T> CreateComponent() {
-		std::shared_ptr<T> newComponent = componentCreator->Create<T>(last_id);
+	T* CreateComponent() {
+		T* newComponent = componentCreator->Create<T>(last_id);
 //		newComponent->id = last_id;
 		++last_id;
 		return newComponent;
 	}
 
 
-	void ChangeCurrentScene(std::shared_ptr<Scene> scene);
+	void ChangeCurrentScene(Scene* scene);
 
 private:
     static int last_id;
 
-	std::unique_ptr<GameObjectCreator> gameObjectCreator;
-	std::unique_ptr<ComponentCreator> componentCreator;
+	GameObjectCreator* gameObjectCreator;
+	ComponentCreator* componentCreator;
 
 };

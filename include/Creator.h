@@ -6,8 +6,6 @@
 
 #pragma once
 
-#include <memory>
-
 #include "Object.h"
 
 class Creator {
@@ -16,6 +14,6 @@ public:
 
 private:
 	template<class T>
-	std::shared_ptr<T> Create();
+	T* Create();
 };
 

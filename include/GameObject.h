@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -28,13 +27,16 @@ public:
     GameObject(const GameObject &) = delete;
     GameObject &operator=(const GameObject &) & = delete;
 
-	void onAddedToScene(std::shared_ptr<Scene> newScene);
+	void onAddedToScene(Scene* newScene);
 
 	template<class T>
-	std::shared_ptr<T> GetComponent();
+	T* GetComponent();
 
 	template<class T>
-	std::shared_ptr<T> addComponent();
+	T* addComponent();
+
+	/// Remove a component from this game object
+	void removeComponent(Component *component);
 
     // update
     virtual void update(double dt) {}
@@ -50,8 +52,6 @@ public:
 		name = newName;
 	}
 
-
-
 	Vector3 getPosition() const {
         return position;
     }
@@ -64,8 +64,8 @@ protected:
 	/// Name
 	std::string name;
 
-	std::vector<std::shared_ptr<Component>> components;
-	std::shared_ptr<Scene> scene;
+	std::vector<Component*> components;
+	Scene* scene;
 
     Vector3 position = {0, 0, 0};  // must initialize, else garbage
 

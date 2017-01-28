@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <memory>
-
 #include "Creator.h"
 
 //class Scene;
@@ -19,13 +17,13 @@ public:
 
 	// defined in header, else include templ_impl.cpp at the end of the file
 	template<class T>
-	std::shared_ptr<T> Create(const int id) {
-		auto go = std::make_shared<T>("GameObject");
+	T* Create(const int id) {
+		auto go = new T("GameObject");
 		go->id = id;
 		go->init();
-		if (std::shared_ptr<Scene> sp_CurrentScene = currentScene.lock()) {
+		if (currentScene != nullptr) {
 			// convert back to base GameObject shared pointer
-			sp_CurrentScene->addGameObject(std::static_pointer_cast<GameObject>(go));
+			currentScene->addGameObject(go);
 			std::cout << "Game object created and added to current scene" << std::endl;
 			return go;
 		} else {
@@ -34,10 +32,10 @@ public:
 		}
 }
 
-	void ChangeCurrentScene(std::shared_ptr<Scene> scene);
+	void ChangeCurrentScene(Scene* scene);
 
 private:
 	// current scene, to which all new objects should be added
-	std::weak_ptr<Scene> currentScene;
+	Scene* currentScene;
 };
 

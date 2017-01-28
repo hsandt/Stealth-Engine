@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <iostream>
+#include <ShaderUtils.h>
 
 #include "Renderer.h"
 #include "RenderComponent.h"
@@ -15,13 +16,13 @@ using namespace std;
 
 // REGISTER
 
-void Renderer::registerRenderComponent(std::shared_ptr<RenderComponent> renderComponent) {
+void Renderer::registerRenderComponent(RenderComponent* renderComponent) {
 //void Renderer::registerRenderComponent(RenderComponent* renderComponent) {
 //	renderComponents.emplace_back(renderComponent);  // shared to weak pointer conversion
-	auto wk_RC = weak_ptr<RenderComponent>(renderComponent);
+//	auto wk_RC = weak_ptr<RenderComponent>(renderComponent);
 //	shared_ptr<RenderComponent> sh_RC(wk_RC);
-//	renderComponents.push_back(renderComponent);  // shared to weak pointer conversion
-	renderComponents.push_back(wk_RC);  // shared to weak pointer conversion
+	renderComponents.push_back(renderComponent);  // shared to weak pointer conversion
+//	renderComponents.push_back(wk_RC);  // shared to weak pointer conversion
 //	renderComponents.push_back(sh_RC);  // shared to weak pointer conversion
 //	renderComponents.emplace_back(wk_RC);  // shared to weak pointer conversion
 }
@@ -35,13 +36,7 @@ void Renderer::clear() const {
 
 void Renderer::render() {
 	for (auto renderComponent : renderComponents) {
-		cout << "render" << endl;
-		if (shared_ptr<RenderComponent> sp_RenderComponent = renderComponent.lock()) {
-			cout << "R" << endl;
-			sp_RenderComponent->render(this);
-		}
-//		cout << "R" << endl;
-//		renderComponent->render(this);
+		renderComponent->render(this);
 	}
 }
 
@@ -92,6 +87,16 @@ void Renderer::drawSquare(float x, float y, float w, float h) {
 			0,                  // stride
 			(void*)0            // array buffer offset
 	);
+
+	// REFACTOR: in loadAllShaders, we have already loaded basic engine shaders
+	// store pointers to them somewhere and get them back now, by id or name!
+
+	// Create and compile our GLSL program from the shaders
+	GLuint programID = loadShaders( "resources/shaders/SimpleVertexShader.glsl", "resources/shaders/SimpleFragmentShader.glsl" );
+
+	// Use our shader
+	glUseProgram(programID);
+
 	// Draw the triangle !
 	glDrawArrays(GL_TRIANGLES, 0, 6); // Starting from vertex 0; 6 vertices total -> 2 triangle
 	glDisableVertexAttribArray(0);
