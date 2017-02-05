@@ -1,26 +1,35 @@
 //
-// Created by acro_ on 2016/07/11.
+// Created by Long Nguyen Huu on 2016/07/11.
 //
 
 #pragma once
 
+#include <memory>
 #include "Box2D/Box2D.h"
+
+#include "geometry/Vec2.h"
 
 class Physics
 {
 private:
-	b2World *world = nullptr;
-	b2Vec2 gravity = {0.f, 0.f};
+	std::unique_ptr<b2World> world = nullptr;
 
 public:
-	Physics(b2Vec2 gravity);
+	Physics(Vec2f gravity);
 	virtual ~Physics();
 
-	/// Set gravity
-	void SetGravity(b2Vec2 gravity)
+	/// Get world gravity
+	Vec2f GetGravity () const
 	{
-		this->gravity = gravity;
+		return world->GetGravity();
 	}
+
+	/// Set world gravity
+	void SetGravity(Vec2f gravity)
+	{
+		world->SetGravity(gravity);
+	}
+
 };
 
 

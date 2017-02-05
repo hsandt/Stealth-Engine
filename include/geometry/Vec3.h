@@ -4,13 +4,14 @@
 #include <assert.h>
 #include <cmath>
 #include <iosfwd>
+#include <Box2D/Common/b2Math.h>
 
 #include "utils/infix_iterator.h"
 
-class Vector3
+struct Vector3
 {
 public:
-	float coords[3] = {0, 0, 0};
+	FLTYPE coords[3] = {0, 0, 0};
 
 	Vector3() {}
 
@@ -195,6 +196,15 @@ public:
 	{
 		return (*this - v).LengthSquared();
 	}
+
+	/* Conversion functions */
+
+	#ifdef BOX2D_H
+	inline operator b2Vec3() const
+	{
+		return {coords[0], coords[1], coords[2]};
+	}
+	#endif
 
 }; // end class definition
 
