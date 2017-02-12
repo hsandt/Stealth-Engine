@@ -4,7 +4,7 @@
 
 #include "catch.hpp"
 
-#include "geometry/Vec2.h"
+#include "geometry/Vector2.h"
 
 TEST_CASE( "Test Vec2f comparison", "[geometry]" )
 {

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "geometry/Vec3.h"
+#include "geometry/Vector3.h"
 
 struct Intention {
     // move intention, 2D vector with magnitude between 0 and 1

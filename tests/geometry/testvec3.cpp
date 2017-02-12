@@ -4,7 +4,7 @@
 
 #include "catch.hpp"
 
-#include "geometry/Vec3.h"
+#include "geometry/Vector3.h"
 
 TEST_CASE( "Test Vector3 comparison", "[geometry]" )
 {

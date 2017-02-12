@@ -13,7 +13,7 @@
 
 #include "Object.h"
 #include "Renderer.h"
-#include "geometry/Vec3.h"
+#include "geometry/Vector3.h"
 
 class Component;
 class Scene;

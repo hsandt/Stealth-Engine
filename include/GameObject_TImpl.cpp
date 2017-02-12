@@ -6,7 +6,7 @@
 #include "FactoryUtils.h"
 #include "Component.h"
 #include "RenderComponent.h"
-#include "geometry/Vec3.h"
+#include "geometry/Vector3.h"
 
 #include "GameObject.h"
 

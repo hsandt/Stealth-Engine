@@ -14,7 +14,7 @@
 #include "Renderer.h"
 #include "RenderComponent.h"
 #include "SquareRenderComponent.h"
-#include "geometry/Vec3.h"
+#include "geometry/Vector3.h"
 
 using namespace std;
 

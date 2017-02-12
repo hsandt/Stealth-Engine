@@ -10,8 +10,7 @@
 
 struct Vector3
 {
-public:
-	FLTYPE coords[3] = {0, 0, 0};
+	float coords[3] = {0, 0, 0};
 
 	Vector3() {}
 
@@ -199,6 +198,8 @@ public:
 
 	/* Conversion functions */
 
+	// REFACTOR: if it fails or causes unwanted dependency to Box2D, forward the definition of b2Vec3 (class b2Vec3)
+	// and move the conversion operator definition to cpp (uncomment)
 	#ifdef BOX2D_H
 	inline operator b2Vec3() const
 	{

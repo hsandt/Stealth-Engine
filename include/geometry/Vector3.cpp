@@ -1,6 +1,6 @@
 #include <GL/glew.h>
 
-#include "geometry/Vec3.h"
+#include "geometry/Vector3.h"
 
 void glVertex(Vec3<int> const &v) { glVertex3iv(v.coords);}
 void glVertex(Vec3<short> const &v) { glVertex3sv(v.coords);}
@@ -18,3 +18,8 @@ void glTranslate(Vec3<float> const & v) { glTranslatef(v.coords[0],v.coords[1],v
 void glTranslate(Vec3<double> const & v){ glTranslated(v.coords[0],v.coords[1],v.coords[2]);}
 void glScale(Vec3<float> const & v) { glScalef(v.coords[0],v.coords[1],v.coords[2]);}
 void glScale(Vec3<double> const & v){ glScaled(v.coords[0],v.coords[1],v.coords[2]);}
+
+// uncomment if you moved conversion operator definition here (include what you need to)
+//operator b2Vec3(const Vector3&) {
+//	return {coords[0], coords[1], coords[2]};
+//}

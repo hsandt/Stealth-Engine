@@ -7,7 +7,7 @@
 #include <memory>
 #include "Box2D/Box2D.h"
 
-#include "geometry/Vec2.h"
+#include "geometry/Vector2.h"
 
 class Physics
 {
