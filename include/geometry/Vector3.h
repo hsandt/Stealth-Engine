@@ -36,7 +36,14 @@ struct Vector3
 		return *this;
 	}
 
-	// Coordinate reference getter
+	// Coordinate getter
+	float const &x() const { return coords[0]; };
+
+	float const &y() const { return coords[1]; };
+
+	float const &z() const { return coords[2]; };
+
+	// Coordinate setter
 	float &x() { return coords[0]; };
 
 	float &y() { return coords[1]; };
@@ -201,6 +208,13 @@ struct Vector3
 	// REFACTOR: if it fails or causes unwanted dependency to Box2D, forward the definition of b2Vec3 (class b2Vec3)
 	// and move the conversion operator definition to cpp (uncomment)
 	#ifdef BOX2D_H
+	Vector3(b2Vec3 const &b3V)
+	{
+		coords[0] = b3V.x;
+		coords[1] = b3V.y;
+		coords[2] = b3V.y;
+	}
+
 	inline operator b2Vec3() const
 	{
 		return {coords[0], coords[1], coords[2]};
@@ -242,11 +256,27 @@ inline float LengthSquared(Vector3 const &p)
 	return (p.coords[0] * p.coords[0] + p.coords[1] * p.coords[1] + p.coords[2] * p.coords[2]);
 }
 
-inline Vector3 &Normalize(Vector3 &p)
+/// Return a normalized copy of this vector
+inline Vector3 Normalized(Vector3 const &p)  // inline required to avoid multiple definition on include during linking
 {
-	float n = Length(p);
-	if (n > 0.0) p /= n;
-	return p;
+	Vector3 p2 = p;
+	p2.Normalize();
+	return p2;
+}
+
+/// Return a clamped copy of this vector
+inline Vector3 ClampLength(Vector3 const &p, float maxLength)
+{
+	float length = p.Length();
+	if (length == 0)
+		return Vector3(0, 0, 0);
+
+	Vector3 normalizedVector3 = p;
+	if (length > maxLength)
+	{
+		normalizedVector3 *= maxLength / length;
+	}
+	return normalizedVector3;
 }
 
 inline float Distance(Vector3 const &p1, Vector3 const &p2)

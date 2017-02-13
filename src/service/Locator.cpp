@@ -5,10 +5,10 @@
 
 #include <iostream>
 
-#include "GameApplication.h"
-#include "InputManager.h"
+#include "application/GameApplication.h"
+#include "service/InputManager.h"
 
-#include "Locator.h"
+#include "service/Locator.h"
 
 using namespace std;
 

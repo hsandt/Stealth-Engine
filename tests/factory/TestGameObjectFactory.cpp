@@ -1,0 +1,35 @@
+//
+// Created by wing on 15/09/06.
+//
+
+#include <memory>
+
+#include "scene/Scene.h"
+#include "entity/GameObject.h"
+#include "factory/Factory.h"
+#include "UnitTest++/UnitTest++.h"
+
+using namespace std;
+
+SUITE(GameObjectFactory) {
+    class SceneFixture {
+    public:
+        shared_ptr<Scene> s = make_shared<Scene>();
+        GameObjectFactory f;
+
+//        void RegisterCurrent
+
+    };
+
+    TEST_FIXTURE(SceneFixture, CreateNewObject) {
+        f.SetCurrentScene(s);
+        auto go = f.Create<GameObject>();
+        CHECK_EQUAL(0, go->ID());
+        CHECK_EQUAL(0, s->getGameObjects().at(0)->ID());
+    }
+}
+
+int main(int argc, char* argv[])
+{
+    return UnitTest::RunAllTests();
+}

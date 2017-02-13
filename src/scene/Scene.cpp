@@ -12,11 +12,11 @@
 //#include <boost/log/trivial.hpp>
 //#include <boost/chrono/floor.hpp>
 
-#include "Scene.h"
+#include "scene/Scene.h"
 
-#include "Locator.h"
-#include "Factory.h"
-#include "GameObject.h"
+#include "service/Locator.h"
+#include "factory/Factory.h"
+#include "entity/GameObject.h"
 
 using namespace std;
 //using namespace boost::log;
@@ -67,7 +67,7 @@ void Scene::addGameObject(unique_ptr<GameObject>&& go) {
 void Scene::addGameObject(GameObject* go) {
     auto emplacePair = gameObjects.emplace(go->ID(), go);
     if (emplacePair.second) {
-        cout << "[SCENE] Added game object #" << go->ID() << " " << go->getName() << endl;
+        cout << "[SCENE] Added game object #" << go->ID() << " " << go->name << endl;
 	    go->onAddedToScene(this);
     }
     else {

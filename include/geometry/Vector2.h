@@ -4,16 +4,23 @@
 #include <assert.h>
 #include <cmath>
 #include <iosfwd>
+#include <Box2D/Common/b2Math.h>
 
 #include "utils/infix_iterator.h"
 
-struct Vector2
+// TEST
+#include <iostream>
+
+//struct Vector2
+class Vector2
 {
-	float coords[2] = {0, 0};
+public:
+	float coords[2] = {0, 0};  // required
 
-	Vector2() {}
+	Vector2()
+	{}
 
-	Vector2(const FLTYPE nx, const FLTYPE ny)
+	Vector2(const float nx, const float ny)
 	{
 		coords[0] = nx;
 		coords[1] = ny;
@@ -26,6 +33,19 @@ struct Vector2
 	}
 
 	Vector2 &operator=(Vector2 const &v)
+	{
+		coords[0] = v.coords[0];
+		coords[1] = v.coords[1];
+		return *this;
+	}
+
+	Vector2(Vector2 const &&v)
+	{
+		coords[0] = v.coords[0];
+		coords[1] = v.coords[1];
+	}
+
+	Vector2 &operator=(Vector2 const &&v)
 	{
 		coords[0] = v.coords[0];
 		coords[1] = v.coords[1];
@@ -47,20 +67,25 @@ struct Vector2
 	}
 #endif
 
-	// Coordinate reference getter
-	FLTYPE &x() { return coords[0]; };
+	// Coordinate getter
+	float const &x() const { return coords[0]; };
 
-	FLTYPE &y() { return coords[1]; };
+	float const &y() const { return coords[1]; };
+
+	// Coordinate setter
+	float &x() { return coords[0]; };
+
+	float &y() { return coords[1]; };
 
 	// Index getter
-	FLTYPE &operator[](const int i)
+	float &operator[](const int i)
 	{
 		assert(i >= 0 && i < 2);
 		return coords[i];
 	}
 
 	// Index getter const
-	const FLTYPE &operator[](const int i) const
+	const float &operator[](const int i) const
 	{
 		assert(i >= 0 && i < 2);
 		return coords[i];
@@ -77,18 +102,18 @@ struct Vector2
 		return Vector2(coords[0] - v.coords[0], coords[1] - v.coords[1]);
 	}
 
-	Vector2 operator*(const FLTYPE s) const
+	Vector2 operator*(const float s) const
 	{
 		return Vector2(coords[0] * s, coords[1] * s);
 	}
 
-	Vector2 operator/(const FLTYPE s) const
+	Vector2 operator/(const float s) const
 	{
 		return Vector2(coords[0] / s, coords[1] / s);
 	}
 
 	/// Scalar product
-	FLTYPE operator*(Vector2 const &v) const
+	float operator*(Vector2 const &v) const
 	{
 		return (coords[0] * v.coords[0] + coords[1] * v.coords[1]);
 	}
@@ -108,14 +133,14 @@ struct Vector2
 		return *this;
 	}
 
-	Vector2 &operator*=(const FLTYPE s)
+	Vector2 &operator*=(const float s)
 	{
 		coords[0] *= s;
 		coords[1] *= s;
 		return *this;
 	}
 
-	Vector2 &operator/=(const FLTYPE s)
+	Vector2 &operator/=(const float s)
 	{
 		coords[0] /= s;
 		coords[1] /= s;
@@ -123,21 +148,22 @@ struct Vector2
 	}
 
 	/// Return norm
-	FLTYPE Length() const
+	float Length() const
 	{
-		return (FLTYPE) sqrt(coords[0] * coords[0] + coords[1] * coords[1]);
+		return (float) sqrt(coords[0] * coords[0] + coords[1] * coords[1]);
 	}
 
 	/// Return squared norm
-	FLTYPE LengthSquared() const
+	float LengthSquared() const
 	{
 		return coords[0] * coords[0] + coords[1] * coords[1];
 	}
 
 	Vector2 &Normalize()
 	{
-		FLTYPE n = Length();
-		if (n > 0) {
+		float n = Length();
+		if (n > 0)
+		{
 			coords[0] /= n;
 			coords[1] /= n;
 		}
@@ -179,13 +205,13 @@ struct Vector2
 //    }
 
 	/// Return the distance with another vector
-	FLTYPE Distance(Vector2 const &v) const
+	float Distance(Vector2 const &v) const
 	{
 		return (*this - v).Length();
 	}
 
 	/// Return the squared distance with another vector
-	FLTYPE SquaredDistance(Vector2 const &v) const
+	float SquaredDistance(Vector2 const &v) const
 	{
 		return (*this - v).LengthSquared();
 	}
@@ -193,16 +219,16 @@ struct Vector2
 }; // end class definition
 
 // To string
-inline std::ostream& operator<<(std::ostream &stream, const Vector2 &v)
+inline std::ostream &operator<<(std::ostream &stream, const Vector2 &v)
 {
 	stream << "Vec2(";
-	std::copy(v.coords, v.coords + 2, infix_ostream_iterator<FLTYPE>(stream, ", "));
+	std::copy(v.coords, v.coords + 2, infix_ostream_iterator<float>(stream, ", "));
 	return stream << ")";
 }
 
-inline FLTYPE Angle(Vector2 const &p1, Vector2 const &p2)
+inline float Angle(Vector2 const &p1, Vector2 const &p2)
 {
-	return (FLTYPE) acos((p1 * p2) / (p1.Length() * p2.Length()));
+	return (float) acos((p1 * p2) / (p1.Length() * p2.Length()));
 }
 
 inline Vector2 operator-(Vector2 const &p)
@@ -210,38 +236,55 @@ inline Vector2 operator-(Vector2 const &p)
 	return Vector2(-p.coords[0], -p.coords[1]);
 }
 
-inline Vector2 operator*(const FLTYPE s, Vector2 const &p)
+inline Vector2 operator*(const float s, Vector2 const &p)
 {
 	return Vector2(p.coords[0] * s, p.coords[1] * s);
 }
 
-inline FLTYPE Length(Vector2 const &p)
+inline float Length(Vector2 const &p)
 {
 	return sqrt(p.coords[0] * p.coords[0] + p.coords[1] * p.coords[1]);
 }
 
-inline FLTYPE LengthSquared(Vector2 const &p)
+inline float LengthSquared(Vector2 const &p)
 {
 	return (p.coords[0] * p.coords[0] + p.coords[1] * p.coords[1]);
 }
 
-inline Vector2 &Normalize(Vector2 &p)
+
+/// Return a normalized copy of this vector
+inline Vector2 Normalized(Vector2 const &p)
 {
-	FLTYPE n = Length(p);
-	if (n > 0.0) p /= n;
-	return p;
+	Vector2 p2 = p;
+	p2.Normalize();
+	return p2;
 }
 
-inline FLTYPE Distance(Vector2 const &p1, Vector2 const &p2)
+/// Return a clamped copy of this vector
+inline Vector2 ClampLength(Vector2 const &p, float maxLength)
+{
+	float length = p.Length();
+	if (length == 0)
+		return Vector2(0, 0);
+
+	Vector2 normalizedVector2 = p;
+	if (length > maxLength)
+	{
+		normalizedVector2 *= maxLength / length;
+	}
+	return normalizedVector2;
+}
+
+inline float Distance(Vector2 const &p1, Vector2 const &p2)
 {
 	return Length(p1 - p2);
 }
 
-inline Vector2 &RotateZ(Vector2 &p, FLTYPE _angle)
+inline Vector2 &RotateZ(Vector2 &p, float _angle)
 {
-	FLTYPE c = cos(_angle);
-	FLTYPE s = sin(_angle);
-	FLTYPE cx = c * p.x() - s * p.y();
+	float c = cos(_angle);
+	float s = sin(_angle);
+	float cx = c * p.x() - s * p.y();
 	p.y() = s * p.x() + c * p.y();
 	p.x() = cx;
 	return p;

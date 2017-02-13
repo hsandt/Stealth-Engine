@@ -7,27 +7,38 @@
 
 #include <memory>
 #include <iostream>
-#include <ShaderUtils.h>
+#include <renderer/ShaderUtils.h>
 
-#include "Renderer.h"
-#include "RenderComponent.h"
+#include "renderer/Renderer.h"
+#include "component/RenderComponent.h"
 
 using namespace std;
 
-// REGISTER
+// REFACTOR: split in 2 classes: Renderer for the Rendering layer above OpenGL and RenderManager to register
+// Render component and iterate on them
+
+/* future RenderManager */
 
 void Renderer::registerRenderComponent(RenderComponent* renderComponent) {
-//void Renderer::registerRenderComponent(RenderComponent* renderComponent) {
-//	renderComponents.emplace_back(renderComponent);  // shared to weak pointer conversion
-//	auto wk_RC = weak_ptr<RenderComponent>(renderComponent);
-//	shared_ptr<RenderComponent> sh_RC(wk_RC);
 	renderComponents.push_back(renderComponent);  // shared to weak pointer conversion
-//	renderComponents.push_back(wk_RC);  // shared to weak pointer conversion
-//	renderComponents.push_back(sh_RC);  // shared to weak pointer conversion
-//	renderComponents.emplace_back(wk_RC);  // shared to weak pointer conversion
 }
 
-// RENDER
+void Renderer::unregisterRenderComponent(RenderComponent* renderComponent) {
+	auto it = find(renderComponents.begin(), renderComponents.end(), renderComponent);
+
+	// REFACTOR: make a util function to remove element when present in container
+	if (it != renderComponents.end())
+	{
+		// here, component == *it
+		renderComponents.erase(it);
+	}
+	else
+	{
+		cout << "renderComponent not found in Renderer renderComponents" << endl;
+	}
+}
+
+/* future Renderer */
 
 void Renderer::clear() const {
 	glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);

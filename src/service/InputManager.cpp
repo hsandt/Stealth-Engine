@@ -6,86 +6,174 @@
 //  Copyright (c) 27 Heisei L Nguyen Huu. All rights reserved.
 //
 
+#include <algorithm>
+#include <iostream>
 #include <utility>
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
-#include "enum/KeyDynamicState.h"
-#include "enum/Button.h"
-#include "InputManager.h"
+#include "input/KeyStates.h"
+#include "input/Key.h"
+#include "service/InputManager.h"
 
 using namespace std;
 
+/* Public */
+
 InputManager::InputManager(GLFWwindow *window) : window(window)
 {
-//    for (Button button : allButtons) {
-//        buttonStateMap.emplace(button, make_pair(ButtonState::UP, ButtonEvent::NONE));
-//    }
+	// initialize all keys by registering them for the input backend
+	registerAllKeys();
 
-	for (int key : allKeys) {
-		keyDynamicStateMap.emplace(key, KeyDynamicState::UP);
-	}
-
+	initializeKeyDynamicStateMap();
 }
 
 InputManager::~InputManager()
 {
 }
 
-void InputManager::processInputs() {
+void InputManager::registerInputComponent(InputComponent *inputComponent)
+{
+	inputComponents.push_back(inputComponent);  // shared to weak pointer conversion
 
-    // GLFW only provides a function to get the static state of a key (pressed or released)
-    // In order to track the dynamic state of a key (just pressed, down, just release, up), we need to monitor
-    // the evolution of its static state
-
-    // array of keys for which we track the state
-    int keys[] = {GLFW_KEY_LEFT, GLFW_KEY_RIGHT, GLFW_KEY_DOWN, GLFW_KEY_UP, GLFW_KEY_ESCAPE};
-
-	// update dynamic state of all keys, including switching from pressed to down and released to up
-    for (int key : keys) {
-        int staticState = glfwGetKey(window, key);
-		processKey(key, staticState);
-    }
 }
 
-bool InputManager::isKeyDown(int key) const {
-	KeyDynamicState dynamicState = keyDynamicStateMap.at(key);
-	return dynamicState == KeyDynamicState::PRESSED || dynamicState == KeyDynamicState::DOWN;
-}
+void InputManager::unregisterInputComponent(InputComponent *inputComponent)
+{
+	auto it = find(inputComponents.begin(), inputComponents.end(), inputComponent);
 
-//ButtonState InputManager::getButtonState(Button const button) const {
-//    return buttonStateMap.at(button).first;
-//}
-
-// TODO: add is pressed or released_pressed, etc. methods
-
-//bool InputManager::isPressedOrDown(Button const button) const {
-//    ButtonState buttonPair = buttonStateMap.at(button).first;
-//    return buttonPair != ButtonState::UP && buttonPair != ButtonState::RELEASED;
-//}
-
-void InputManager::processKey(int key, int newState) {
-    // TODO: replace button pair with a clearer struct, OR use 2 distinct maps
-	// Previous key state
-	KeyDynamicState &keyState = keyDynamicStateMap.at(key);
-
-    // in order to get references instead of getting the element from the key twice
-    if (keyState == KeyDynamicState::RELEASED)
+	// REFACTOR: make a util function to remove element when present in container
+	if (it != inputComponents.end())
 	{
-		if (newState == GLFW_RELEASE) keyState = KeyDynamicState::UP;
-		else keyState = KeyDynamicState::PRESSED;
-	}
-	else if (keyState == KeyDynamicState::UP)
-	{
-		if (newState == GLFW_PRESS) keyState = KeyDynamicState::PRESSED;
-	}
-	else if (keyState == KeyDynamicState::PRESSED)
-	{
-		if (newState == GLFW_PRESS) keyState = KeyDynamicState::DOWN;
-		else keyState = KeyDynamicState::RELEASED;
+		// here, component == *it
+		inputComponents.erase(it);
 	}
 	else
 	{
-		if (newState == GLFW_RELEASE) keyState = KeyDynamicState::RELEASED;
+		cout << "renderComponent not found in Renderer renderComponents" << endl;
 	}
 }
+
+void InputManager::processInputs()
+{
+	// GLFW only provides a function to get the static state of a key (pressed or released).
+	// In order to track the dynamic state of a key (just pressed, down, just release, up), we need to monitor
+	// the evolution of its static state.
+
+	// update dynamic state of all keys, including switching from pressed to down and released to up
+	for (const auto& keyDataPair : allKeyData)
+	{
+		// GCC 7: for (auto& [key, value] : map)
+		int glfwCode = glfwGetKey(window, keyDataPair.second.glfwCode);
+		processKey(keyDataPair.first, toKeyStaticState(glfwCode));
+	}
+}
+
+
+void InputManager::applyInputBindings()
+{
+	for (auto inputComponent : inputComponents) {
+		inputComponent->applyKeyBindings();
+		// TODO: apply axis and action bindings
+	}
+}
+
+KeyStaticState InputManager::getKeyStaticState(Key key) const
+{
+    return toKeyStaticState(keyDynamicStateMap.at(key));
+}
+
+KeyDynamicState InputManager::getKeyDynamicState(Key key) const
+{
+    return keyDynamicStateMap.at(key);
+}
+
+float InputManager::getAxisKeyValue(Key key) const
+{
+	return toAxisValue(keyDynamicStateMap.at(key));
+}
+
+bool InputManager::isKeyPressed(Key key) const
+{
+	KeyDynamicState dynamicState = keyDynamicStateMap.at(key);
+	return dynamicState == KeyDynamicState::PRESSED;
+}
+
+bool InputManager::isKeyReleased(Key key) const
+{
+	KeyDynamicState dynamicState = keyDynamicStateMap.at(key);
+	return dynamicState == KeyDynamicState::RELEASED;
+}
+
+bool InputManager::isKeyDown(Key key) const
+{
+	KeyDynamicState dynamicState = keyDynamicStateMap.at(key);
+	return dynamicState == KeyDynamicState::PRESSED || dynamicState == KeyDynamicState::HELD_DOWN;
+}
+
+bool InputManager::isKeyUp(Key key) const
+{
+	KeyDynamicState dynamicState = keyDynamicStateMap.at(key);
+	return dynamicState == KeyDynamicState::RELEASED || dynamicState == KeyDynamicState::HELD_UP;
+}
+
+/* Private */
+
+void InputManager::registerAllKeys()
+{
+	// create key data and copy directly to map instead of using a shared pointer as in Unreal Engine InputCoreTypes.cpp > AddKey
+	registerKey(Key::ESCAPE, KeyData(GLFW_KEY_ESCAPE));
+	registerKey(Key::RIGHT, KeyData(GLFW_KEY_RIGHT));
+	registerKey(Key::LEFT, KeyData(GLFW_KEY_LEFT));
+	registerKey(Key::DOWN, KeyData(GLFW_KEY_DOWN));
+	registerKey(Key::UP, KeyData(GLFW_KEY_UP));
+}
+
+void InputManager::registerKey(Key key, KeyData keyData)
+{
+	allKeyData.emplace(key, keyData);
+}
+
+void InputManager::initializeKeyDynamicStateMap()
+{
+	for (const auto& keyDataPair : allKeyData)
+	{
+		keyDynamicStateMap.emplace(keyDataPair.first, KeyDynamicState::HELD_UP);
+	}
+}
+
+void InputManager::processKey(Key key, KeyStaticState newStaticState)
+{
+	// DEBUG
+	if (keyDynamicStateMap.find(key) == keyDynamicStateMap.end())
+		return;
+
+	// Get previous key state by reference so that we can update it inside the map if needed
+	KeyDynamicState &keyState = keyDynamicStateMap.at(key);
+
+	if (keyState == KeyDynamicState::RELEASED)
+	{
+		if (newStaticState == KeyStaticState::UP)
+			keyState = KeyDynamicState::HELD_UP;
+		else
+			keyState = KeyDynamicState::PRESSED;  // pressed just after released
+	}
+	else if (keyState == KeyDynamicState::HELD_UP)
+	{
+		if (newStaticState == KeyStaticState::DOWN)
+			keyState = KeyDynamicState::PRESSED;
+	}
+	else if (keyState == KeyDynamicState::PRESSED)
+	{
+		if (newStaticState == KeyStaticState::DOWN)
+			keyState = KeyDynamicState::HELD_DOWN;
+		else
+			keyState = KeyDynamicState::RELEASED;  // released just after pressed
+	}
+	else  // keyState == KeyDynamicState::HELD_DOWN
+	{
+		if (newStaticState == KeyStaticState::UP)
+			keyState = KeyDynamicState::RELEASED;
+	}
+}
+

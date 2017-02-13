@@ -3,29 +3,33 @@
 //
 
 #include <iostream>
-#include "Renderer.h"
-#include "RenderComponent.h"
 
-#include "SquareRenderComponent.h"
+#include "component/RenderComponent.h"
+#include "component/Transform.h"
+#include "entity/Actor.h"
+#include "renderer/Renderer.h"
 
-#include "GameObject.h"
+#include "component/SquareRenderComponent.h"
 
 using namespace std;
 
 SquareRenderComponent::SquareRenderComponent() : RenderComponent() {}
 
 void SquareRenderComponent::render(Renderer *renderer) {
-    if (gameObject != nullptr)
+    if (actor != nullptr)
     {
-	    float w = 20, h = 20;
+	    const float w = 20, h = 20;
 
-	    float x = gameObject->getPosition().x();
-	    float y = gameObject->getPosition().y();
+	    float x = actor->transform->position.x();
+	    float y = actor->transform->position.y();
 	    renderer->drawSquare(x - w / 2, y - h / 2, w, h);
+
+	    cout << "[SquareRenderComponent] " << x << " " << y << endl;
     }
     else
     {
-	    cout << "no go to lock" << endl;
+	    cout << "[SquareRenderComponent] no game object" << endl;
     }
 
 }
+

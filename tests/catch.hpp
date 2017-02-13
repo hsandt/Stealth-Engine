@@ -5024,7 +5024,7 @@ namespace Catch {
             LightGrey = Bright | Grey,
             BrightWhite = Bright | White,
 
-            // By intention
+            // By moveIntention
             FileName = LightGrey,
             Warning = Yellow,
             ResultError = BrightRed,

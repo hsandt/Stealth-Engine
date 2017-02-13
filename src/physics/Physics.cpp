@@ -7,7 +7,7 @@
 
 #include "geometry/Vector2.h"
 
-#include "Physics.h"
+#include "physics/Physics.h"
 
 using namespace std;
 
