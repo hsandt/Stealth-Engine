@@ -19,6 +19,22 @@ using namespace std;
 
 /* future RenderManager */
 
+Renderer::Renderer(GLFWwindow *window) : window(window)
+{
+	init();
+}
+
+void Renderer::init()
+{
+	// REFACTOR: in loadAllShaders, we have already loaded basic engine shaders
+	// store pointers to them somewhere and get them back now, by id or name!
+
+	// Create and compile our GLSL program from the shaders
+
+	// Shader Program 0: Simple Vertex / Simple Fragment
+	shaderProgramIDs[0] = loadShaders( "resources/shaders/SimpleVertexShader.glsl", "resources/shaders/SimpleFragmentShader.glsl" );
+}
+
 void Renderer::registerRenderComponent(RenderComponent* renderComponent) {
 	renderComponents.push_back(renderComponent);  // shared to weak pointer conversion
 }
@@ -99,21 +115,11 @@ void Renderer::drawSquare(float x, float y, float w, float h) {
 			(void*)0            // array buffer offset
 	);
 
-	// REFACTOR: in loadAllShaders, we have already loaded basic engine shaders
-	// store pointers to them somewhere and get them back now, by id or name!
-
-	// Create and compile our GLSL program from the shaders
-	GLuint programID = loadShaders( "resources/shaders/SimpleVertexShader.glsl", "resources/shaders/SimpleFragmentShader.glsl" );
-
-	// Use our shader
-	glUseProgram(programID);
+	// Use our shader (simple)
+	// TODO: use material shader
+	glUseProgram(shaderProgramIDs[0]);
 
 	// Draw the triangle !
 	glDrawArrays(GL_TRIANGLES, 0, 6); // Starting from vertex 0; 6 vertices total -> 2 triangle
 	glDisableVertexAttribArray(0);
 }
-
-
-
-
-

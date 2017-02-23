@@ -8,6 +8,7 @@
 #include <GLFW/glfw3.h>
 
 #include <algorithm>
+#include <array>
 
 #include "utils/Color.h"
 
@@ -17,19 +18,27 @@ class GameObject;
 class Renderer
 {
 public:
-	Renderer(GLFWwindow *window) : window(window) { }
+	Renderer(GLFWwindow *window);
+
+	/// Initialize renderer:
+	/// - load all shaders
+	void init();
 
 	/// Clear screen buffer
-	void clear () const;
+	void clear() const;
 
 	/// Render through all render components
 	void render();
 
+	/// Draw a square from corner (x, y) and size (w, h) toward bottom-right
 	void drawSquare(float x, float y, float w, float h);
 
 private:
 	/// Window used to render
 	GLFWwindow *window = nullptr;
+
+	/// Array of shaders loaded
+	std::array<GLuint, 16> shaderProgramIDs = {};
 
 	/// Background color
 	Color backgroundColor = {0, 0, 0.2, 1};  // dark blue
@@ -38,14 +47,11 @@ private:
 	/// All Render components in the current scene (weak pointers)
 	std::vector<RenderComponent*> renderComponents;
 
+public:
 	/// Register a new render component (weak pointer)
 	void registerRenderComponent(RenderComponent* renderComponent);
 
 	/// Unregister a render component (weak pointer)
 	void unregisterRenderComponent(RenderComponent* renderComponent);
-
-	// incomplete class does not support making a single method friend
-//	friend void RenderComponent::onAddedToGameObject(std::shared_ptr<GameObject> gameObject);
-	friend class RenderComponent;
 };
 

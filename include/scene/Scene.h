@@ -36,6 +36,11 @@ private:
     Scene(Scene&&) = delete;
     Scene &operator=(Scene&&) & = delete;
 
+    // OPTIMIZE: usually, the best is an array of a vector of GameObject instances (not pointers)
+    // for locality / cache efficiency + slot / handle mapping. For now, we support GameObject
+    // subclasses (as UE4) so this is not possible due to having objects of different sizes.
+    // If subclasses reveal unneeded during game development, we will switch to pure entity-components
+    // (as Unity) as use an array of game objects instances indeed.
     std::map<int, GameObject*> gameObjects;
 
 };

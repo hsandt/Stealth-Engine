@@ -23,8 +23,6 @@ void SquareRenderComponent::render(Renderer *renderer) {
 	    float x = actor->transform->position.x();
 	    float y = actor->transform->position.y();
 	    renderer->drawSquare(x - w / 2, y - h / 2, w, h);
-
-	    cout << "[SquareRenderComponent] " << x << " " << y << endl;
     }
     else
     {
