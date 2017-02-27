@@ -12,12 +12,21 @@
 
 using namespace std;
 
-GameApplication *Locator::gameApplication;  // default initialization to nullptr for static (required)
+// default initialization to nullptr for all static pointers (lines required)
+Logger *Locator::logger;
+GameApplication *Locator::gameApplication;
+Factory *Locator::factory;
 InputManager *Locator::inputManager;
 Renderer *Locator::renderer;
-Factory *Locator::factory;
 
-// maybe return a shared_ptr for faster processing
+Logger* Locator::getLogger() {
+    return logger;
+}
+
+Factory* Locator::getFactory() {
+    return factory;
+}
+
 GameApplication* Locator::getGameApplication() {
     return gameApplication;
 }
@@ -30,6 +39,3 @@ Renderer* Locator::getRenderer() {
     return renderer;
 }
 
-Factory* Locator::getFactory() {
-    return factory;
-}

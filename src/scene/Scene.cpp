@@ -12,11 +12,11 @@
 //#include <boost/log/trivial.hpp>
 //#include <boost/chrono/floor.hpp>
 
-#include "scene/Scene.h"
-
-#include "service/Locator.h"
-#include "factory/Factory.h"
+#include "debug/Logger.h"
 #include "entity/GameObject.h"
+#include "factory/Factory.h"
+#include "scene/Scene.h"
+#include "service/Locator.h"
 
 using namespace std;
 //using namespace boost::log;
@@ -32,7 +32,7 @@ Scene::~Scene()
         delete goPair.second;
     }
 
-    cout << "[SCENE] Scene destroyed" << endl;
+    LOG("[SCENE] Scene destroyed");
 }
 
 map<int, GameObject*> Scene::getGameObjects() const {
@@ -67,11 +67,11 @@ void Scene::addGameObject(unique_ptr<GameObject>&& go) {
 void Scene::addGameObject(GameObject* go) {
     auto emplacePair = gameObjects.emplace(go->ID(), go);
     if (emplacePair.second) {
-        cout << "[SCENE] Added game object #" << go->ID() << " " << go->name << endl;
+        LOGF("[SCENE] Added game object #%d %s", go->ID(), go->name.c_str());
 	    go->onAddedToScene(this);
     }
     else {
-        cout << "Could not add game object with id: " << go->ID() << ": game object with same ID already exists in the scene." << endl;
+        LOGF("Could not add game object with id: %d: game object with same ID already exists in the scene.",  go->ID());
     }
 }
 

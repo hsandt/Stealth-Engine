@@ -4,10 +4,11 @@
 
 #pragma once
 
+class Logger;
 class GameApplication;
+class Factory;
 class InputManager;
 class Renderer;
-class Factory;
 
 class Locator {
 public:
@@ -15,16 +16,18 @@ public:
 
 	// NATIVE POINTERS: we delete the objects in GameApplication destructor
 
+    static Logger* getLogger();
     static GameApplication* getGameApplication();
+    static Factory* getFactory();
     static InputManager* getInputManager();
     static Renderer* getRenderer();
-    static Factory* getFactory();
 
 private:
+	static Logger *logger;
 	static GameApplication *gameApplication;
+    static Factory *factory;
     static InputManager *inputManager;
     static Renderer *renderer;
-    static Factory *factory;
 
 	friend class GameApplication;
 };

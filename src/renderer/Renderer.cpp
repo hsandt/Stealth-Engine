@@ -21,14 +21,10 @@ using namespace std;
 
 Renderer::Renderer(GLFWwindow *window) : window(window)
 {
-	init();
 }
 
 void Renderer::init()
 {
-	// REFACTOR: in loadAllShaders, we have already loaded basic engine shaders
-	// store pointers to them somewhere and get them back now, by id or name!
-
 	// Create and compile our GLSL program from the shaders
 
 	// Shader Program 0: Simple Vertex / Simple Fragment

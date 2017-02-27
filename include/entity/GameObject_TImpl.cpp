@@ -8,7 +8,7 @@
 #include "component/RenderComponent.h"
 #include "geometry/Vector3.h"
 
-#include "GameObject.h"
+//#include "GameObject.h"
 
 
 using namespace std;

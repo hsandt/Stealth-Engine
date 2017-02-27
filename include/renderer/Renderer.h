@@ -22,6 +22,7 @@ public:
 
 	/// Initialize renderer:
 	/// - load all shaders
+	/// Call it after constructing the single instance
 	void init();
 
 	/// Clear screen buffer

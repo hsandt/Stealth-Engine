@@ -6,11 +6,11 @@
 #include "factory/GameObjectCreator.h"
 #include "factory/ComponentCreator.h"
 
-#include "scene/Scene.h"
+#include "debug/Logger.h"
 #include "entity/GameObject.h"
 #include "entity/Character.h"
+#include "scene/Scene.h"
 
-#include <iostream>
 
 using namespace std;
 
@@ -24,7 +24,7 @@ Factory::Factory() {
 Factory::~Factory() {
     delete gameObjectCreator;
     delete componentCreator;
-    std::cout << "[FACTORY] Factory destroyed" << std::endl;
+    LOG("[FACTORY] Factory destroyed");
 }
 
 void Factory::ChangeCurrentScene(Scene* scene) {

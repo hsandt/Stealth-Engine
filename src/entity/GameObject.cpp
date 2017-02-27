@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "component/Component.h"
+#include "debug/Logger.h"
 #include "object/Object.h"
 #include "factory/FactoryUtils.h"
 
@@ -27,15 +28,15 @@ GameObject::~GameObject()
 	{
 		if (component != nullptr)
 		{
-			cout << "[GAMEOBJECT] Deleting component " << component->id << endl;
+			LOGF("[GAMEOBJECT] Deleting component %d", component->id);
 			delete component;
 		}
 		else
 		{
-			cout << "[GAMEOBJECT] GameObject #" << id << " " << name << " has null component" << endl;
+			LOGF("[GAMEOBJECT] GameObject #%d %s has null component", id, name.c_str());
 		}
 	}
-	cout << "[GAMEOBJECT] GameObject #" << id << " " << name << " destroyed" << endl;
+	LOGF("[GAMEOBJECT] GameObject #%d %s destroyed", id, name.c_str());
 }
 
 

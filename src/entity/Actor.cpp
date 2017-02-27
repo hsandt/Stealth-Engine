@@ -13,15 +13,6 @@ class Transform;
 Actor::Actor() : GameObject()
 {
 	transform = addComponent<Transform>();
-
-	// SIGSEGV
-	// DEBUG
-	if (transform == nullptr) {
-		cout << "null transform" << endl;
-	}
-	transform -> position.x() = 0.0f;
-//	transform -> position.y() = 0.0f;
-	transform->setPosition(Vector2(1,2));
 }
 
 Actor::~Actor() {

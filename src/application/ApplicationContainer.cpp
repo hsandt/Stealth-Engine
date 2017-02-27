@@ -8,9 +8,10 @@
 
 #include <memory>
 #include <iostream>
-#include "application/GameApplication.h"
 
+#include "application/GameApplication.h"
 #include "application/ApplicationContainer.h"
+#include "debug/Logger.h"
 
 using namespace std;
 
@@ -118,5 +119,5 @@ void ApplicationContainer::runGame(int fps) {
 
 void error_callback(int error, const char* description)
 {
-    cerr << "[GLFW] Error: " << description << endl;
+    LOGERR("[GLFW] Error: ", description);
 }
