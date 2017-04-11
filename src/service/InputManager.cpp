@@ -9,6 +9,8 @@
 #include <algorithm>
 #include <iostream>
 #include <utility>
+#include <debug/Logger.h>
+#include <service/Locator.h>
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
@@ -30,6 +32,7 @@ InputManager::InputManager(GLFWwindow *window) : window(window)
 
 InputManager::~InputManager()
 {
+	LOG("[INPUT] InputManager destroyed");
 }
 
 void InputManager::registerInputComponent(InputComponent *inputComponent)

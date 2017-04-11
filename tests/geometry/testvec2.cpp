@@ -8,9 +8,9 @@
 
 TEST_CASE( "Test Vec2f comparison", "[geometry]" )
 {
-	Vec2f a(1, 2);
-	Vec2f b(1, 2);
-	Vec2f c(2, 3);
+	Vector2 a(1, 2);
+	Vector2 b(1, 2);
+	Vector2 c(2, 3);
 
 	SECTION("Equality")
 	{

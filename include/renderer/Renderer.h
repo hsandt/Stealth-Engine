@@ -19,6 +19,7 @@ class Renderer
 {
 public:
 	Renderer(GLFWwindow *window);
+	virtual ~Renderer();
 
 	/// Initialize renderer:
 	/// - load all shaders

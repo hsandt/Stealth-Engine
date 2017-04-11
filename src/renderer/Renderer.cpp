@@ -9,7 +9,9 @@
 #include <iostream>
 #include <renderer/ShaderUtils.h>
 
+#include "debug/Logger.h"
 #include "renderer/Renderer.h"
+#include "service/Locator.h"
 #include "component/RenderComponent.h"
 
 using namespace std;
@@ -21,6 +23,11 @@ using namespace std;
 
 Renderer::Renderer(GLFWwindow *window) : window(window)
 {
+}
+
+Renderer::~Renderer()
+{
+	LOG("[RENDERER] Renderer destroyed");
 }
 
 void Renderer::init()

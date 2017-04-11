@@ -9,30 +9,40 @@
 #pragma once
 
 #include <iosfwd>
-#include <type_traits>
-#include <algorithm>
-#include <iterator>
-#include <string>
-#include <vector>
-#include <deque>
-#include <map>
 
-#include "utils/infix_iterator.h"
-#include "utils/TraitsUtil.h"
+// Use CMake standard macro for Release and MinSizeRel
+#ifndef NDEBUG
 
-// macro to log easily
-#define LOG(...) if (Locator::getLogger() != nullptr) Locator::getLogger()->log(__VA_ARGS__);
-#define LOGWARN(...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logwarn(__VA_ARGS__);
-#define LOGERR(...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logerr(__VA_ARGS__);
+	// Shortcut macros to log messages
+	// Only call them from inside GameClass subclass objects
+	#define LOG(...) if (Locator::getLogger() != nullptr) Locator::getLogger()->log(__VA_ARGS__)
+	#define LOGWARN(...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logwarn(__VA_ARGS__)
 
-#define LOGF(format, ...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logf(format, __VA_ARGS__);
-#define LOGWARNF(format, ...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logwarnf(format, __VA_ARGS__);
-#define LOGERRF(format, ...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logerrf(format, __VA_ARGS__);
+	// Format versions
+	#define LOGF(format, ...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logf(format, ##__VA_ARGS__)
+	#define LOGWARNF(format, ...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logwarnf(format, ##__VA_ARGS__)
 
-// macro to ease concatenation version
+#else
+
+	#define LOG(...)
+	#define LOGWARN(...)
+	#define LOGERR(...)
+
+	#define LOGF(format, ...)
+	#define LOGWARNF(format, ...)
+	#define LOGERRF(format, ...)
+
+	#define DUMP(variable) ""
+
+#endif
+
+// Log errors even in Release. Maybe don't log them in RelMinSize build
+#define LOGERR(...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logerr(__VA_ARGS__)
+#define LOGERRF(format, ...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logerrf(format, ##__VA_ARGS__)
+
+// Macro to ease concatenation version (required in Release build for LOGERR(F)
 #define DUMP(variable) #variable ":", variable
 
-#define BUFFER_SIZE 100
 
 class Logger {
     
@@ -41,9 +51,6 @@ private:
     std::ostream & standardOS;
     std::ostream & warningOS;
     std::ostream & errorOS;
-
-    /// Buffer for formatting string
-    char buf[BUFFER_SIZE] = {};
     
 public:
 	// Non-template methods should be inlined or defined
@@ -52,6 +59,11 @@ public:
     Logger(std::ostream & standardOS, std::ostream & warningOS, std::ostream & errorOS)
 	    : standardOS(standardOS), warningOS(warningOS), errorOS(errorOS)
 	{}
+
+	virtual ~Logger()
+	{
+		log("[LOG] Logger destroyed");
+	}
 
 	/// Log an undetermined number of parameters to the standard output stream
     template<typename... Args>
@@ -65,27 +77,6 @@ public:
 	template<typename... Args>
     void logerr(const Args&... args);
 
-private:
-	/// Log an undetermined number of parameters to given output stream
-	template<typename... Args>
-	void log(std::ostream & os, const Args&... args);
-
-	/// Stream an undetermined number of parameters with the appropriate string formatting
-	template<typename FirstArg, typename... Args>
-	void streamArgs(std::ostream & os, const FirstArg& arg, const Args&... args);
-
-	/// Most generic overload for streaming
-	template<class T>
-	void stream(std::ostream& os, const T& value);
-//	void stream(std::ostream& os, const std::enable_if_t<!is_container<T>::value, T>& value);
-
-	/// Iterable container overload for streaming
-	// http://eli.thegreenplace.net/2014/sfinae-and-enable_if/
-	// add more container types as needed
-	template<class T>
-	void stream(std::ostream& os, const std::enable_if_t<is_container<T>::value, T>& value);
-
-public:
 	/// Log a formatted string with undefined number of parameters to the standard output stream
 	template<typename... Args>
     void logf(const std::string &format, Args... args);
@@ -98,14 +89,6 @@ public:
 	template<typename... Args>
     void logerrf(const std::string &format, Args... args);
 
-private:
-    /// Stream a formatted string with undefined number of parameters
-    template<typename... Args>
-    void streamf(std::ostream & os, const std::string& format, Args... args);
 };
-
-/// Map streaming operator override
-//template<class T, class U>
-//void operator<<(std::ostream & flux, const std::map<T, U>& dict);
 
 #include "debug/Logger.tpp"

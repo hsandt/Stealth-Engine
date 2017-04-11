@@ -37,7 +37,7 @@ public:
     };
 
     // Initialize application, called by run(), don't call manually.
-    int init(int width, int height);
+    ApplicationContainer::RESULT init(int width, int height);
 
     /// Run the game at given FPS
     void runGame(int fps);

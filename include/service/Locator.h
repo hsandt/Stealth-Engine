@@ -30,4 +30,5 @@ private:
     static Renderer *renderer;
 
 	friend class GameApplication;
+	friend class EngineCore;
 };

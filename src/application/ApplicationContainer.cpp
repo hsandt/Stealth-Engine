@@ -25,7 +25,7 @@ ApplicationContainer::~ApplicationContainer()
     destroy();
 }
 
-int ApplicationContainer::init(int width, int height)
+ApplicationContainer::RESULT ApplicationContainer::init(int width, int height)
 {
     // Set callback for any GLFW error
     glfwSetErrorCallback(error_callback);
@@ -38,13 +38,12 @@ int ApplicationContainer::init(int width, int height)
         return FAILURE;
     }
 
-    // Create window (OpenGL 4.0+, 4.5 not available yet, check your drivers)
-//	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
+    // Create window (OpenGL 4.5+ now supported by Nvidia drivers for Ubuntu)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-//    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL
+//	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
 
     window = glfwCreateWindow(width, height, APPTITLE, nullptr, nullptr);
     if (!window) {
@@ -66,7 +65,7 @@ int ApplicationContainer::init(int width, int height)
 	glewExperimental=true; // Needed in core profile
 	if (glewInit() != GLEW_OK) {
 		fprintf(stderr, "Failed to initialize GLEW\n");
-		return -1;
+		return RESULT::FAILURE;
 	}
 
     // for now, pure OpenGL
