@@ -5,7 +5,7 @@
 #pragma once
 
 #include <iostream>
-#include "service/Locator.h"
+#include "core/EngineCore.h"
 #include "Factory.h"
 // Locator uses class forward declaration, safer to include
 #include "application/GameApplication.h"
@@ -14,12 +14,12 @@
 
 template<class T>
 T* CreateGameObject() {
-    Factory* factory = Locator::getFactory();
+    Factory* factory = EngineCore::getFactory();
     return factory->CreateGameObject<T>();
 }
 
 template<class T>
 T* CreateComponent() {
-	Factory* factory = Locator::getFactory();
+	Factory* factory = EngineCore::getFactory();
     return factory->CreateComponent<T>();
 }

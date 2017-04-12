@@ -18,7 +18,7 @@ class GameObject;
 class Renderer
 {
 public:
-	Renderer(GLFWwindow *window);
+	Renderer();
 	virtual ~Renderer();
 
 	/// Initialize renderer:
@@ -36,9 +36,6 @@ public:
 	void drawSquare(float x, float y, float w, float h);
 
 private:
-	/// Window used to render
-	GLFWwindow *window = nullptr;
-
 	/// Array of shaders loaded
 	std::array<GLuint, 16> shaderProgramIDs = {};
 

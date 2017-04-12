@@ -3,49 +3,50 @@
 //
 
 #include <iostream>
+#include <stdexcept>
 
+#include "application/GLFWWindowManager.h"
 #include "debug/Logger.h"
 #include "core/EngineCore.h"
 #include "application/GameApplication.h"
+#include "application/ApplicationResult.h"
 #include "factory/Factory.h"
 #include "renderer/Renderer.h"
-#include "service/Locator.h"
+
+EngineCore* EngineCore::instance = nullptr;
 
 EngineCore::EngineCore(GameApplication* gameApplication)
+	: gameApplication(gameApplication)
 {
-	// OGRE-style engine initialization (see Game Engine Architecture 5.1.3.1 p.236)
-	// using new in engine core constructor, and deleting explicitly in core destructor.
-	// This means we don't need separate startUp and shutDown methods, relying on
-	// constructor and destructor only. However, we can create them if we need more
-	// control on initialization and shut down.
-	// Still use service Locator (instead of setting static singleton instance
-	// in constructor as in OgreSingleton.h)
+	if (instance)
+		throw runtime_error("An instance of EngineCore has already been created");
 
-	// register Service Providers to Service Locators
-	Locator::gameApplication = gameApplication;
+	instance = this;
+}
+
+void EngineCore::init(const GameConfig & gameConfig)
+{
+	// always create the Logger 1st
+	logger = new Logger(std::cout, std::cout, std::cerr);
+
+	windowManager = new GLFWWindowManager();
+	windowManager->init(gameConfig);
 
 	// Create logger on standard output stream
-	Locator::logger = new Logger(std::cout, std::cout, std::cerr);
 
-	Locator::factory = new Factory();
+	factory = new Factory();
 
-	Locator::inputManager = new InputManager(gameApplication->getWindow());
+	inputManager = new InputManager();
 
-	Locator::renderer = new Renderer(gameApplication->getWindow());
+	renderer = new Renderer();
 	// initialize Renderer (will load all standard shaders)
-	Locator::renderer->init();
+	renderer->init();
 }
 
 EngineCore::~EngineCore()
 {
-	delete Locator::factory;
-	delete Locator::inputManager;
-	delete Locator::renderer;  // or use unique_ptr
-	delete Locator::logger;
-
-	// clear reverse references considered as weak
-	Locator::factory = nullptr;
-	Locator::inputManager = nullptr;
-	Locator::renderer = nullptr;
-	Locator::logger = nullptr;
+	delete factory;
+	delete inputManager;
+	delete renderer;
+	delete logger;
 }

@@ -16,7 +16,7 @@
 #include "entity/GameObject.h"
 #include "factory/Factory.h"
 #include "scene/Scene.h"
-#include "service/Locator.h"
+#include "core/EngineCore.h"
 
 using namespace std;
 //using namespace boost::log;
@@ -85,7 +85,7 @@ void Scene::removeGameObject(GameObject* go) {
 }
 
 void Scene::init() {
-    Locator::getFactory()->ChangeCurrentScene(this);
+    EngineCore::getFactory()->ChangeCurrentScene(this);
     // T* &&arg did not work well, so to ensure I don't keep a ref of the GO I use only unique_ptr
 //	addGameObject(unique_ptr<GameObject> {new Guard("Guard", {100, 50, 0})});  // use rhs or move only
 //	addGameObject(unique_ptr<GameObject> {new Spy("Spy", {50, 50, 0})});

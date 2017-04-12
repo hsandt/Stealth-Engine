@@ -6,7 +6,6 @@
 
 #include <memory>
 
-#include "service/Locator.h"
 // required if defining template here; else include templ_impl.cpp at the end of the file
 #include "factory/GameObjectCreator.h"
 #include "factory/ComponentCreator.h"

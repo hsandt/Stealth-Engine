@@ -10,19 +10,20 @@
 #include <iostream>
 #include <utility>
 #include <debug/Logger.h>
-#include <service/Locator.h>
+#include <core/EngineCore.h>
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
 #include "input/KeyStates.h"
 #include "input/Key.h"
 #include "service/InputManager.h"
+#include "application/WindowManager.h"
 
 using namespace std;
 
 /* Public */
 
-InputManager::InputManager(GLFWwindow *window) : window(window)
+InputManager::InputManager()
 {
 	// initialize all keys by registering them for the input backend
 	registerAllKeys();
@@ -67,8 +68,9 @@ void InputManager::processInputs()
 	for (const auto& keyDataPair : allKeyData)
 	{
 		// GCC 7: for (auto& [key, value] : map)
-		int glfwCode = glfwGetKey(window, keyDataPair.second.glfwCode);
-		processKey(keyDataPair.first, toKeyStaticState(glfwCode));
+		int keyCode = EngineCore::getWindowManager()->getKey(keyDataPair.second.glfwCode);
+//		int glfwCode = glfwGetKey(window, keyDataPair.second.glfwCode);
+		processKey(keyDataPair.first, EngineCore::getWindowManager()->toKeyStaticState(keyCode));
 	}
 }
 
@@ -124,6 +126,7 @@ bool InputManager::isKeyUp(Key key) const
 
 void InputManager::registerAllKeys()
 {
+	// REFACTOR: move away any GLFW reference to GLFWWindowManager
 	// create key data and copy directly to map instead of using a shared pointer as in Unreal Engine InputCoreTypes.cpp > AddKey
 	registerKey(Key::ESCAPE, KeyData(GLFW_KEY_ESCAPE));
 	registerKey(Key::RIGHT, KeyData(GLFW_KEY_RIGHT));

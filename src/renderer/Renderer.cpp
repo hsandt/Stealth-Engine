@@ -11,8 +11,9 @@
 
 #include "debug/Logger.h"
 #include "renderer/Renderer.h"
-#include "service/Locator.h"
+#include "core/EngineCore.h"
 #include "component/RenderComponent.h"
+#include "application/WindowManager.h"
 
 using namespace std;
 
@@ -21,7 +22,7 @@ using namespace std;
 
 /* future RenderManager */
 
-Renderer::Renderer(GLFWwindow *window) : window(window)
+Renderer::Renderer()
 {
 }
 
@@ -77,7 +78,9 @@ void Renderer::drawSquare(float x, float y, float w, float h) {
 	glBindVertexArray(VertexArrayID);
 
 	int screenWidth, screenHeight;
-	glfwGetFramebufferSize(window, &screenWidth, &screenHeight);  // use framebuffer size for pixel size (2x if high-dpi)
+	// use framebuffer size for screen coordinates instead of window size for pixel size
+	// (prevent 2x if high-dpi, and if window shows reduced image the original coords will be preserved)
+	EngineCore::getWindowManager()->getFramebufferSize(&screenWidth, &screenHeight);
 
 	float normalizedX1 = x / screenWidth * 2 - 1;
 	float normalizedY1 = y / screenHeight * 2 - 1;

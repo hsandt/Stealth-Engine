@@ -3,7 +3,7 @@
 //
 
 #include "component/Component.h"
-#include "service/Locator.h"
+#include "core/EngineCore.h"
 #include "service/InputManager.h"
 
 #include "component/InputComponent.h"
@@ -22,7 +22,7 @@ InputComponent::~InputComponent() {
 
 void InputComponent::init()
 {
-	inputManager = Locator::getInputManager();
+	inputManager = EngineCore::getInputManager();
 }
 
 void InputComponent::registerComponent()

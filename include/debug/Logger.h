@@ -10,17 +10,21 @@
 
 #include <iosfwd>
 
+#include "core/EngineCore.h"
+
+#define LOGGER_VALID (EngineCore::getInstance() != nullptr && EngineCore::getInstance()->getLogger() != nullptr)
+
 // Use CMake standard macro for Release and MinSizeRel
 #ifndef NDEBUG
 
 	// Shortcut macros to log messages
 	// Only call them from inside GameClass subclass objects
-	#define LOG(...) if (Locator::getLogger() != nullptr) Locator::getLogger()->log(__VA_ARGS__)
-	#define LOGWARN(...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logwarn(__VA_ARGS__)
+	#define LOG(...) if LOGGER_VALID EngineCore::getInstance()->getLogger()->log(__VA_ARGS__)
+	#define LOGWARN(...) if LOGGER_VALID EngineCore::getInstance()->getLogger()->logwarn(__VA_ARGS__)
 
 	// Format versions
-	#define LOGF(format, ...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logf(format, ##__VA_ARGS__)
-	#define LOGWARNF(format, ...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logwarnf(format, ##__VA_ARGS__)
+	#define LOGF(format, ...) if LOGGER_VALID EngineCore::getInstance()->getLogger()->logf(format, ##__VA_ARGS__)
+	#define LOGWARNF(format, ...) if LOGGER_VALID EngineCore::getInstance()->getLogger()->logwarnf(format, ##__VA_ARGS__)
 
 #else
 
@@ -37,8 +41,8 @@
 #endif
 
 // Log errors even in Release. Maybe don't log them in RelMinSize build
-#define LOGERR(...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logerr(__VA_ARGS__)
-#define LOGERRF(format, ...) if (Locator::getLogger() != nullptr) Locator::getLogger()->logerrf(format, ##__VA_ARGS__)
+#define LOGERR(...) if LOGGER_VALID EngineCore::getInstance()->getLogger()->logerr(__VA_ARGS__)
+#define LOGERRF(format, ...) if LOGGER_VALID EngineCore::getInstance()->getLogger()->logerrf(format, ##__VA_ARGS__)
 
 // Macro to ease concatenation version (required in Release build for LOGERR(F)
 #define DUMP(variable) #variable ":", variable

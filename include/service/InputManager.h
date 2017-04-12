@@ -24,7 +24,7 @@
 class InputManager
 {
 public:
-    InputManager(GLFWwindow *window);
+    InputManager();
     virtual ~InputManager();
     
     InputManager(const InputManager &) = delete;
@@ -72,11 +72,6 @@ public:
     bool isKeyUp(Key key) const;
 
 private:
-    /* Pointers */
-
-    /// Application window
-    GLFWwindow *window;
-
     /* Key data */
 
     std::map<Key, KeyData> allKeyData;
@@ -106,18 +101,6 @@ private:
     void processKey(Key key, KeyStaticState newStaticState);
 
     /* Helper */
-
-    static KeyStaticState toKeyStaticState(int glfwCode) {
-        switch (glfwCode)
-        {
-        case GLFW_RELEASE:
-            return KeyStaticState::UP;
-        case GLFW_PRESS:
-            return KeyStaticState::DOWN;
-        default:
-            return KeyStaticState::NONE;
-        }
-    }
 
     static KeyStaticState toKeyStaticState(KeyDynamicState keyDynamicState) {
         if (keyDynamicState == KeyDynamicState::RELEASED || keyDynamicState == KeyDynamicState::HELD_UP)
