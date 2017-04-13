@@ -6,7 +6,8 @@
 
 #include <iostream>
 
-// required if defining template in header
+#include "core/EngineCore.h"
+#include "scene/SceneManager.h"
 #include "scene/Scene.h"
 
 class GameObjectCreator {
@@ -20,6 +21,7 @@ public:
 		go->setNameToDefault();
 		go->init();
 
+		Scene* currentScene = EngineCore::getSceneManager()->getCurrentScene();
 		if (currentScene != nullptr) {
 			// add the created game object to the current scene (shared pointer)
 			currentScene->addGameObject(go);
@@ -30,11 +32,5 @@ public:
 			return nullptr;
 		}
 	}
-
-	void ChangeCurrentScene(Scene* scene);
-
-private:
-	// current scene, to which all new objects should be added
-	Scene* currentScene;
 };
 

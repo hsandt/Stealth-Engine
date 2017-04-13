@@ -85,8 +85,5 @@ void Scene::removeGameObject(GameObject* go) {
 }
 
 void Scene::init() {
-    EngineCore::getFactory()->ChangeCurrentScene(this);
-    // T* &&arg did not work well, so to ensure I don't keep a ref of the GO I use only unique_ptr
-//	addGameObject(unique_ptr<GameObject> {new Guard("Guard", {100, 50, 0})});  // use rhs or move only
-//	addGameObject(unique_ptr<GameObject> {new Spy("Spy", {50, 50, 0})});
+	LOGF("[Scene] Scene %s is initialized", "scene name");  // TODO: give a name to all objects!
 }

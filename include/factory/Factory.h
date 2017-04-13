@@ -41,8 +41,6 @@ public:
 		return newComponent;
 	}
 
-	void ChangeCurrentScene(Scene* scene);
-
 private:
     static int last_id;
 

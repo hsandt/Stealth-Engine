@@ -8,6 +8,3 @@
 
 using namespace std;
 
-void GameObjectCreator::ChangeCurrentScene(Scene* scene) {
-	currentScene = scene;
-}

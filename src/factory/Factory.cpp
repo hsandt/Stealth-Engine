@@ -27,10 +27,6 @@ Factory::~Factory() {
     LOG("[FACTORY] Factory destroyed");
 }
 
-void Factory::ChangeCurrentScene(Scene* scene) {
-    gameObjectCreator->ChangeCurrentScene(scene);
-}
-
 /*
 template<class T>
 std::shared_ptr<T> Factory::Create() {

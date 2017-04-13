@@ -19,4 +19,7 @@ struct GameConfig
 
 	/// Target frames per second, used to compute the loop iteration period
 	int fps = 30;
+
+	/// Name of the initial scene to load
+	char initialSceneName[40] = "main";
 };

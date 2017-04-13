@@ -9,6 +9,7 @@
 class GameApplication;
 class WindowManager;
 class Factory;
+class SceneManager;
 class InputManager;
 class Renderer;
 class Logger;
@@ -20,6 +21,7 @@ private:
 	WindowManager *windowManager = nullptr;
 
 	Factory *factory = nullptr;
+	SceneManager *sceneManager = nullptr;
 	InputManager *inputManager = nullptr;
 	Renderer *renderer = nullptr;
 
@@ -49,6 +51,9 @@ public:
 
 	/// Return the factory
 	inline static Factory* getFactory() { return instance ? instance->factory : nullptr; }
+
+	/// Return the scene manager
+	inline static SceneManager* getSceneManager() { return instance ? instance->sceneManager : nullptr; }
 
 	/// Return the input manager
 	inline static InputManager* getInputManager() { return instance ? instance->inputManager : nullptr; }

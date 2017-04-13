@@ -11,6 +11,7 @@
 #include "application/GameApplication.h"
 #include "application/ApplicationResult.h"
 #include "factory/Factory.h"
+#include "scene/SceneManager.h"
 #include "renderer/Renderer.h"
 
 EngineCore* EngineCore::instance = nullptr;
@@ -35,6 +36,9 @@ void EngineCore::init(const GameConfig & gameConfig)
 	// Create logger on standard output stream
 
 	factory = new Factory();
+
+	sceneManager = new SceneManager();
+	sceneManager->init();
 
 	inputManager = new InputManager();
 
