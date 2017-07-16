@@ -6,16 +6,12 @@
 //  Copyright (c) 27 Heisei L Nguyen Huu. All rights reserved.
 //
 
-// REFACTOR: move to Engine once all dependencies to Spy/Guard have been removed
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <iostream>
 #include <memory>
 #include <vector>
-#include <renderer/ShaderUtils.h>
-//#include <boost/log/trivial.hpp>
 
 // Engine
 #include "debug/Logger.h"
@@ -29,7 +25,6 @@
 #include "scene/Scene.h"
 #include "geometry/Vector2.h"
 #include "application/WindowManager.h"
-
 #include "application/GameApplication.h"
 #include "renderer/ShaderUtils.h"
 

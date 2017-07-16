@@ -8,7 +8,6 @@
 
 #include "debug/Logger.h"
 #include "entity/GameObject.h"
-#include "entity/Character.h"
 #include "scene/Scene.h"
 
 
@@ -67,4 +66,3 @@ std::shared_ptr<T> Factory::Create() {
 //	++last_id;
 //	return newComponent;
 //}
-

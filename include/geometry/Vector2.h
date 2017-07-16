@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <cmath>
 #include <iosfwd>
-#include <Box2D/Common/b2Math.h>
+// #include <Box2D/Common/b2Math.h>
 
 #include "utils/infix_iterator.h"
 
