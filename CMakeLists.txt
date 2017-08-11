@@ -14,6 +14,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")  # executable outp
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # static libraries output directory
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # dynamic libraries output directory (unused)
 
+message(STATUS "${PROJECT_SOURCE_DIR}/libs")
+message(STATUS "GLFW_LOCATION: ${GLFW_LOCATION}")
+set(GLFW_LOCATION "${PROJECT_SOURCE_DIR}/libs/glfw")
+set(CMAKE_LIBRARY_PATH "${PROJECT_SOURCE_DIR}/libs")
 
 # Input files
 
@@ -103,10 +107,85 @@ set(TEST_ENGINE_SOURCE_FILES
 
 # Cmake packages
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${PROJECT_SOURCE_DIR}/libs)
 set(CMAKE_FIND_LIBRARY_SUFFIXES .dll .dylib .so)
+set(GLEW_DIR ${PROJECT_SOURCE_DIR}/libs)
 
-# Physics
+# Rendering libraries: OpenGL, GLEW, GLFW
+
+# FindOpenGL.cmake
+find_package(OpenGL REQUIRED)
+include_directories(${OpenGL_INCLUDE_DIR})
+
+message(STATUS "OpenGL found: ${OPENGL_FOUND}")
+message(STATUS "OpenGL xmesa found: ${OPENGL_XMESA_FOUND}")
+message(STATUS "OpenGL glu found: ${OPENGL_GLU_FOUND}")
+message(STATUS "OpenGL include dir: ${OPENGL_INCLUDE_DIR}")
+message(STATUS "OpenGL libraries: ${OPENGL_LIBRARIES}")
+message(STATUS "OpenGL gl library: ${OPENGL_gl_LIBRARY}")
+
+# LINUX: I installed libGLEW.so from GLEW 2.0 with some API changes, check compatibility!
+# FindGLEW.cmake
+find_package(GLEW REQUIRED)
+# this apparently tries to build the library again and require glew-config.cmake
+# (which is only in source code! /home/wing/Developer/C++/glew-2.0.0/build/cmake)
+#find_package(GLEW REQUIRED PATHS ${PROJECT_SOURCE_DIR}/libs)
+include_directories($(GLEW_INCLUDE_DIR))
+link_directories(${GLEW_LIBRARIES})
+#add_definitions(-DGLEW_STATIC)  # uncomment to use static library
+#add_definitions(-DGLEW_MX)  # uncomment to use thread-safe multiple GL contexts
+
+message(STATUS "GLEW found: ${GLEW_FOUND}")
+message(STATUS "GLEW include dir: ${GLEW_INCLUDE_DIR}")
+message(STATUS "GLEW libraries: ${GLEW_LIBRARIES}")
+
+# non-static causes undefined reference to `__imp___glewGenVertexArrays' and so one
+# static cause: Warning: corrupt .drectve at end of def file
+# glew32s.lib(tmp/glew_static/Release/x64/glew.obj):(.text$mn+0xd): undefined reference to `__imp_wglGetProcAddress'
+# find_library(GLEW glew32s ${PROJECT_SOURCE_DIR}/libs)  # static
+
+# REFACTOR: use FIND_LIBRARY_USE_LIB64_PATHS to search automatically in lib32/lib64 as needed
+# for now, make 64-bit the default (32s may be requied on Windows)
+
+# message(STATUS "p size: ${CMAKE_SIZEOF_VOID_P}!")
+# doesn't work properly (CMAKE_SIZEOF_VOID_P is empty), so just use 64-bit no matter what for now
+# if you need to adapt to 32-bit, do it everywhere
+
+# VERSION NOTES: Windows glfw3.dll is GLFW 3.2.0, libglfw.so.3.2 is GLFW 3.2.1 (API compatible)
+
+# search different names based on OS (or rename all the libs uniformly)
+#if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+#    find_library(GLFW glfw.3.2 ${PROJECT_SOURCE_DIR}/libs)  # libglfw.3.2.dylib
+#else((${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
+#    find_library(GLFW glfw ${PROJECT_SOURCE_DIR}/libs)  # libglfw.so.3.2 or glfw3.dll
+#endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+#message(STATUS "GLFW lib path: ${GLFW}")
+
+#message(STATUS "searched in ${PROJECT_SOURCE_DIR}/libs")
+#message(STATUS "version glfw: ${GLFW_VERSION}")
+
+#set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/libs")
+#set(GLFW_LOCATION libs)
+find_package(GLFW)  # does not work with .a (detected in priority with MingW-w64)
+#   Could not find a package configuration file provided by "GLFW" with any of
+#  the following names:
+
+#    GLFWConfig.cmake
+#    glfw-config.cmake
+
+# GLFW_FOUND
+# GLFW_INCLUDE_DIR
+# GLFW_LIBRARIES
+
+message(STATUS "glfw lib path: ${GLFW}")
+message(STATUS "glfw found: ${GLFW_FOUND}")
+message(STATUS "glfw include dir: ${GLFW_INCLUDE_DIR}")
+message(STATUS "glfw libraries: ${GLFW_LIBRARIES}")
+#add_definitions(-DGLFW_DLL) (if using .a, do not use DLL (crashes as can't detect libgcc... and glfw3.dll anyway)
+
+
+# Physics library: Box2D
 
 #SET(BOX2D_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/libs/include)
 #
@@ -119,79 +198,8 @@ set(CMAKE_FIND_LIBRARY_SUFFIXES .dll .dylib .so)
 #message(WARNING ${BOX2D_INCLUDE_DIR})
 
 # Box2D: static linking
-find_library(Box2D Box2D ${PROJECT_SOURCE_DIR}/libs)
-message(STATUS "Box2D lib path: ${Box2D}")
-
-# Rendering
-
-# FindOpenGL.cmake is required to find_package! (on Linux)
-find_package(OpenGL REQUIRED)
-if (OPENGL_FOUND)
-    include_directories(${OpenGL_INCLUDE_DIRS})
-    link_directories(${OpenGL_LIBRARY_DIRS})
-    add_definitions(${OpenGL_DEFINITIONS})
-else (OPENGL_FOUND)
-    message(SEND_ERROR "OPENGL not found!")
-endif (OPENGL_FOUND)
-message(STATUS "OpenGL gl lib: ${OPENGL_gl_LIBRARY}")
-message(STATUS "OpenGL glu lib: ${OPENGL_glu_LIBRARY}")
-message(STATUS "OpenGL xmesa lib: ${OPENGL_xmesa_LIBRARY}")
-message(STATUS "OpenGL include dir: ${OPENGL_INCLUDE_DIR}")
-message(STATUS "OpenGL libs: ${OPENGL_LIBRARIES}")
-
-# LINUX: I installed libGLEW.so from GLEW 2.0 with some API changes, check compatibility!
-
-#find_package(GLEW REQUIRED HINTS "${PROJECT_SOURCE_DIR}/libs")
-find_package(GLEW REQUIRED)
-if (GLEW_FOUND)
-    include_directories($(GLEW_INCLUDE_DIR))
-    link_directories(${GLEW_LIBRARY})
-    add_definitions(-DGLEW_STATIC)
-    add_definitions(-DGLEW_MX)
-message(STATUS "GLEW libs: ${GLEW_INCLUDE_DIR}")
-message(STATUS "GLEW_LIBRARY: ${GLEW_LIBRARY}")
-
-endif()
-
-# non-static causes undefined reference to `__imp___glewGenVertexArrays' and so one
-# static cause: Warning: corrupt .drectve at end of def file
-# glew32s.lib(tmp/glew_static/Release/x64/glew.obj):(.text$mn+0xd): undefined reference to `__imp_wglGetProcAddress'
-#find_library(GLEW glew32s ${PROJECT_SOURCE_DIR}/libs)  # static
-
-# REFACTOR: use FIND_LIBRARY_USE_LIB64_PATHS to search automatically in lib32/lib64 as needed
-# for now, make 64-bit the default
-
-message(STATUS "p size: ${CMAKE_SIZEOF_VOID_P}!")
-# doesn't work properly (CMAKE_SIZEOF_VOID_P is empty), so just use 64-bit no matter what for now
-# if you need to adapt to 32-bit, do it everywhere
-
-
-# IMPROVE: create or download FindGLFW.cmake somewhere
-# VERSION NOTES: Windows glfw3.dll is GLFW 3.2.0, libglfw.so.3.2 is GLFW 3.2.1 (API compatible)
-
-# search different names based on OS (or rename all the libs uniformly)
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    find_library(GLFW glfw.3.2 ${PROJECT_SOURCE_DIR}/libs)  # libglfw.3.2.dylib
-else((${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
-    find_library(GLFW glfw ${PROJECT_SOURCE_DIR}/libs)  # libglfw.so.3.2 or glfw3.dll
-endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-message(STATUS "GLFW lib path: ${GLFW}")
-
-message(STATUS "searched in ${PROJECT_SOURCE_DIR}/libs")
-message(STATUS "version glfw: ${GLFW_VERSION}")
-
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/libs")
-set(GLFW_LOCATION libs)
-#find_package(GLFW)  # does not work with .a (detected in priority with MingW-w64)
-#   Could not find a package configuration file provided by "GLFW" with any of
-#  the following names:
-
-#    GLFWConfig.cmake
-#    glfw-config.cmake
-message(STATUS "glfw lib path: ${GLFW}")
-message(STATUS "glfw libs: ${GLFW_LIBRARIES}")
-message(STATUS "glfw include dir: ${GLFW_INCLUDE_DIR}")
-#add_definitions(-DGLFW_DLL) (if using .a, do not use DLL (crashes as can't detect libgcc... and glfw3.dll anyway)
+#find_library(Box2D Box2D ${PROJECT_SOURCE_DIR}/libs)
+#message(STATUS "Box2D lib path: ${Box2D}")
 
 
 # TODO: use INSTALL to distribute the shared libaries so the app is portable
@@ -264,7 +272,7 @@ endforeach()
 
 target_link_libraries(engine
 #        ${Box2D}
-        "${OPENGL_LIBRARIES}"
+        "${OPENGL_gl_LIBRARY}"  # We don't need glu for GLEW
         "${GLEW_LIBRARY}"
         "${GLFW}"
         )

@@ -137,8 +137,10 @@ else ()
         set(GLFW_iokit_LIBRARY "-framework IOKit" CACHE STRING "IOKit framework for OSX")
     else ()
         # (*)NIX
-        
-        find_package(Threads REQUIRED)
+
+        # Commented to avoid CMake bug:
+        # Could NOT find Threads (missing: Threads_FOUND)
+#        find_package(Threads REQUIRED)
 
         find_package(X11 REQUIRED)
         
