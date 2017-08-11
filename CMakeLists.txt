@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.2)
-project(StealthEngine CXX)
+cmake_minimum_required(VERSION 3.7)
+project(StealthEngine VERSION 0.1 LANGUAGES CXX)
 
 
 # Flags
@@ -12,7 +12,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
 set(CMAKE_BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")  # executable output directory
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # static libraries output directory
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # dynamic libraries output directory (unused)
+#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # dynamic libraries output directory (unused)
 
 message(STATUS "${PROJECT_SOURCE_DIR}/libs")
 message(STATUS "GLFW_LOCATION: ${GLFW_LOCATION}")
@@ -108,14 +108,12 @@ set(TEST_ENGINE_SOURCE_FILES
 # Cmake packages
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
-set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${PROJECT_SOURCE_DIR}/libs)
-set(CMAKE_FIND_LIBRARY_SUFFIXES .dll .dylib .so)
-set(GLEW_DIR ${PROJECT_SOURCE_DIR}/libs)
+
 
 # Rendering libraries: OpenGL, GLEW, GLFW
 
 # FindOpenGL.cmake
-find_package(OpenGL REQUIRED)
+find_package(OpenGL 4.5 REQUIRED)  # version requirement does not work, left as a note only
 include_directories(${OpenGL_INCLUDE_DIR})
 
 message(STATUS "OpenGL found: ${OPENGL_FOUND}")
@@ -125,14 +123,9 @@ message(STATUS "OpenGL include dir: ${OPENGL_INCLUDE_DIR}")
 message(STATUS "OpenGL libraries: ${OPENGL_LIBRARIES}")
 message(STATUS "OpenGL gl library: ${OPENGL_gl_LIBRARY}")
 
-# LINUX: I installed libGLEW.so from GLEW 2.0 with some API changes, check compatibility!
 # FindGLEW.cmake
-find_package(GLEW REQUIRED)
-# this apparently tries to build the library again and require glew-config.cmake
-# (which is only in source code! /home/wing/Developer/C++/glew-2.0.0/build/cmake)
-#find_package(GLEW REQUIRED PATHS ${PROJECT_SOURCE_DIR}/libs)
+find_package(GLEW 2.0 REQUIRED)  # version requirement does not work, left as a note only
 include_directories($(GLEW_INCLUDE_DIR))
-link_directories(${GLEW_LIBRARIES})
 #add_definitions(-DGLEW_STATIC)  # uncomment to use static library
 #add_definitions(-DGLEW_MX)  # uncomment to use thread-safe multiple GL contexts
 
@@ -140,49 +133,14 @@ message(STATUS "GLEW found: ${GLEW_FOUND}")
 message(STATUS "GLEW include dir: ${GLEW_INCLUDE_DIR}")
 message(STATUS "GLEW libraries: ${GLEW_LIBRARIES}")
 
-# non-static causes undefined reference to `__imp___glewGenVertexArrays' and so one
-# static cause: Warning: corrupt .drectve at end of def file
-# glew32s.lib(tmp/glew_static/Release/x64/glew.obj):(.text$mn+0xd): undefined reference to `__imp_wglGetProcAddress'
-# find_library(GLEW glew32s ${PROJECT_SOURCE_DIR}/libs)  # static
+# FindGLFW.cmake
+find_package(GLFW 3.2 REQUIRED)  # version requirement does not work, left as a note only
+include_directories(${GLFW_INCLUDE_DIR})
 
-# REFACTOR: use FIND_LIBRARY_USE_LIB64_PATHS to search automatically in lib32/lib64 as needed
-# for now, make 64-bit the default (32s may be requied on Windows)
-
-# message(STATUS "p size: ${CMAKE_SIZEOF_VOID_P}!")
-# doesn't work properly (CMAKE_SIZEOF_VOID_P is empty), so just use 64-bit no matter what for now
-# if you need to adapt to 32-bit, do it everywhere
-
-# VERSION NOTES: Windows glfw3.dll is GLFW 3.2.0, libglfw.so.3.2 is GLFW 3.2.1 (API compatible)
-
-# search different names based on OS (or rename all the libs uniformly)
-#if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-#    find_library(GLFW glfw.3.2 ${PROJECT_SOURCE_DIR}/libs)  # libglfw.3.2.dylib
-#else((${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
-#    find_library(GLFW glfw ${PROJECT_SOURCE_DIR}/libs)  # libglfw.so.3.2 or glfw3.dll
-#endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-#message(STATUS "GLFW lib path: ${GLFW}")
-
-#message(STATUS "searched in ${PROJECT_SOURCE_DIR}/libs")
-#message(STATUS "version glfw: ${GLFW_VERSION}")
-
-#set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/libs")
-#set(GLFW_LOCATION libs)
-find_package(GLFW)  # does not work with .a (detected in priority with MingW-w64)
-#   Could not find a package configuration file provided by "GLFW" with any of
-#  the following names:
-
-#    GLFWConfig.cmake
-#    glfw-config.cmake
-
-# GLFW_FOUND
-# GLFW_INCLUDE_DIR
-# GLFW_LIBRARIES
-
-message(STATUS "glfw lib path: ${GLFW}")
-message(STATUS "glfw found: ${GLFW_FOUND}")
-message(STATUS "glfw include dir: ${GLFW_INCLUDE_DIR}")
-message(STATUS "glfw libraries: ${GLFW_LIBRARIES}")
-#add_definitions(-DGLFW_DLL) (if using .a, do not use DLL (crashes as can't detect libgcc... and glfw3.dll anyway)
+message(STATUS "GLFW found: ${GLFW_FOUND}")
+message(STATUS "GLFW include dir: ${GLFW_INCLUDE_DIR}")
+message(STATUS "GLFW libraries: ${GLFW_LIBRARIES}")
+#add_definitions(-DGLFW_DLL)  # uncomment if using dynamic library and linking fails
 
 
 # Physics library: Box2D
@@ -203,32 +161,29 @@ message(STATUS "glfw libraries: ${GLFW_LIBRARIES}")
 
 
 # TODO: use INSTALL to distribute the shared libaries so the app is portable
+# this also allows you to copy library headers so that other developers can use the engine
 
-# target
+# Targets
 
-# DEBUG: in case target_include_directories does not work
-include_directories(include libs/include)
-include_directories(tests)  # not performant, really need to isolate target include directories
-
-# Static library
+# Stealth engine static library
 add_library(engine ${ENGINE_SOURCE_FILES})
-#target_include_directories(engine PUBLIC include PRIVATE libs/include)
+target_include_directories(engine PUBLIC include)
 
+# Test engine executable
 add_executable(test_engine ${TEST_ENGINE_SOURCE_FILES})
-# it works in UbisoftGP, try again!
-#target_include_directories(engine_test PUBLIC tests)  # does not seem to work, need full path?
+target_include_directories(test_engine PRIVATE tests)
 
 
-# http://qrikko.blogspot.fr/2016/05/cmake-and-how-to-copy-resources-during.html
 # Scan through resource folder for updated files and copy if none existing or changed
+# http://qrikko.blogspot.fr/2016/05/cmake-and-how-to-copy-resources-during.html
 message(STATUS "Copying resources from ${PROJECT_SOURCE_DIR}...")
 
 file (GLOB_RECURSE resources "${PROJECT_SOURCE_DIR}/resources/*.*")
 foreach(resource ${resources})
-#    message(STATUS "getting info for ${resource}...")
     get_filename_component(filename ${resource} NAME)
     get_filename_component(dir ${resource} DIRECTORY)
     get_filename_component(dirname ${dir} NAME)
+    # DEBUG
 #    message(STATUS "(${resource}) filename: ${filename}, dir: ${dir}, dirname: ${dirname}")
 
     set (output "")
@@ -238,24 +193,14 @@ foreach(resource ${resources})
         set (output "${path_component}/${output}")
         get_filename_component(dir ${dir} DIRECTORY)
         get_filename_component(dirname ${dir} NAME)
+        # DEBUG
 #        message(STATUS "(${dirname}) output: ${output}, path_component: ${path_component}, dir: ${dir}, dirname: ${dirname}")
     endwhile()
 
     set(output "${CMAKE_BINARY_DIR}/bin/resources/${output}${filename}")
 #    message(STATUS "output: ${output}")
 
-    # custom command with OUTPUT suggested by the same website does not work
-    #add_custom_command(
-    #COMMENT "Moving updated resource-file '${filename}'"
-    #OUTPUT ${output}
-    #DEPENDS ${resource}
-    #COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    #${resource}
-    #${output}
-    #)
-    #add_custom_target(${filename} ALL DEPENDS ${resource} ${output})
-
-    # POST_BUILD command works
+    # Add POST_BUILD command to copy resource file
     # http://stackoverflow.com/questions/13429656/cmake-how-to-copy-contents-of-a-directory-into-build-directory-after-make
     add_custom_command(
         TARGET engine POST_BUILD COMMAND
@@ -268,21 +213,22 @@ foreach(resource ${resources})
 endforeach()
 
 
-# linking
+# Linking
 
 target_link_libraries(engine
-#        ${Box2D}
-        "${OPENGL_gl_LIBRARY}"  # We don't need glu for GLEW
-        "${GLEW_LIBRARY}"
-        "${GLFW}"
+        "${OPENGL_gl_LIBRARY}"  # We don't need _glu_ with GLEW
+        "${GLEW_LIBRARIES}"
+        "${GLFW_LIBRARIES}"
+        #        ${Box2D}
         )
 
 target_link_libraries(test_engine
         engine
         )
 
-add_custom_target(run_test
-    COMMAND test_engine
-    DEPENDS test_engine
-    WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-)
+# Allow to run test_engine executable with "make run_test_engine"
+add_custom_target(run_test_engine
+        COMMAND test_engine
+        DEPENDS test_engine
+        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        )
