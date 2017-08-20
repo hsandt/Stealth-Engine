@@ -4,7 +4,8 @@
 #include <assert.h>
 #include <cmath>
 #include <iosfwd>
-// #include <Box2D/Common/b2Math.h>
+
+#include <Box2D/Common/b2Math.h>
 
 #include "utils/infix_iterator.h"
 
@@ -54,7 +55,7 @@ public:
 
 	/* Conversion functions */
 
-#ifdef BOX2D_H
+#ifdef B2_MATH_H
 	Vector2(b2Vec2 const &b2V)
 	{
 		coords[0] = b2V.x;
@@ -63,7 +64,7 @@ public:
 
 	operator b2Vec2() const
 	{
-		return {coords[0], coords[1]};
+		return { coords[0], coords[1] };
 	}
 #endif
 

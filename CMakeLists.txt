@@ -54,6 +54,7 @@ set(ENGINE_SOURCE_FILES
         include/input/KeyEvent.h
         include/input/KeyStates.h
         include/object/Object.h
+        include/physics/Physics.h
         include/renderer/Renderer.h
         include/renderer/ShaderUtils.h
         include/scene/Scene.h
@@ -84,6 +85,7 @@ set(ENGINE_SOURCE_FILES
         src/factory/Factory.cpp
         src/factory/GameObjectCreator.cpp
         src/object/Object.cpp
+        src/physics/Physics.cpp
         src/renderer/Renderer.cpp
         src/renderer/ShaderUtils.cpp
         src/scene/Scene.cpp
@@ -145,22 +147,15 @@ message(STATUS "GLFW libraries: ${GLFW_LIBRARIES}")
 
 # Physics library: Box2D
 
-#SET(BOX2D_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/libs/include)
-#
-#find_package(Box2D)
-#if (BOX2D_FOUND)
-#    include_directories(${BOX2D_INCLUDE_DIR})
-#else (BOX2D_FOUND)
-#    message(SEND_ERROR "BOX2D not found!")
-#endif (BOX2D_FOUND)
-#message(WARNING ${BOX2D_INCLUDE_DIR})
+find_package(Box2D  REQUIRED)  # version requirement does not work, left as a note only
+include_directories(${BOX2D_INCLUDE_DIRS})
 
-# Box2D: static linking
-#find_library(Box2D Box2D ${PROJECT_SOURCE_DIR}/libs)
-#message(STATUS "Box2D lib path: ${Box2D}")
+message(STATUS "Box2D found: ${BOX2D_FOUND}")
+message(STATUS "Box2D include dir: ${BOX2D_INCLUDE_DIR}")
+message(STATUS "Box2D libraries: ${BOX2D_LIBRARIES}")
 
 
-# TODO: use INSTALL to distribute the shared libaries so the app is portable
+# TODO: use INSTALL to distribute the shared libraries so the app is portable
 # this also allows you to copy library headers so that other developers can use the engine
 
 # Targets

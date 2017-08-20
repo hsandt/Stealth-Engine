@@ -4,28 +4,27 @@
 
 #pragma once
 
-#include <memory>
-#include "Box2D/Box2D.h"
+#include <Box2D/Box2D.h>
 
 #include "geometry/Vector2.h"
 
 class Physics
 {
 private:
-	std::unique_ptr<b2World> world = nullptr;
+	b2World* world = nullptr;
 
 public:
-	Physics(Vec2f gravity);
+	Physics(Vector2 gravity);
 	virtual ~Physics();
 
 	/// Get world gravity
-	Vec2f GetGravity () const
+	Vector2 GetGravity () const
 	{
 		return world->GetGravity();
 	}
 
 	/// Set world gravity
-	void SetGravity(Vec2f gravity)
+	void SetGravity(Vector2 gravity)
 	{
 		world->SetGravity(gravity);
 	}
