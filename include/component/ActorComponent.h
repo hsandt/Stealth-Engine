@@ -14,10 +14,13 @@ public:
 	ActorComponent();
 	virtual ~ActorComponent() {};
 
+	/// Return the type of this component (hiding base static method)
+	static const ComponentType getComponentType() { return ComponentType::ACTOR_COMPONENT; }
+
 	/// Return the actor this component is attached to
 	Actor* getActor() const { return actor; }
 
-	virtual void init() override;
+	void init() override;
 
 protected:
 	/// Actor this component is attached to (weak pointer)

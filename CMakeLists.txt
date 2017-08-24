@@ -4,8 +4,7 @@ project(StealthEngine VERSION 0.1 LANGUAGES CXX)
 
 # Flags
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
-
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z -Wno-logical-op-parentheses")
 
 # Output paths
 
@@ -30,6 +29,7 @@ set(ENGINE_SOURCE_FILES
         include/application/WindowManager.h
         include/component/ActorComponent.h
         include/component/Component.h
+        include/component/ComponentType.h
         include/component/InputComponent.h
         include/component/RenderComponent.h
         include/component/SquareRenderComponent.h
@@ -101,9 +101,10 @@ set(TEST_ENGINE_SOURCE_FILES
         tests/testmain.cpp
 
         # All actual test cpp files added from here
-        tests/geometry/testvec2.cpp
-        tests/geometry/testvec3.cpp
-        tests/utils/teststringutils.cpp
+        tests/factory/TestFactory.cpp
+        tests/geometry/TestVec2.cpp
+        tests/geometry/TestVec3.cpp
+        tests/utils/TestStringUtils.cpp
         )
 
 

@@ -4,17 +4,24 @@
 
 #pragma once
 
+#include "ComponentType.h"
 #include "object/Object.h"
 
 class GameObject;
 
+// REFACTOR: separate into base Component and NonActorComponent
 class Component : public Object {
-	// friendship is not inherited, we can safely give access to GameObject
+	// friendship required for addComponent
 	friend class GameObject;
+	friend class Actor;
 
 public:
     Component();
     virtual ~Component() {};
+
+	/// Return the type of this component
+	/// NOTE: currently unused since we used SFINAE for GameObject::addComponent but may be useful later
+	static const ComponentType getComponentType() { return ComponentType::COMPONENT; }
 
 	/// Register the component to the appropriate manager
 	virtual void registerComponent() {};

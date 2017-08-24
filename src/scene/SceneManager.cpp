@@ -14,17 +14,18 @@ using namespace std;
 
 SceneManager::SceneManager()
 {
-	LOG("[SceneManager] SceneManager constructed");
+	LOG("[SCENE MANAGER] SceneManager constructed");
 }
 
 SceneManager::~SceneManager()
 {
-	LOG("[SceneManager] SceneManager destroyed");
+	LOG("[SCENE MANAGER] SceneManager destroyed");
+	delete currentScene;
 }
 
 void SceneManager::init()
 {
-	LOG("[SceneManager] SceneManager init");
+	LOG("[SCENE MANAGER] SceneManager init");
 
 	// TODO: check all scene asset files (game config, etc.)
 	// and either dump them here directly or check the existence
@@ -39,7 +40,7 @@ void SceneManager::queryLoadScene(std::string name)
 	if (it != sceneNames.end())
 		nextSceneName = name;
 	else
-		LOGERRF("[SceneManager] Scene %s is not a valid scene name.", name.c_str());
+		LOGERRF("[SCENE MANAGER] Scene %s is not a valid scene name.", name.c_str());
 }
 
 bool SceneManager::shouldLoadScene() const

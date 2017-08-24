@@ -21,6 +21,15 @@ public:
 
     Transform* transform = nullptr;
 
+	/// Add a new component of type T to this actor.
+	template<class T>
+	T* addComponent() {
+		// Actor accepts both non-actor and actor components,
+		// so we redefine a new addComponent, hiding effectively
+		// the base version which is also templated and therefore cannot be virtual
+		return addComponent_Internal<T>();
+	}
+
 protected:
 	/// Return the default name of a new instance of this game object
 	virtual std::string getDefaultName() const override { return "Actor"; }

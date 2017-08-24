@@ -6,12 +6,12 @@
 
 #include <memory>
 
-#include "component/Component.h"
+#include "component/ActorComponent.h"
 #include "geometry/Vector2.h"
 
-class Transform : public Component {
+class Transform : public ActorComponent {
 public:
-    Transform() : Component() {
+    Transform() : ActorComponent() {
     }
     virtual ~Transform();
 

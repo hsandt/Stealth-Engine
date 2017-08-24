@@ -26,15 +26,16 @@
 	#define LOGF(format, ...) if LOGGER_VALID EngineCore::getInstance()->getLogger()->logf(format, ##__VA_ARGS__)
 	#define LOGWARNF(format, ...) if LOGGER_VALID EngineCore::getInstance()->getLogger()->logwarnf(format, ##__VA_ARGS__)
 
+	// Macro to ease concatenation version
+	#define DUMP(variable) #variable ":", variable
+
 #else
 
 	#define LOG(...)
 	#define LOGWARN(...)
-	#define LOGERR(...)
 
 	#define LOGF(format, ...)
 	#define LOGWARNF(format, ...)
-	#define LOGERRF(format, ...)
 
 	#define DUMP(variable) ""
 
@@ -43,10 +44,6 @@
 // Log errors even in Release. Maybe don't log them in RelMinSize build
 #define LOGERR(...) if LOGGER_VALID EngineCore::getInstance()->getLogger()->logerr(__VA_ARGS__)
 #define LOGERRF(format, ...) if LOGGER_VALID EngineCore::getInstance()->getLogger()->logerrf(format, ##__VA_ARGS__)
-
-// Macro to ease concatenation version (required in Release build for LOGERR(F)
-#define DUMP(variable) #variable ":", variable
-
 
 class Logger {
     

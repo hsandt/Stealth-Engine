@@ -33,13 +33,13 @@ using namespace std;
 GameApplication::GameApplication() :
 		isRunning(false) {
 	if (config.fps > 0)
-		config.fps = 30;
+		config.fps = 30;  // ?? if < 0?
 	secPerUpdate = 1. / config.fps;  // fixed deltaTime
 }
 
 GameApplication::~GameApplication() {
+	LOG("[GAME] Destroying GameApplication...");
 	delete engineCore;
-	cout << "[GAME] GameApplication destroyed" << endl;
 }
 
 void GameApplication::loadConfig(const char* filePath)

@@ -14,8 +14,11 @@
 #include "object/Object.h"
 
 class Component;
+class ActorComponent;
 class Scene;
 
+// REFACTOR: separate into base GameObject and NonActorGameObject
+/* Generic game object, abstract or inside a scene */
 class GameObject : public Object
 {
 
@@ -33,8 +36,10 @@ public:
 	template<class T>
 	T* getComponent();
 
+	/// Add a component to this game object
 	template<class T>
-	T* addComponent();
+	typename std::enable_if<!std::is_base_of<ActorComponent, T>::value, T>::type*
+	addComponent();
 
 	/// Remove a component from this game object
 	void removeComponent(Component *component);
@@ -64,6 +69,10 @@ protected:
 
 	/// Return the default name of a new instance of this game object
 	virtual std::string getDefaultName() const { return "GameObject"; }
+
+	/// Add a component to this game object (internal)
+	template<class T>
+	T* addComponent_Internal();
 };
 
 

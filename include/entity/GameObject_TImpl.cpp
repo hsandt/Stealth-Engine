@@ -5,8 +5,11 @@
 #include <iostream>
 #include "factory/FactoryUtils.h"
 #include "component/Component.h"
+#include "component/ActorComponent.h"
 #include "component/RenderComponent.h"
+#include "debug/Logger.h"
 #include "geometry/Vector3.h"
+#include "utils/ExceptionUtil.h"
 
 //#include "GameObject.h"
 
@@ -34,7 +37,13 @@ T* GameObject::getComponent() {
 }
 
 template<class T>
-T* GameObject::addComponent () {
+typename std::enable_if<!std::is_base_of<ActorComponent, T>::value, T>::type*
+GameObject::addComponent () {
+	return addComponent_Internal<T>();
+}
+
+template<class T>
+T* GameObject::addComponent_Internal () {
 	T* component = CreateComponent<T>();
 	component->gameObject = this;
 	components.push_back(component);
@@ -42,19 +51,3 @@ T* GameObject::addComponent () {
 	component->registerComponent();
 	return component;
 }
-
-
-// NOT NEEDED?
-//template<>
-//shared_ptr<Component> GameObject::GetComponent<Component>() {
-//    cout << "GetComponent<Component>" << endl;
-//    return nullptr;
-//}
-
-//template<>
-//shared_ptr<RenderComponent> GameObject::GetComponent<RenderComponent>() {
-//    cout << "GetComponent<RenderComponent>" << endl;
-////	return dynamic_pointer_cast<RenderComponent>(components[0]);  // ultra-cheat to test
-//    return nullptr;
-//
-//}

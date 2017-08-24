@@ -49,8 +49,12 @@ void EngineCore::init(const GameConfig & gameConfig)
 
 EngineCore::~EngineCore()
 {
-	delete factory;
-	delete inputManager;
+	// Destroy all modules in reverse order
+	LOG("[ENGINE] Destroying engine core...");
 	delete renderer;
+	delete inputManager;
+	delete sceneManager;
+	delete factory;
+	delete windowManager;
 	delete logger;
 }
