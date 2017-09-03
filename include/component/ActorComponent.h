@@ -20,7 +20,7 @@ public:
 	/// Return the actor this component is attached to
 	Actor* getActor() const { return actor; }
 
-	void init() override;
+	void setGameObject(GameObject* go) override;
 
 protected:
 	/// Actor this component is attached to (weak pointer)

@@ -22,12 +22,15 @@ public:
 		go->init();
 
 		Scene* currentScene = EngineCore::getSceneManager()->getCurrentScene();
-		if (currentScene != nullptr) {
+		if (currentScene != nullptr)
+		{
 			// add the created game object to the current scene (shared pointer)
 			currentScene->addGameObject(go);
 			std::cout << "Game object created and added to current scene" << std::endl;
 			return go;
-		} else {
+		}
+		else
+		{
 			std::cout << "Current scene has expired, don't create game object" << std::endl;
 			return nullptr;
 		}

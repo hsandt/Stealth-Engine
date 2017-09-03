@@ -57,7 +57,7 @@ set(ENGINE_SOURCE_FILES
         include/input/KeyEvent.h
         include/input/KeyStates.h
         include/object/Object.h
-        include/physics/Physics.h
+        include/physics/PhysicsManager.h
         include/renderer/Renderer.h
         include/renderer/ShaderUtils.h
         include/scene/Scene.h
@@ -88,7 +88,7 @@ set(ENGINE_SOURCE_FILES
         src/factory/Factory.cpp
         src/factory/GameObjectCreator.cpp
         src/object/Object.cpp
-        src/physics/Physics.cpp
+        src/physics/PhysicsManager.cpp
         src/renderer/Renderer.cpp
         src/renderer/ShaderUtils.cpp
         src/scene/Scene.cpp
@@ -218,7 +218,7 @@ target_link_libraries(engine
         "${OPENGL_gl_LIBRARY}"  # We don't need _glu_ with GLEW
         "${GLEW_LIBRARIES}"
         "${GLFW_LIBRARIES}"
-        #        ${Box2D}
+        "${BOX2D_LIBRARIES}"
         )
 
 target_link_libraries(test_engine

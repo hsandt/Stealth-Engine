@@ -16,6 +16,9 @@
 class Vector2
 {
 public:
+	// REFACTOR: I prefer x and y members in the end, as they allow direct
+	// access via .x and .y instead of .x() and .y(), and in C++ float32 are
+	// compact anyway
 	float coords[2] = {0, 0};  // required
 
 	Vector2()

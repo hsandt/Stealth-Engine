@@ -14,3 +14,10 @@ Component::Component() : Object()
 {
 
 }
+
+void Component::setGameObject(GameObject* go)
+{
+	if (gameObject)
+		throw std::runtime_error("[COMPONENT] Cannot change the game object of a once attached component.");
+	gameObject = go;
+}

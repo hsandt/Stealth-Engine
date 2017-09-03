@@ -21,9 +21,9 @@ public:
 
 	void init() override;
 
-	void registerComponent() override;
+	void onAddedToGameObject() override;
 
-	void unregisterComponent() override;
+	void onRemovedFromGameObject() override;
 
 	// REFACTOR: pass "this" UserClass instance and use delegates (void* + cast, etc.) to be able
 	// to store any method of any object for later

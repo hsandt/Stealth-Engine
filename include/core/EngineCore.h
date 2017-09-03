@@ -14,6 +14,7 @@ class Factory;
 class SceneManager;
 class InputManager;
 class Renderer;
+class PhysicsManager;
 class Logger;
 
 class EngineCore
@@ -32,6 +33,8 @@ private:
 	InputManager *inputManager = nullptr;
 	/// Renderer (strong ref)
 	Renderer *renderer = nullptr;
+	/// Physics manager (strong ref)
+	PhysicsManager *physicsManager = nullptr;
 
 	/// Logger (strong ref)
 	Logger *logger;
@@ -90,6 +93,9 @@ public:
 
 	/// Return the renderer
 	inline static Renderer* getRenderer() { return requireInstance()->renderer; }
+
+	/// Return the physics manager
+	inline static PhysicsManager* getPhysicsManager() { return requireInstance()->physicsManager; }
 
 	/// Return the logger
 	inline static Logger* getLogger() { return requireInstance()->logger; }

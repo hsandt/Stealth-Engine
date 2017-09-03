@@ -13,8 +13,8 @@ public:
     RenderComponent();
 	virtual ~RenderComponent() {};
 
-	virtual void registerComponent() override;
-    virtual void unregisterComponent() override;
+	virtual void onAddedToGameObject() override;
+    virtual void onRemovedFromGameObject() override;
 
     virtual void render(Renderer* renderer) = 0;
 

@@ -25,12 +25,12 @@ void InputComponent::init()
 	inputManager = EngineCore::getInputManager();
 }
 
-void InputComponent::registerComponent()
+void InputComponent::onAddedToGameObject()
 {
 	inputManager->registerInputComponent(this);
 }
 
-void InputComponent::unregisterComponent()
+void InputComponent::onRemovedFromGameObject()
 {
 	inputManager->unregisterInputComponent(this);
 }

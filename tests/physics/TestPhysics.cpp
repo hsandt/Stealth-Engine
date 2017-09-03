@@ -24,13 +24,13 @@ TEST_CASE("Physics", "[physics]")
 
 	SECTION("create an actor")
 	{
-		auto* go = EngineCore::getFactory()->CreateGameObject<Actor>();
+		Actor* actor = EngineCore::getFactory()->CreateGameObject<Actor>();
 
 		SECTION("add a Rigidbody component to game object")
 		{
-			Rigidbody* rigidbody = go->addComponent<Rigidbody>();
+			Rigidbody* rigidbody = actor->addComponent<Rigidbody>();
 			REQUIRE(rigidbody != nullptr);
-			CHECK(rigidbody->getGameObject() == go);
+			CHECK(rigidbody->getGameObject() == actor);
 			// TODO: more interesting test on physics properties, possibly collision detection
 			// on one frame by teleporting objects (no need to run game loop)
 			// TODO: integration test, this time running the game loop and checking dynamic collisions

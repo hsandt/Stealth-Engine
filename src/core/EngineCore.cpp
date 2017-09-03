@@ -13,6 +13,7 @@
 #include "factory/Factory.h"
 #include "scene/SceneManager.h"
 #include "renderer/Renderer.h"
+#include "physics/PhysicsManager.h"
 
 EngineCore* EngineCore::instance = nullptr;
 
@@ -43,15 +44,19 @@ void EngineCore::init(const GameConfig & gameConfig)
 
 	inputManager = new InputManager();
 
+	// create and initialize Renderer (will load all standard shaders)
 	renderer = new Renderer();
-	// initialize Renderer (will load all standard shaders)
 	renderer->init();
+
+	// create physics manager
+	physicsManager = new PhysicsManager();
 }
 
 EngineCore::~EngineCore()
 {
 	// Destroy all modules in reverse order
 	LOG("[ENGINE] Destroying engine core...");
+	delete physicsManager;
 	delete renderer;
 	delete inputManager;
 	delete sceneManager;

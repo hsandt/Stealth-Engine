@@ -24,6 +24,7 @@ using namespace std;
 
 Renderer::Renderer()
 {
+	LOG("[RENDERER] Renderer created");
 }
 
 Renderer::~Renderer()

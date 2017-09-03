@@ -20,6 +20,7 @@ using namespace std;
 
 GameObject::GameObject() : Object()
 {
+	LOG("[TEST] construct go");
 }
 
 GameObject::~GameObject()
@@ -51,7 +52,7 @@ void GameObject::removeComponent(Component *component)
 	if (it != components.end())
 	{
 		// here, component == *it
-		component->unregisterComponent();
+		component->onRemovedFromGameObject();
 		delete component;
 		components.erase(it);
 	}

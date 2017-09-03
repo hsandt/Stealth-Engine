@@ -16,17 +16,6 @@
 
 using namespace std;
 
-//template<class T>
-//void GameObject::AddComponent() {
-//    cout << "AddComponent<T>" << endl;
-//}
-
-//template<>
-//void GameObject::AddComponent<Component>() {
-//    cout << "AddComponent<Component>" << endl;
-//    // TODO
-//}
-
 // REFACTOR: prefer shared pointers?
 template<class T>
 T* GameObject::getComponent() {
@@ -45,9 +34,8 @@ GameObject::addComponent () {
 template<class T>
 T* GameObject::addComponent_Internal () {
 	T* component = CreateComponent<T>();
-	component->gameObject = this;
+	component->setGameObject(this);
 	components.push_back(component);
-	component->init();
-	component->registerComponent();
+	component->onAddedToGameObject();
 	return component;
 }

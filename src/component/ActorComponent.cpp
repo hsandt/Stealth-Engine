@@ -16,10 +16,10 @@ ActorComponent::ActorComponent() : Component()
 {
 }
 
-void ActorComponent::init()
+void ActorComponent::setGameObject(GameObject* go)
 {
-	Component::init();
+	Component::setGameObject(go);
 
-	// store pointer to Actor
+	// also store pointer for actor version
 	actor = dynamic_cast<Actor*>(gameObject);
 }
