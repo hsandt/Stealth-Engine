@@ -15,8 +15,6 @@ Rigidbody::Rigidbody()
 
 }
 
-
-
 Rigidbody::~Rigidbody()
 {
 	// body is supposed to be destroyed in onRemovedFromGameObject,

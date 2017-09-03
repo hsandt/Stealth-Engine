@@ -12,6 +12,9 @@ class SquareRenderComponent : public RenderComponent {
 public:
     SquareRenderComponent();
 
+	static std::string getStringID() { return "SquareRenderComponent"; }
+	std::string getClassStringID() const override { return getStringID(); }
+
 private:
     virtual void render(Renderer *renderer) override;
 };

@@ -34,7 +34,8 @@ public:
 	/* Component methods */
 
 	template<class T>
-	T* getComponent();
+	typename std::enable_if<std::is_base_of<Component, T>::value, T>::type*
+	getComponent();
 
 	/// Add a component to this game object
 	template<class T>

@@ -19,6 +19,9 @@ public:
 	InputComponent();
 	virtual ~InputComponent();
 
+	static std::string getStringID() { return "InputComponent"; }
+	std::string getClassStringID() const override { return getStringID(); }
+
 	void init() override;
 
 	void onAddedToGameObject() override;

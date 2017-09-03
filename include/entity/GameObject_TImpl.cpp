@@ -18,11 +18,23 @@ using namespace std;
 
 // REFACTOR: prefer shared pointers?
 template<class T>
-T* GameObject::getComponent() {
+typename std::enable_if<std::is_base_of<Component, T>::value, T>::type*
+GameObject::getComponent() {
 	// TODO: static test with is_base_of,
 	// iterating on all component
-    cout << "GetComponent<T>" << endl;
-    return nullptr;
+	for (auto* component : components)
+	{
+		// a. use dynamic cast to check component type (a bit expensive on cast)
+//		T* castComponent = dynamic_cast<T*>(component);
+//		if (castComponent != nullptr)
+//			return castComponent;
+
+		// b. use string id to identify component type clearly
+		// (a bit expensive until we replace strings with special classes)
+		if (component->getClassStringID() == T::getStringID())
+			return dynamic_cast<T*>(component);
+	}
+	return nullptr;
 }
 
 template<class T>

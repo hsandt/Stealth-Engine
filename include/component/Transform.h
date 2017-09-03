@@ -11,11 +11,14 @@
 
 class Transform : public ActorComponent {
 public:
-    Transform() : ActorComponent() {
-    }
+    Transform();
     virtual ~Transform();
 
-    Vector2 position;
+	static std::string getStringID() { return "Transform"; }
+
+	std::string getClassStringID() const override { return getStringID(); }
+
+	Vector2 position;
 
 	void setPosition(const Vector2& newPosition) { position = newPosition; }
 };

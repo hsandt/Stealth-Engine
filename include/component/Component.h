@@ -4,12 +4,18 @@
 
 #pragma once
 
+#include <string>
+
 #include "ComponentType.h"
 #include "object/Object.h"
 
 class GameObject;
 
+/// Abstract base class for all components
+/// Note that concrete subclasses should implement static std::string getStringID()
 // REFACTOR: separate into base Component and NonActorComponent
+// this will also allow us to set getComponentType = 0 to make the class abstract
+// and prevent AddComponent<Component>
 class Component : public Object {
 	// friendship required for addComponent
 	friend class GameObject;
@@ -23,8 +29,7 @@ public:
 	/// NOTE: currently unused since we used SFINAE for GameObject::addComponent but may be useful later
 	static const ComponentType getComponentType() { return ComponentType::COMPONENT; }
 
-	// void init() override is not added here because there is no specific behavior added
-	// but note that you should override init() and not fill the constructor for things that require the gameObject
+	virtual std::string getClassStringID() const = 0;
 
 	/// Set the game object this component is attached to (can be done only once)
 	virtual void setGameObject(GameObject* go);

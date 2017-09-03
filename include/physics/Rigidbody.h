@@ -4,8 +4,10 @@
 
 #pragma once
 
-#include <include/component/ActorComponent.h>
-#include <include/geometry/Vector2.h>
+#include <string>
+
+#include "component/ActorComponent.h"
+#include "geometry/Vector2.h"
 
 class Rigidbody : public ActorComponent
 {
@@ -16,8 +18,8 @@ public:
 	Rigidbody();
 	virtual ~Rigidbody();
 
-	Rigidbody(const Rigidbody &) = delete;
-	Rigidbody & operator=(const Rigidbody &) = delete;
+	static std::string getStringID() { return "Rigidbody"; }
+	std::string getClassStringID() const override { return getStringID(); }
 
 	void onAddedToGameObject() override;
 	void onRemovedFromGameObject() override;
