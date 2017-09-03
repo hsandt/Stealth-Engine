@@ -2,7 +2,6 @@
 // Created by wing on 15/09/06.
 //
 
-#include <memory>
 #include <tests/catch.hpp>
 
 #include "component/Transform.h"
@@ -39,6 +38,7 @@ TEST_CASE("Factory", "[factory]")
 		    InputComponent* inputComponent = go->addComponent<InputComponent>();
 			REQUIRE(inputComponent != nullptr);
 		    CHECK(inputComponent->getGameObject() == go);
+		    // fails for now, getComponent is not implemented
 		    CHECK(go->getComponent<InputComponent>() == inputComponent);
 	    }
     }

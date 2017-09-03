@@ -32,6 +32,8 @@ public:
 		return newGameObject;
 	}
 
+	// TODO: add CreateActor, a variant for Actors that takes initial position parameter
+
 	// REFACTOR: prevent that except when adding to existing object
 	/// Create a new component
 	template<class T>

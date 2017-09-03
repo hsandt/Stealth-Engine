@@ -31,7 +31,7 @@ void SceneManager::init()
 	// and either dump them here directly or check the existence
 	// of the corresponding scene asset files
 
-	sceneNames.push_back("main");
+	sceneNames.emplace_back("main");
 }
 
 void SceneManager::queryLoadScene(std::string name)

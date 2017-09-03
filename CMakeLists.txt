@@ -5,6 +5,9 @@ project(StealthEngine VERSION 0.1 LANGUAGES CXX)
 # Flags
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z -Wno-logical-op-parentheses")
+# If clang is used for compilation, force it to emit debug information for libstc++
+# https://stackoverflow.com/questions/41745527/cannot-view-stdstring-when-compiled-with-clang
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG")
 
 # Output paths
 
@@ -93,7 +96,7 @@ set(ENGINE_SOURCE_FILES
         src/scene/SceneManager.cpp
         src/service/InputManager.cpp
         src/utils/Color.cpp
-        )
+        src/physics/Rigidbody.cpp include/physics/Rigidbody.h)
 
 set(TEST_ENGINE_SOURCE_FILES
         tests/catch.hpp
@@ -105,7 +108,7 @@ set(TEST_ENGINE_SOURCE_FILES
         tests/geometry/TestVec2.cpp
         tests/geometry/TestVec3.cpp
         tests/utils/TestStringUtils.cpp
-        )
+        tests/physics/TestPhysics.cpp)
 
 
 # Cmake packages

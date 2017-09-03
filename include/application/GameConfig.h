@@ -20,6 +20,8 @@ struct GameConfig
 	/// Target frames per second, used to compute the loop iteration period
 	int fps = 30;
 
+	// REFACTOR: create a StringID class for short strings
+	// that relate to uniquely identified objects, but human-readable
 	/// Name of the initial scene to load
-	char initialSceneName[40] = "main";
+	std::string initialSceneName = "main";
 };

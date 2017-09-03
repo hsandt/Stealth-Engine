@@ -16,13 +16,14 @@
 
 EngineCore* EngineCore::instance = nullptr;
 
-EngineCore::EngineCore(GameApplication* gameApplication)
-	: gameApplication(gameApplication)
+EngineCore::EngineCore()
 {
-	if (instance)
-		throw runtime_error("An instance of EngineCore has already been created");
 
-	instance = this;
+}
+
+void EngineCore::bindGameApplication(GameApplication* pApplication)
+{
+	gameApplication = pApplication;
 }
 
 void EngineCore::init(const GameConfig & gameConfig)
@@ -57,4 +58,12 @@ EngineCore::~EngineCore()
 	delete factory;
 	delete windowManager;
 	delete logger;
+
+	// if you are the singleton instance (and you should be,
+	// unless you're an invalid 2nd instance about to be destroyed)
+	// then you should clear the pointer to instance now, else
+	// it will be invalid and next time we check for instance (in getInstance, LOG, etc.), it will cause SIGSEGV
+	// Don't delete it! it would cause a recursive delete and SIGSEGV on delete invalid renderer pointer
+	if (instance == this)
+		instance = nullptr;
 }

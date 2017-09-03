@@ -60,12 +60,13 @@ void GameApplication::setInitialWindowSize(int width, int height)
 
 void GameApplication::init() {
 	// initialize Engine Core, which will initialize all the modules
-	engineCore = new EngineCore(this);
+	engineCore = EngineCore::getOrCreateInstance();
+	engineCore->bindGameApplication(this);  // currently, ref to GameApplication is unused
 	engineCore->init(config);
 
 	// query loading of initial scene
-	engineCore->getSceneManager()->queryLoadScene(config.initialSceneName);
-};
+	EngineCore::getSceneManager()->queryLoadScene(config.initialSceneName);
+}
 
 void GameApplication::run() {
 	double currentTime;
