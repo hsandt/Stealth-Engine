@@ -12,11 +12,18 @@ class Transform;
 
 Actor::Actor() : GameObject()
 {
-	transform = addComponent<Transform>();
+//	transform = addComponent<Transform>();
 }
 
 Actor::~Actor() {
 
 }
 
-//Transform* GameObject::addComponent<Transform>();
+void Actor::init()
+{
+	GameObject::init();
+
+	// TEST: safer after construction?
+	transform = addComponent<Transform>();
+
+}

@@ -30,6 +30,8 @@ public:
 		return addComponent_Internal<T>();
 	}
 
+	void init() override;
+
 protected:
 	/// Return the default name of a new instance of this game object
 	virtual std::string getDefaultName() const override { return "Actor"; }

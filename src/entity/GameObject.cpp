@@ -21,6 +21,11 @@ using namespace std;
 GameObject::GameObject() : Object()
 {
 	LOG("[TEST] construct go");
+
+	// TEST: force components initialization (normally not needed,
+	// but may fix garbage vector bug)
+	components.resize(0);
+	components.reserve(16);
 }
 
 GameObject::~GameObject()
