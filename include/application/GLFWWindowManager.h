@@ -8,6 +8,15 @@
 
 #pragma once
 
+// On OSX, integrated graphics only support OpenGL up to 3.3 (this may cause incompatibility issues with the shader language)
+#if __APPLE__
+	#define OPEN_GL_VERSION_MAJOR 3
+	#define OPEN_GL_VERSION_MINOR 3
+#else
+	#define OPEN_GL_VERSION_MAJOR 4
+	#define OPEN_GL_VERSION_MINOR 5
+#endif
+
 // Include GLEW. Always include it before gl.h and glfw.h, since it's a bit magic.
 #include <input/KeyStates.h>
 #include "GL/glew.h"

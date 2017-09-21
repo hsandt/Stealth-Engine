@@ -49,12 +49,19 @@ void GLFWWindowManager::init(const GameConfig & gameConfig)
         throw runtime_error("[GLFW] Could not initialize application.");
     }
 
-    // Create window (OpenGL 4.5+ now supported by Nvidia drivers for Ubuntu)
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+    // Create window (OpenGL 4.5+ now supported by Nvidia drivers for Ubuntu, but OSX integrated graphics support 3.3 only;
+	// may cause issues with shader language)
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPEN_GL_VERSION_MAJOR);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPEN_GL_VERSION_MINOR);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL, but this can cause some issues
 //	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
+
+	// On OSX, we may need to set the Stencil bits if issues arise. For now, using OpenGL 3.3 works, even with integrated graphics.
+	// Discrete graphics may work with 4.5 too.
+	// https://stackoverflow.com/questions/27365099/nsgl-failed-to-create-opengl-pixel-format
+//	glfwWindowHint(GLFW_STENCIL_BITS, 8);
 
 	int width, height;
     if (gameConfig.initialWindowWidth > 0 && gameConfig.initialWindowHeight > 0)
