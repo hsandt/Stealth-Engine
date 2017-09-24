@@ -16,6 +16,7 @@ PhysicsManager::PhysicsManager() {
 	// Initialize the world with no gravity, since the PhysicsManager
 	// is constructed immediately by the EngineCore and therefore we don't have
 	// scene information yet, including gravity
+	// TODO: delay world creation in init, or better, create a world for the current scene (except if you want to share the world)
 	world = new b2World({0.f, 0.f});
 
 	LOG("[PHYSICS MANAGER] Physics manager created");

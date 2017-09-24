@@ -4,14 +4,20 @@ project(StealthEngine VERSION 0.1 LANGUAGES CXX)
 
 # Flags
 
+# C++17
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z -Wno-logical-op-parentheses")
+
+# Produce debugging information on debug, optimize on release
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+
 # If clang is used for compilation, force it to emit debug information for libstc++
 # https://stackoverflow.com/questions/41745527/cannot-view-stdstring-when-compiled-with-clang
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG")
 
 # Output paths
 
-set(CMAKE_BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build")
+set(CMAKE_BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build-${CMAKE_BUILD_TYPE}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")  # executable output directory
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # static libraries output directory
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # dynamic libraries output directory (unused)

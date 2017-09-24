@@ -20,7 +20,7 @@ Rigidbody::~Rigidbody()
 	// body is supposed to be destroyed in onRemovedFromGameObject,
 	// just check if it was the case as a safety
 	if (body)
-		EngineCore::getPhysicsManager()->destroyBody(body);
+		destroyBody();
 }
 
 void Rigidbody::onAddedToGameObject()
@@ -34,8 +34,22 @@ void Rigidbody::onRemovedFromGameObject()
 {
 	ActorComponent::onRemovedFromGameObject();
 
-	EngineCore::getPhysicsManager()->destroyBody(body);
 }
+
+void Rigidbody::destroyBody()
+{
+	PhysicsManager* physicsManager = EngineCore::getPhysicsManager();
+	if (physicsManager)
+	{
+		physicsManager->destroyBody(body);
+	}
+	else
+	{
+		const string name = gameObject ? gameObject->name : "destroyed object";
+		LOGERRF("Rigidbody::destroyBody (%s): PhysicsManager is already destroyed, check destruction order in EngineCore::~", name.c_str());
+	}
+}
+
 
 void Rigidbody::addBoxShape(float width, float height, const Vector2& offset, float angle)
 {

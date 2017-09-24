@@ -13,7 +13,7 @@
 
 using namespace std;
 
-TEST_CASE("Physics", "[physics]")
+TEST_CASE("Physics: use rigidbody", "[physics]")
 {
 	// REFACTOR: see TestFactory, factorize boilerplate code
 	GameApplication gameApplication;
@@ -22,18 +22,22 @@ TEST_CASE("Physics", "[physics]")
 	// simulate the 1st frame since we don't call run
 	EngineCore::getSceneManager()->loadNextScene();
 
-	SECTION("create an actor")
+	GIVEN("an actor")
 	{
 		Actor* actor = EngineCore::getFactory()->CreateGameObject<Actor>();
 
-		SECTION("add a Rigidbody component to game object")
+		WHEN("we add a Rigidbody component to actor")
 		{
 			Rigidbody* rigidbody = actor->addComponent<Rigidbody>();
-			REQUIRE(rigidbody != nullptr);
-			CHECK(rigidbody->getGameObject() == actor);
-			// TODO: more interesting test on physics properties, possibly collision detection
-			// on one frame by teleporting objects (no need to run game loop)
-			// TODO: integration test, this time running the game loop and checking dynamic collisions
+			actor->addComponent<Rigidbody>();
+			THEN("the rigidbody should be attached to the actor")
+            {
+                REQUIRE(rigidbody != nullptr);
+                CHECK(rigidbody->getGameObject() == actor);
+				// TODO: more interesting test on physics properties, possibly collision detection
+				// on one frame by teleporting objects (no need to run game loop)
+				// TODO: integration test, this time running the game loop and checking dynamic collisions
+			}
 		}
 	}
 }
