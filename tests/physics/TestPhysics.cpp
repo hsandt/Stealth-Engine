@@ -8,6 +8,7 @@
 // for the most common engine classes
 #include "entity/Actor.h"
 #include "factory/Factory.h"
+#include "physics/PhysicsManager.h"
 #include "physics/Rigidbody.h"
 #include "scene/Scene.h"
 
@@ -36,7 +37,22 @@ TEST_CASE("Physics: use rigidbody", "[physics]")
                 CHECK(rigidbody->getGameObject() == actor);
 				// TODO: more interesting test on physics properties, possibly collision detection
 				// on one frame by teleporting objects (no need to run game loop)
-				// TODO: integration test, this time running the game loop and checking dynamic collisions
+				// TODO: integration test, this time running the game loop for some time
+                // and checking dynamic collisions
+
+                GIVEN("a gravity of 10 toward the bottom")
+                {
+                    EngineCore::getPhysicsManager()->setGravity({0, -10});
+				    WHEN("we skip 1s")
+                    {
+                        // private
+//                        gameApplication.update(1.f);
+                        THEN("the actor has moved")
+                        {
+                            // TODO
+                        }
+                    }
+                }
 			}
 		}
 	}

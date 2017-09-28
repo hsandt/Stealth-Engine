@@ -23,9 +23,14 @@ public:
 
 	void onAddedToGameObject() override;
 	void onRemovedFromGameObject() override;
+
+    void start() override;
+    void update() override;
+
 private:
 	void destroyBody();
 
+public:
 	/// Add a box shape to the rigidbody with width, height and optional offset and angle
 	void addBoxShape(float width, float height, const Vector2 & offset = {0.f, 0.f}, float angle = 0.f);
 

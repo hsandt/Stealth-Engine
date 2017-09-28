@@ -40,7 +40,7 @@ void SceneManager::queryLoadScene(std::string name)
 	if (it != sceneNames.end())
 		nextSceneName = name;
 	else
-		LOGERRF("[SCENE MANAGER] Scene %s is not a valid scene name.", name.c_str());
+		LOGERRF("[SceneManager] Scene %s is not a valid scene name.", name.c_str());
 }
 
 bool SceneManager::shouldLoadScene() const

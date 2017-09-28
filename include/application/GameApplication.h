@@ -54,6 +54,9 @@ public:
     /// Load configuration from the provided file
     void loadConfig(const char* filePath);
 
+	/// Return the duration of a frame
+	inline double getFrameDuration() const { return secPerUpdate; }
+
 	/// Set the app title in the config
 	void setTitle(const std::string & title);
 
@@ -80,6 +83,8 @@ private:
     void processInput();
     /// Called to apply any callbacks bound to an input, mainly via InputComponents
     void applyInputBindings();
+    /// Call the start callback of all components in the scene
+    void start();
     /// Called to update AI and physics (mainly via BehaviourComponents)
     void update(float dt);
     /// Called to render the game view, mainly via RenderComponents

@@ -16,6 +16,8 @@ RenderComponent::RenderComponent() : ActorComponent()
 }
 
 void RenderComponent::onAddedToGameObject() {
+	ActorComponent::onAddedToGameObject();
+
 	// register render component to Renderer (use static cast,
 	// dynamic only works if polymorphic base class i.e. a true virtual method)
 	EngineCore::getRenderer()->registerRenderComponent(this);
@@ -23,5 +25,7 @@ void RenderComponent::onAddedToGameObject() {
 
 void RenderComponent::onRemovedFromGameObject()
 {
+	ActorComponent::onRemovedFromGameObject();
+
 	EngineCore::getRenderer()->unregisterRenderComponent(this);
 }

@@ -114,7 +114,7 @@ set(TEST_ENGINE_SOURCE_FILES
         tests/geometry/TestVec2.cpp
         tests/geometry/TestVec3.cpp
         tests/utils/TestStringUtils.cpp
-        tests/physics/TestPhysics.cpp)
+        tests/physics/TestPhysics.cpp tests/TestFriend.h)
 
 
 # Cmake packages

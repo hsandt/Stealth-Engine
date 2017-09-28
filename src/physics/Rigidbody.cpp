@@ -7,6 +7,7 @@
 
 #include "include/component/Transform.h"
 #include "include/entity/Actor.h"
+#include "include/core/EngineCore.h"
 #include "include/physics/PhysicsManager.h"
 #include "include/physics/Rigidbody.h"
 
@@ -27,13 +28,21 @@ void Rigidbody::onAddedToGameObject()
 {
 	ActorComponent::onAddedToGameObject();
 
-	body = EngineCore::getPhysicsManager()->createBody(actor);
+	EngineCore::getPhysicsManager()->registerRigidbody(this);
+
+    // TODO: allow dynamic parameter to set body type
+    // OPTIMIZE: since it would be costly to recreate the body each time the type changes
+    // (in the editor or before running the game), only start the World
+    // simulation when the game starts
+//	body = EngineCore::getPhysicsManager()->createBody(actor);
+	body = EngineCore::getPhysicsManager()->createDynamicBody(actor);
 }
 
 void Rigidbody::onRemovedFromGameObject()
 {
 	ActorComponent::onRemovedFromGameObject();
 
+	EngineCore::getPhysicsManager()->unregisterRigidbody(this);
 }
 
 void Rigidbody::destroyBody()
@@ -56,7 +65,14 @@ void Rigidbody::addBoxShape(float width, float height, const Vector2& offset, fl
 	b2PolygonShape groundBox;
 	groundBox.SetAsBox(width, height, (b2Vec2) offset, angle);
 	// TODO: add density parameter (0 is ok for static objects, but need 1 or so for dynamic)
-	body->CreateFixture(&groundBox, 0.0f);
+	body->CreateFixture(&groundBox, 1.0f);  // support dynamic
+
+    // if you also need friction
+//    b2FixtureDef fixtureDef;
+//    fixtureDef.shape = &dynamicBox;
+//    fixtureDef.density = 1.0f;
+//    fixtureDef.friction = 0.3f;
+//    body->CreateFixture(&fixtureDef);
 }
 
 void Rigidbody::removeAllShapes()
@@ -99,3 +115,23 @@ void Rigidbody::removeAllShapes()
 	b->m_fixtureCount = 0;
 	*/
 }
+
+void Rigidbody::start()
+{
+    ActorComponent::start();
+
+    // set initial position from game object
+    // (for now, rely on onAddedToGameObject initial position to check if it works,
+    // uncomment this later)
+//    Vector2 actorPosition = actor->transform->position;
+//    body->SetTransform((b2Vec2) actorPosition, body->GetAngle());
+}
+
+void Rigidbody::update()
+{
+    ActorComponent::update();
+
+    // set actor position to body's position (update must be called after physics step)
+    actor->transform->setPosition(body->GetPosition());
+}
+

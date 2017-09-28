@@ -47,6 +47,13 @@ public:
 	/// Return the game object this component is attached to
 	GameObject* getGameObject() const { return gameObject; }
 
+	/// Game start callback: called on game start if this component is on an active object in the scene,
+	/// or has just been added during play
+	virtual void start() {}
+
+	/// Update callback: called during play if this component is on an active object
+	virtual void update() {}
+
 protected:
     GameObject* gameObject = nullptr;
 

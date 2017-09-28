@@ -12,17 +12,28 @@
 #include "entity/Actor.h"
 #include "geometry/Vector2.h"
 
+class Rigidbody;
+
 class PhysicsManager
 {
 private:
+	/// Physics world
 	b2World* world = nullptr;
+
+	// Physics parameters
+    float32 timeStep;
+    int32 velocityIterations = 6;
+    int32 positionIterations = 2;
+
+	/// All Render components in the current scene (weak pointers)
+	std::vector<Rigidbody*> rigidbodies;
 
 public:
 	PhysicsManager();
 	virtual ~PhysicsManager();
 
 	/// Get world gravity
-	inline Vector2 getGravity () const
+	inline Vector2 getGravity() const
 	{
 		return world->GetGravity();
 	}
@@ -34,6 +45,7 @@ public:
 	}
 
 	b2Body* createBody(Actor* actor);
+	b2Body* createDynamicBody(Actor* actor);
 
 	inline void destroyBody(b2Body* body)
 	{
@@ -43,6 +55,17 @@ public:
 		world->DestroyBody(body);
 	}
 
+    /// Start all rigidbodies
+    void start();
+
+    /// Apply physics time step
+    void update();
+
+    /// Register a new render component (weak pointer)
+    void registerRigidbody(Rigidbody* rigidbody);
+
+    /// Unregister a render component (weak pointer)
+    void unregisterRigidbody(Rigidbody* rigidbody);
 };
 
 

@@ -18,7 +18,7 @@ struct GameConfig
 	int initialWindowHeight = 0;
 
 	/// Target frames per second, used to compute the loop iteration period
-	int fps = 30;
+	int fps = 60;
 
 	// REFACTOR: create a StringID class for short strings
 	// that relate to uniquely identified objects, but human-readable

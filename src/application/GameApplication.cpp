@@ -20,6 +20,7 @@
 #include "entity/GameObject.h"
 #include "factory/Factory.h"
 #include "scene/SceneManager.h"
+#include "physics/PhysicsManager.h"
 #include "renderer/Renderer.h"
 #include "core/EngineCore.h"
 #include "scene/Scene.h"
@@ -32,8 +33,8 @@ using namespace std;
 
 GameApplication::GameApplication() :
 		isRunning(false) {
-	if (config.fps > 0)
-		config.fps = 30;  // ?? if < 0?
+	if (config.fps <= 0)
+		config.fps = 30;  // default if invalid value
 	secPerUpdate = 1. / config.fps;  // fixed deltaTime
 }
 
@@ -76,7 +77,7 @@ void GameApplication::run() {
 
 	isRunning = true;
 
-	// TODO: check nextScene from SceneManager and load if a new one is expected
+    start();
 
 	WindowManager* windowManager = engineCore->getWindowManager();
 
@@ -158,10 +159,19 @@ void GameApplication::applyInputBindings()
 		EngineCore::getInputManager()->applyInputBindings();
 }
 
+void GameApplication::start()
+{
+    // Start all behavior scripts
+
+    // Start all rigidbodies
+    EngineCore::getPhysicsManager()->start();
+}
+
 void GameApplication::update(float dt) {
+	// OPTIMIZE: when using smart pointers, we can store smart ptr to current scene and just check validity here
 	Scene* currentScene = EngineCore::getSceneManager()->getCurrentScene();
 	if (!currentScene)
-		return;  // no error message here because it would loop too fast
+		return;  // no error message here because it would loop too fast (or use a LOG_ONCE)
 
 	map<int, GameObject*> gameObjects{currentScene->getGameObjects()};
 	for (auto goPair : gameObjects) {
@@ -173,8 +183,9 @@ void GameApplication::update(float dt) {
 		go->update(dt);
 		// go -> SetPosition(go -> GetPosition() + Vector3 {23, 2, 0});
 	}
-	// DEBUG
 
+    // apply physics step (this is done after custom script updates)
+    EngineCore::getPhysicsManager()->update();
 }
 
 void GameApplication::render()
