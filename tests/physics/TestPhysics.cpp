@@ -6,6 +6,7 @@
 
 // REFACTOR: make a generic header that contains itself headers
 // for the most common engine classes
+#include "application/RunMode.h"
 #include "entity/Actor.h"
 #include "factory/Factory.h"
 #include "physics/PhysicsManager.h"
@@ -18,7 +19,7 @@ TEST_CASE("Physics: use rigidbody", "[physics]")
 {
 	// REFACTOR: see TestFactory, factorize boilerplate code
 	GameApplication gameApplication;
-	gameApplication.init();
+	gameApplication.init(RunMode::Test);
 
 	// simulate the 1st frame since we don't call run
 	EngineCore::getSceneManager()->loadNextScene();

@@ -16,6 +16,7 @@
 #include "service/InputManager.h"
 #include "renderer/Renderer.h"
 #include "factory/Factory.h"
+#include "RunMode.h"
 
 class EngineCore;
 
@@ -64,7 +65,7 @@ public:
 	void setInitialWindowSize(int width, int height);
 
     /// Initialize engine, passing the game config
-    void init();
+    void init(RunMode runMode);
 
     /// Run the game in the current scene
     void run();

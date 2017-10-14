@@ -28,6 +28,7 @@
 #include "application/WindowManager.h"
 #include "application/GameApplication.h"
 #include "renderer/ShaderUtils.h"
+#include "include/application/RunMode.h"
 
 using namespace std;
 
@@ -59,11 +60,11 @@ void GameApplication::setInitialWindowSize(int width, int height)
 	config.initialWindowHeight = height;
 }
 
-void GameApplication::init() {
+void GameApplication::init(RunMode runMode) {
 	// initialize Engine Core, which will initialize all the modules
 	engineCore = EngineCore::getOrCreateInstance();
 	engineCore->bindGameApplication(this);  // currently, ref to GameApplication is unused
-	engineCore->init(config);
+	engineCore->init(runMode, config);
 
 	// query loading of initial scene
 	EngineCore::getSceneManager()->queryLoadScene(config.initialSceneName);

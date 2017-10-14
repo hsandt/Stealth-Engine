@@ -9,6 +9,7 @@
 #include "debug/Logger.h"
 #include "core/EngineCore.h"
 #include "application/GameApplication.h"
+#include "application/RunModeData.h"
 #include "application/ApplicationResult.h"
 #include "factory/Factory.h"
 #include "scene/SceneManager.h"
@@ -27,7 +28,7 @@ void EngineCore::bindGameApplication(GameApplication* pApplication)
 	gameApplication = pApplication;
 }
 
-void EngineCore::init(const GameConfig & gameConfig)
+void EngineCore::init(RunMode runMode, const GameConfig &gameConfig)
 {
 	// REFACTOR: use smart pointers for all modules and maybe other objects
 	// so that we can check if a pointer is valid or not after destruction
@@ -43,12 +44,34 @@ void EngineCore::init(const GameConfig & gameConfig)
 	// Create logger on standard output stream
 	logger = new Logger(std::cout, std::cout, std::cerr);
 
+	this->runMode = runMode;
+	switch (runMode)
+	{
+		case RunMode::Play:
+			runModeData = g_RunModeDataSet.getPlayModeData();
+			break;
+		case RunMode::Simulation:
+			runModeData = g_RunModeDataSet.getSimulationModeData();
+			break;
+		case RunMode::Test:
+			runModeData = g_RunModeDataSet.getTestModeData();
+			break;
+		case RunMode::TestWithRendering:
+			runModeData = g_RunModeDataSet.getTestWithRenderingModeData();
+			break;
+		default:
+			throw std::invalid_argument("[EngineCore] Cannot init with RunMode::None");
+	}
+
 	windowManager = new GLFWWindowManager();
 	windowManager->init(gameConfig);
 
 	// create and initialize Renderer (will load all standard shaders)
-	renderer = new Renderer();
-	renderer->init();
+	if (runModeData->renderingActive)
+	{
+		renderer = new Renderer();
+		renderer->init();
+	}
 
 	// create physics manager
 	physicsManager = new PhysicsManager();
@@ -58,10 +81,8 @@ void EngineCore::init(const GameConfig & gameConfig)
 	sceneManager = new SceneManager();
 	sceneManager->init();
 
-	inputManager = new InputManager();
-
-
-
+	if (runModeData->inputActive)
+		inputManager = new InputManager();
 }
 
 EngineCore::~EngineCore()

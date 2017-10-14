@@ -102,7 +102,7 @@ set(ENGINE_SOURCE_FILES
         src/scene/SceneManager.cpp
         src/service/InputManager.cpp
         src/utils/Color.cpp
-        src/physics/Rigidbody.cpp include/physics/Rigidbody.h)
+        src/physics/Rigidbody.cpp include/physics/Rigidbody.h include/application/RunMode.h src/test/TestRunner.cpp src/test/TestRunner.h src/application/RunModeData.cpp include/application/RunModeData.h)
 
 set(TEST_ENGINE_SOURCE_FILES
         tests/catch.hpp

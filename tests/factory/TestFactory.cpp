@@ -8,6 +8,7 @@
 #include "entity/GameObject.h"
 #include "factory/Factory.h"
 #include "scene/Scene.h"
+#include "application/RunMode.h"
 
 using namespace std;
 
@@ -22,7 +23,7 @@ TEST_CASE("Factory", "[factory]")
 	// We can also test each module by order of initialization (engine init test)
 	// We can only put the GameApplication in a traditional Fixture reused to each integration test
 	GameApplication gameApplication;
-	gameApplication.init();
+	gameApplication.init(RunMode::Test);
 
 	// simulate the 1st frame since we don't call run
 	EngineCore::getSceneManager()->loadNextScene();

@@ -5,6 +5,8 @@
 #pragma once
 
 #include <stdexcept>
+#include <application/RunMode.h>
+#include <application/RunModeData.h>
 
 #include "application/GameConfig.h"
 
@@ -20,7 +22,10 @@ class Logger;
 class EngineCore
 {
 private:
-	/// Game Application (weak ref)
+    /// Singleton instance (weak ref)
+    static EngineCore* instance;
+
+    /// Game Application (weak ref)
 	GameApplication* gameApplication = nullptr;
 
 	/// Window manager (strong ref)
@@ -35,12 +40,12 @@ private:
 	Renderer *renderer = nullptr;
 	/// Physics manager (strong ref)
 	PhysicsManager *physicsManager = nullptr;
-
 	/// Logger (strong ref)
 	Logger *logger;
 
-	/// Singleton instance (weak ref)
-	static EngineCore* instance;
+    /// Run mode
+	RunMode runMode = RunMode::None;
+	const RunModeData* runModeData = nullptr;
 
 private:
 	EngineCore();
@@ -74,7 +79,7 @@ public:
 	void bindGameApplication(GameApplication* gameApplication);
 
 	/// Initialize all the modules
-	void init(const GameConfig & gameConfig);
+    void init(RunMode runMode, const GameConfig &gameConfig);
 
 	/// Return the game application
 	inline static GameApplication* getGameApplication() { return requireInstance()->gameApplication; }
