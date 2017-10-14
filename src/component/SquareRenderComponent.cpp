@@ -20,8 +20,8 @@ void SquareRenderComponent::render(Renderer *renderer) {
     {
 	    const float w = 20, h = 20;
 
-	    float x = actor->transform->position.x();
-	    float y = actor->transform->position.y();
+	    float x = actor->transform->getPosition().x();
+	    float y = actor->transform->getPosition().y();
 	    renderer->drawSquare(x - w / 2, y - h / 2, w, h);
     }
     else

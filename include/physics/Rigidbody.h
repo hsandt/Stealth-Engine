@@ -36,6 +36,10 @@ public:
 
 	/// Remove all the shapes on this rigidbody (this will make it impossible to collide with)
 	void removeAllShapes();
+
+    /// Set the position of the rigidbody for the next physics update
+    /// If the rigidbody is dynamic, velocity is preserved
+    void setPosition(const Vector2 &position);
 };
 
 

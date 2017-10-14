@@ -39,7 +39,7 @@ b2Body* PhysicsManager::createBody(Actor* actor)
 		throw invalid_argument("[PHYSICS MANAGER] Cannot create body on actor: nullptr");
 
 	b2BodyDef bodyDef;
-	Vector2 actorPosition = actor->transform->position;
+	Vector2 actorPosition = actor->transform->getPosition();
 	bodyDef.position.Set(actorPosition.x(), actorPosition.y());
 
 	b2Body* body = world->CreateBody(&bodyDef);
@@ -52,7 +52,7 @@ b2Body *PhysicsManager::createDynamicBody(Actor *actor)
         throw invalid_argument("[PHYSICS MANAGER] Cannot create body on actor: nullptr");
 
     b2BodyDef bodyDef;
-    Vector2 actorPosition = actor->transform->position;
+    Vector2 actorPosition = actor->transform->getPosition();
     bodyDef.position.Set(actorPosition.x(), actorPosition.y());
     bodyDef.type = b2_dynamicBody;
     b2Body* body = world->CreateBody(&bodyDef);

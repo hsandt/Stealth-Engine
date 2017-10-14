@@ -32,7 +32,8 @@ GameObject::getComponent() {
 		// b. use string id to identify component type clearly
 		// (a bit expensive until we replace strings with special classes)
 		if (component->getClassStringID() == T::getStringID())
-			return dynamic_cast<T*>(component);
+			// we are pretty sure component is of type T now, so we static cast
+			return static_cast<T*>(component);
 	}
 	return nullptr;
 }

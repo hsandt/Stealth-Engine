@@ -135,3 +135,8 @@ void Rigidbody::update()
     actor->transform->setPosition(body->GetPosition());
 }
 
+void Rigidbody::setPosition(const Vector2 &position)
+{
+    body->SetTransform((b2Vec2) position, body->GetAngle());
+}
+

@@ -15,7 +15,9 @@ class GameObject;
 /// Note that concrete subclasses should implement static std::string getStringID()
 // REFACTOR: separate into base Component and NonActorComponent
 // this will also allow us to set getComponentType = 0 to make the class abstract
-// and prevent AddComponent<Component>
+// and prevent AddComponent<Component> as well as SetGameObject on ActorComponent,
+// providing exclusively attaching to game object for NonActorComponent and to actor
+// for actor components
 class Component : public Object {
 	// friendship required for addComponent
 	friend class GameObject;

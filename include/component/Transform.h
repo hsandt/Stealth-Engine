@@ -10,6 +10,10 @@
 #include "geometry/Vector2.h"
 
 class Transform : public ActorComponent {
+
+private:
+    Vector2 position;
+
 public:
     Transform();
     virtual ~Transform();
@@ -18,7 +22,8 @@ public:
 
 	std::string getClassStringID() const override { return getStringID(); }
 
-	Vector2 position;
+    /// Set the actor position and update the rigidbody position
+	void setPosition(const Vector2& newPosition);
 
-	void setPosition(const Vector2& newPosition) { position = newPosition; }
+    Vector2 getPosition() const;
 };

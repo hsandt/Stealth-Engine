@@ -22,4 +22,9 @@ void ActorComponent::setGameObject(GameObject* go)
 
 	// also store pointer for actor version
 	actor = dynamic_cast<Actor*>(gameObject);
+	// REFACTOR: use setActor for exclusively attaching actor component to actor
+	// this will also avoid having static casts (you can also use ClassID for actors to
+	// check hierarchy stuff and make your own no-RTTI dynamic cast)
+	if (!actor)
+		LOGERR("ActorComponent::setGameObject called with non actor game object");
 }
