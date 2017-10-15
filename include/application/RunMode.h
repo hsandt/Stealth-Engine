@@ -9,6 +9,7 @@ enum class RunMode
     None,
     Play,
     Simulation,
-    Test,
+    Test,  // Smoke test
+    TestWithInput,  // Smoke test with input only to debug InputManager (simulated input, etc.)
     TestWithRendering
 };

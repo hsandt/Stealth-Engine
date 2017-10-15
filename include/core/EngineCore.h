@@ -11,6 +11,7 @@
 #include "application/GameConfig.h"
 
 class GameApplication;
+class SmokeTestRunner;
 class WindowManager;
 class Factory;
 class SceneManager;
@@ -25,8 +26,15 @@ private:
     /// Singleton instance (weak ref)
     static EngineCore* instance;
 
+	// ARCHITECTURE: only gameApplication or only smokeTestRunner is set, depending on the
+    // run mode. Unfortunately, I find no elegant way not to have two members where one is
+    // not be used, as a union of pointers to different types is risky.
+
     /// Game Application (weak ref)
 	GameApplication* gameApplication = nullptr;
+
+    /// Smoke Test Runner (weak ref)
+	SmokeTestRunner* smokeTestRunner = nullptr;
 
 	/// Window manager (strong ref)
 	WindowManager *windowManager = nullptr;
@@ -44,8 +52,10 @@ private:
 	Logger *logger;
 
     /// Run mode
-	RunMode runMode = RunMode::None;
 	const RunModeData* runModeData = nullptr;
+
+    /// Target update period (s)
+    double frameDuration = 0.;
 
 private:
 	EngineCore();
@@ -77,9 +87,10 @@ public:
 	}
 
 	void bindGameApplication(GameApplication* gameApplication);
+	void bindSmokeTestRunner(SmokeTestRunner* pTestRunner);
 
 	/// Initialize all the modules
-    void init(RunMode runMode, const GameConfig &gameConfig);
+    void init(const RunModeData* runModeData, const GameConfig &gameConfig);
 
 	/// Return the game application
 	inline static GameApplication* getGameApplication() { return requireInstance()->gameApplication; }
@@ -105,6 +116,8 @@ public:
 	/// Return the logger
 	inline static Logger* getLogger() { return requireInstance()->logger; }
 
+    /// Return the duration of a frame
+    inline double getFrameDuration() const { return frameDuration; }
 };
 
 

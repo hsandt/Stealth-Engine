@@ -3,6 +3,7 @@
 //
 
 #include <tests/catch.hpp>
+#include <include/test/SmokeTestRunner.h>
 
 // REFACTOR: make a generic header that contains itself headers
 // for the most common engine classes
@@ -18,11 +19,8 @@ using namespace std;
 TEST_CASE("Physics: use rigidbody", "[physics]")
 {
 	// REFACTOR: see TestFactory, factorize boilerplate code
-	GameApplication gameApplication;
-	gameApplication.init(RunMode::Test);
-
-	// simulate the 1st frame since we don't call run
-	EngineCore::getSceneManager()->loadNextScene();
+	SmokeTestRunner smokeTestRunner;
+	smokeTestRunner.init();
 
 	GIVEN("an actor")
 	{
@@ -30,27 +28,28 @@ TEST_CASE("Physics: use rigidbody", "[physics]")
 
 		WHEN("we add a Rigidbody component to actor")
 		{
+            // optional since 0, 0 is the default value, but clearer to understand the test
+			actor->transform->setPosition({0.f, 0.f});
 			Rigidbody* rigidbody = actor->addComponent<Rigidbody>();
-			actor->addComponent<Rigidbody>();
 			THEN("the rigidbody should be attached to the actor")
             {
                 REQUIRE(rigidbody != nullptr);
-                CHECK(rigidbody->getGameObject() == actor);
-				// TODO: more interesting test on physics properties, possibly collision detection
-				// on one frame by teleporting objects (no need to run game loop)
-				// TODO: integration test, this time running the game loop for some time
-                // and checking dynamic collisions
+				REQUIRE(rigidbody->getGameObject() == actor);
 
                 GIVEN("a gravity of 10 toward the bottom")
                 {
                     EngineCore::getPhysicsManager()->setGravity({0, -10});
 				    WHEN("we skip 1s")
                     {
-                        // private
-//                        gameApplication.update(1.f);
+						smokeTestRunner.skip(1.0);
                         THEN("the actor has moved")
                         {
-                            // TODO
+                            // 1/2 * g * t^2 = 1/2 * g = 5
+                            // IMPROVE: create "almost" float comparison functions
+                            // We tolerate a small error of 0.1f since we run at 60 FPS
+                            CHECK(actor->transform->getPosition().x() == 0.f);
+                            CHECK(actor->transform->getPosition().y() < -4.9f);
+                            CHECK(actor->transform->getPosition().y() > -5.1f);
                         }
                     }
                 }

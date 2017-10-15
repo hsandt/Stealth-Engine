@@ -35,6 +35,8 @@ set(ENGINE_SOURCE_FILES
         include/application/GameClass.h
         include/application/GameConfig.h
         include/application/GLFWWindowManager.h
+        include/application/RunMode.h
+        include/application/RunModeData.h
         include/application/WindowManager.h
         include/component/ActorComponent.h
         include/component/Component.h
@@ -64,6 +66,7 @@ set(ENGINE_SOURCE_FILES
         include/input/KeyStates.h
         include/object/Object.h
         include/physics/PhysicsManager.h
+        include/physics/Rigidbody.h
         include/renderer/Renderer.h
         include/renderer/ShaderUtils.h
         include/scene/Scene.h
@@ -80,6 +83,7 @@ set(ENGINE_SOURCE_FILES
         src/application/GameClass.cpp
         src/application/GLFWWindowManager.cpp
         src/application/GLFWWindowManager.cpp
+        src/application/RunModeData.cpp
         src/application/WindowManager.cpp
         src/component/ActorComponent.cpp
         src/component/Component.cpp
@@ -95,6 +99,7 @@ set(ENGINE_SOURCE_FILES
         src/factory/GameObjectCreator.cpp
         src/object/Object.cpp
         src/physics/PhysicsManager.cpp
+        src/physics/Rigidbody.cpp
         src/renderer/Renderer.cpp
         src/renderer/ShaderUtils.cpp
         src/scene/Scene.cpp
@@ -102,19 +107,25 @@ set(ENGINE_SOURCE_FILES
         src/scene/SceneManager.cpp
         src/service/InputManager.cpp
         src/utils/Color.cpp
-        src/physics/Rigidbody.cpp include/physics/Rigidbody.h include/application/RunMode.h src/test/TestRunner.cpp src/test/TestRunner.h src/application/RunModeData.cpp include/application/RunModeData.h)
+        )
 
 set(TEST_ENGINE_SOURCE_FILES
+        # REFACTOR: move catch and Smoke test framework to yet another SOURCE_FILES
         tests/catch.hpp
         tests/catch_with_main.hpp
         tests/testmain.cpp
+        tests/TestFriend.h
+
+        src/test/SmokeTestRunner.cpp
+        include/test/SmokeTestRunner.h
 
         # All actual test cpp files added from here
         tests/factory/TestFactory.cpp
         tests/geometry/TestVec2.cpp
         tests/geometry/TestVec3.cpp
+        tests/physics/TestPhysics.cpp
         tests/utils/TestStringUtils.cpp
-        tests/physics/TestPhysics.cpp tests/TestFriend.h)
+        )
 
 
 # Cmake packages

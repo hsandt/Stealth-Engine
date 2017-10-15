@@ -39,7 +39,6 @@ InputManager::~InputManager()
 void InputManager::registerInputComponent(InputComponent *inputComponent)
 {
 	inputComponents.push_back(inputComponent);  // shared to weak pointer conversion
-
 }
 
 void InputManager::unregisterInputComponent(InputComponent *inputComponent)

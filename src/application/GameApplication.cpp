@@ -14,6 +14,8 @@
 #include <vector>
 
 // Engine
+#include <application/RunMode.h>
+#include <application/RunModeData.h>
 #include "debug/Logger.h"
 #include "core/EngineCore.h"
 #include "component/Transform.h"
@@ -35,8 +37,7 @@ using namespace std;
 GameApplication::GameApplication() :
 		isRunning(false) {
 	if (config.fps <= 0)
-		config.fps = 30;  // default if invalid value
-	secPerUpdate = 1. / config.fps;  // fixed deltaTime
+		config.fps = 60;  // default if invalid value
 }
 
 GameApplication::~GameApplication() {
@@ -61,16 +62,27 @@ void GameApplication::setInitialWindowSize(int width, int height)
 }
 
 void GameApplication::init(RunMode runMode) {
+    if (!(runMode == RunMode::Play || runMode == RunMode::Simulation || runMode == RunMode::TestWithRendering))
+        throw std::invalid_argument("RunMode::Test is not accepted for GameApplication");
+
+    this->runMode = runMode;
+    runModeData = &RunModeDataSet::getRunModeData(runMode);
+
 	// initialize Engine Core, which will initialize all the modules
 	engineCore = EngineCore::getOrCreateInstance();
 	engineCore->bindGameApplication(this);  // currently, ref to GameApplication is unused
-	engineCore->init(runMode, config);
+	engineCore->init(runModeData, config);
 
 	// query loading of initial scene
 	EngineCore::getSceneManager()->queryLoadScene(config.initialSceneName);
+
+	initialized = true;
 }
 
 void GameApplication::run() {
+	if (!initialized)
+		throw std::runtime_error("[GameApplication] Cannot run uninitialized game app.");
+
 	double currentTime;
 	double endTime = glfwGetTime();
 	double lag = 0;
@@ -81,46 +93,51 @@ void GameApplication::run() {
     start();
 
 	WindowManager* windowManager = engineCore->getWindowManager();
+    double frameDuration = engineCore->getFrameDuration();
 
 	// update loop
-	while (isRunning) {
-		// track the current time before loading a new scene
-		// because it may take some time in sync and we want
-		// to skip any time that passed during sync loading
-		currentTime = glfwGetTime();
-		lag += currentTime - endTime;
+	while (isRunning)
+    {
+        // track the current time before loading a new scene
+        // because it may take some time in sync and we want
+        // to skip any time that passed during sync loading
+        currentTime = glfwGetTime();
+        lag += currentTime - endTime;
 
-		// if a new scene should be loaded, load it now (sync)
-		if (EngineCore::getSceneManager())
-		{
-			if (EngineCore::getSceneManager()->shouldLoadScene())
-			{
-				EngineCore::getSceneManager()->loadNextScene();
-				onLoadNextScene();
-			}
-		}
+        // if a new scene should be loaded, load it now (sync)
+        if (EngineCore::getSceneManager())
+        {
+            if (EngineCore::getSceneManager()->shouldLoadScene())
+            {
+                EngineCore::getSceneManager()->loadNextScene();
+                onLoadNextScene();
+            }
+        }
 
-		// get the current time but don't add lag, so that time
-		// does not pass during sync scene loading
-		currentTime = glfwGetTime();
+        // get the current time but don't add lag, so that time
+        // does not pass during sync scene loading
+        currentTime = glfwGetTime();
 
-		windowManager->pollEvents();
-		// CHANGE: if using glfwWait, maybe don't poll twice
-		glfwPollEvents();
+        // Even if input is inactive, poll normal events so we can stop the game
+        // with ESCAPE or the close icon (to interrupt a Simulation or a TestWithRendering)
+        windowManager->pollEvents();
 
-		if (windowManager->windowShouldClose())
-			isRunning = false;
+        if (windowManager->windowShouldClose())
+            isRunning = false;
 
-		processInput();
-		applyInputBindings();
+        if (runModeData->inputActive)
+        {
+            processInput();
+            applyInputBindings();
+        }
 
-		while (lag >= secPerUpdate) {
+        while (lag >= frameDuration) {
 			// TODO: add limit for number of iterations to catch back
 			// pass fixed deltaTime as update argument, in sec
 			// ALT: use a service locator for deltaTime (fixed)
-			update((float) secPerUpdate);
+			update((float)frameDuration);
 			// TODO: compute at once
-			lag -= secPerUpdate;
+			lag -= frameDuration;
 		}
 
 		render();
@@ -128,7 +145,7 @@ void GameApplication::run() {
 		endTime = glfwGetTime();
 		lag += endTime - currentTime;
 
-		sleep = secPerUpdate - lag;
+		sleep = frameDuration - lag;
 		if (sleep > 0) {
 			// we are in advance, wait
 //			SDL_Delay(sleep);
@@ -162,6 +179,9 @@ void GameApplication::applyInputBindings()
 
 void GameApplication::start()
 {
+    if (!initialized)
+        throw std::runtime_error("[GameApplication] Cannot start in uninitialized game app.");
+
     // Start all behavior scripts
 
     // Start all rigidbodies

@@ -28,8 +28,15 @@ void EngineCore::bindGameApplication(GameApplication* pApplication)
 	gameApplication = pApplication;
 }
 
-void EngineCore::init(RunMode runMode, const GameConfig &gameConfig)
+void EngineCore::bindSmokeTestRunner(SmokeTestRunner *pTestRunner)
 {
+    smokeTestRunner = pTestRunner;
+}
+
+void EngineCore::init(const RunModeData* runModeData, const GameConfig &gameConfig)
+{
+    frameDuration = 1. / (double)gameConfig.fps;
+
 	// REFACTOR: use smart pointers for all modules and maybe other objects
 	// so that we can check if a pointer is valid or not after destruction
 	// To simplify user API, provide getters that always return raw pointers, returning nullptr
@@ -44,31 +51,12 @@ void EngineCore::init(RunMode runMode, const GameConfig &gameConfig)
 	// Create logger on standard output stream
 	logger = new Logger(std::cout, std::cout, std::cerr);
 
-	this->runMode = runMode;
-	switch (runMode)
-	{
-		case RunMode::Play:
-			runModeData = g_RunModeDataSet.getPlayModeData();
-			break;
-		case RunMode::Simulation:
-			runModeData = g_RunModeDataSet.getSimulationModeData();
-			break;
-		case RunMode::Test:
-			runModeData = g_RunModeDataSet.getTestModeData();
-			break;
-		case RunMode::TestWithRendering:
-			runModeData = g_RunModeDataSet.getTestWithRenderingModeData();
-			break;
-		default:
-			throw std::invalid_argument("[EngineCore] Cannot init with RunMode::None");
-	}
-
-	windowManager = new GLFWWindowManager();
-	windowManager->init(gameConfig);
-
 	// create and initialize Renderer (will load all standard shaders)
 	if (runModeData->renderingActive)
 	{
+        windowManager = new GLFWWindowManager();
+        windowManager->init(gameConfig);
+
 		renderer = new Renderer();
 		renderer->init();
 	}

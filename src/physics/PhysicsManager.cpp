@@ -22,7 +22,7 @@ PhysicsManager::PhysicsManager() {
 
     // TODO: move config in init and add setters to change them in the editor or even in runtime
     // REFACTOR/PRECISION: modify getFrameDuration to include the cast float32 with safety
-    timeStep = (float32) EngineCore::getGameApplication()->getFrameDuration();
+    timeStep = (float32) EngineCore::requireInstance()->getFrameDuration();
 	LOG("[PHYSICS MANAGER] Physics manager created");
 }
 

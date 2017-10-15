@@ -4,6 +4,10 @@
 
 #pragma once
 
+#include <stdexcept>
+
+#include "RunMode.h"
+
 struct RunModeData
 {
     bool inputActive;
@@ -32,6 +36,12 @@ class RunModeDataSet
             .isTest = true,
             .duration = 0.
     };
+    RunModeData testWithInputModeData = {
+            .inputActive = true,
+            .renderingActive = false,
+            .isTest = true,
+            .duration = 0.
+    };
     RunModeData testWithRenderingModeData = {
             .inputActive = false,
             .renderingActive = true,
@@ -39,26 +49,57 @@ class RunModeDataSet
             .duration = 0.
     };
 
+private:
+    RunModeDataSet () = default;
+
+    inline static const RunModeDataSet& getInstance ()
+    {
+        static RunModeDataSet instance;
+        return instance;
+    }
+
 public:
-    const RunModeData* getPlayModeData() const
+    inline const RunModeData& getPlayModeData() const
     {
-        return &playModeData;
+        return playModeData;
     }
 
-    const RunModeData* getSimulationModeData() const
+    inline const RunModeData& getSimulationModeData() const
     {
-        return &simulationModeData;
+        return simulationModeData;
     }
 
-    const RunModeData* getTestModeData() const
+    inline const RunModeData& getTestModeData() const
     {
-        return &testModeData;
+        return testModeData;
     }
 
-    const RunModeData* getTestWithRenderingModeData() const
+    inline const RunModeData& getTestWithInputModeData() const
     {
-        return &testWithRenderingModeData;
+        return testWithInputModeData;
+    }
+
+    inline const RunModeData& getTestWithRenderingModeData() const
+    {
+        return testWithRenderingModeData;
+    }
+
+    static const RunModeData& getRunModeData(RunMode runMode)
+    {
+        switch (runMode)
+        {
+            case RunMode::Play:
+                return getInstance().getPlayModeData();
+            case RunMode::Simulation:
+                return getInstance().getSimulationModeData();
+            case RunMode::Test:
+                return getInstance().getTestModeData();
+            case RunMode::TestWithInput:
+                return getInstance().getTestWithInputModeData();
+            case RunMode::TestWithRendering:
+                return getInstance().getTestWithRenderingModeData();
+            default:
+                throw std::invalid_argument("[RunModeData] Cannot getRunModeData for RunMode::None");
+        }
     }
 };
-
-extern RunModeDataSet g_RunModeDataSet;

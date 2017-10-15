@@ -31,10 +31,11 @@ private:
 	/// Game configuration data
 	GameConfig config;
 
-	/// Target update period (s)
-	double secPerUpdate;
-
 	/* State vars */
+
+	/// Run mode
+	RunMode runMode = RunMode::None;
+	const RunModeData* runModeData;
 
 	/// Has the game application been initialized?
 	bool initialized = false;
@@ -54,9 +55,6 @@ public:
 
     /// Load configuration from the provided file
     void loadConfig(const char* filePath);
-
-	/// Return the duration of a frame
-	inline double getFrameDuration() const { return secPerUpdate; }
 
 	/// Set the app title in the config
 	void setTitle(const std::string & title);

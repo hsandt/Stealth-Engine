@@ -27,11 +27,17 @@ void InputComponent::init()
 
 void InputComponent::onAddedToGameObject()
 {
+	if (!inputManager)
+		throw runtime_error("[InputComponent] InputManager is nullptr");
+
 	inputManager->registerInputComponent(this);
 }
 
 void InputComponent::onRemovedFromGameObject()
 {
+	if (!inputManager)
+		throw runtime_error("[InputComponent] InputManager is nullptr");
+
 	inputManager->unregisterInputComponent(this);
 }
 
