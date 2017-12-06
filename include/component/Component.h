@@ -30,7 +30,6 @@ public:
 	/// Return the type of this component
 	/// NOTE: currently unused since we used SFINAE for GameObject::addComponent but may be useful later
 	static const ComponentType getComponentType() { return ComponentType::COMPONENT; }
-
 	virtual std::string getClassStringID() const = 0;
 
 	/// Set the game object this component is attached to (can be done only once)
@@ -49,6 +48,8 @@ public:
 	/// Return the game object this component is attached to
 	GameObject* getGameObject() const { return gameObject; }
 
+	// REFACTOR? Only Behaviors should have start/update? Else, start calls OnStart which would be overridden in scripts
+	// to avoid calling super each time just in case
 	/// Game start callback: called on game start if this component is on an active object in the scene,
 	/// or has just been added during play
 	virtual void start() {}

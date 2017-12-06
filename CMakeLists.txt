@@ -43,6 +43,7 @@ set(ENGINE_SOURCE_FILES
         include/component/ComponentType.h
         include/component/InputComponent.h
         include/component/RenderComponent.h
+        include/component/ScriptComponent.h
         include/component/SquareRenderComponent.h
         include/component/Transform.h
         include/core/EngineCore.h
@@ -73,6 +74,7 @@ set(ENGINE_SOURCE_FILES
         include/scene/SceneData.h
         include/scene/SceneManager.h
         include/service/InputManager.h
+        include/service/ScriptManager.h
         include/utils/Color.h
         include/utils/ExceptionUtil.h
         include/utils/infix_iterator.h
@@ -89,6 +91,7 @@ set(ENGINE_SOURCE_FILES
         src/component/Component.cpp
         src/component/InputComponent.cpp
         src/component/RenderComponent.cpp
+        src/component/ScriptComponent.cpp
         src/component/SquareRenderComponent.cpp
         src/component/Transform.cpp
         src/core/EngineCore.cpp
@@ -106,6 +109,7 @@ set(ENGINE_SOURCE_FILES
         src/scene/SceneData.cpp
         src/scene/SceneManager.cpp
         src/service/InputManager.cpp
+        src/service/ScriptManager.cpp
         src/utils/Color.cpp
         )
 

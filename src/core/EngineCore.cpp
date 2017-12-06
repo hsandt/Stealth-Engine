@@ -15,6 +15,7 @@
 #include "scene/SceneManager.h"
 #include "renderer/Renderer.h"
 #include "physics/PhysicsManager.h"
+#include "service/ScriptManager.h"
 
 EngineCore* EngineCore::instance = nullptr;
 
@@ -61,8 +62,8 @@ void EngineCore::init(const RunModeData* runModeData, const GameConfig &gameConf
 		renderer->init();
 	}
 
-	// create physics manager
 	physicsManager = new PhysicsManager();
+	scriptManager = new ScriptManager();
 
 	factory = new Factory();
 
@@ -94,6 +95,9 @@ EngineCore::~EngineCore()
 
     delete physicsManager;
     physicsManager = nullptr;
+
+    delete scriptManager;
+    scriptManager = nullptr;
 
     delete renderer;
 	renderer = nullptr;

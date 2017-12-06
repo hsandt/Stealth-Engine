@@ -14,23 +14,24 @@
 #include <vector>
 
 // Engine
-#include <application/RunMode.h>
-#include <application/RunModeData.h>
-#include "debug/Logger.h"
-#include "core/EngineCore.h"
+#include "application/GameApplication.h"
+#include "application/RunMode.h"
+#include "application/RunModeData.h"
+#include "application/WindowManager.h"
 #include "component/Transform.h"
+#include "core/EngineCore.h"
+#include "core/EngineCore.h"
+#include "debug/Logger.h"
 #include "entity/GameObject.h"
 #include "factory/Factory.h"
-#include "scene/SceneManager.h"
+#include "geometry/Vector2.h"
 #include "physics/PhysicsManager.h"
 #include "renderer/Renderer.h"
-#include "core/EngineCore.h"
-#include "scene/Scene.h"
-#include "geometry/Vector2.h"
-#include "application/WindowManager.h"
-#include "application/GameApplication.h"
 #include "renderer/ShaderUtils.h"
-#include "include/application/RunMode.h"
+#include "scene/Scene.h"
+#include "scene/SceneManager.h"
+#include "service/InputManager.h"
+#include "service/ScriptManager.h"
 
 using namespace std;
 
@@ -182,10 +183,11 @@ void GameApplication::start()
     if (!initialized)
         throw std::runtime_error("[GameApplication] Cannot start in uninitialized game app.");
 
-    // Start all behavior scripts
+	// Start all rigidbodies
+	EngineCore::getPhysicsManager()->start();
 
-    // Start all rigidbodies
-    EngineCore::getPhysicsManager()->start();
+	// Start all behavior scripts
+	EngineCore::getScriptManager()->start();
 }
 
 void GameApplication::update(float dt) {
@@ -207,6 +209,9 @@ void GameApplication::update(float dt) {
 
     // apply physics step (this is done after custom script updates)
     EngineCore::getPhysicsManager()->update();
+
+	// update all custom script components
+    EngineCore::getScriptManager()->update();
 }
 
 void GameApplication::render()
