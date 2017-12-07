@@ -24,16 +24,37 @@ GameObject::getComponent() {
 	// iterating on all component
 	for (auto* component : components)
 	{
-		// a. use dynamic cast to check component type (a bit expensive on cast)
-//		T* castComponent = dynamic_cast<T*>(component);
-//		if (castComponent != nullptr)
-//			return castComponent;
+		// a. (for now) use dynamic cast to check component type (require RTTI)
+		// b. (incomplete) use string id to identify component type clearly
+		// (requires custom RTTI, a bit expensive until we replace strings with CRC, hashstrings...)
+		// FIXME: to support base class detection, you need to iterate upward over class string IDs
 
-		// b. use string id to identify component type clearly
-		// (a bit expensive until we replace strings with special classes)
+		// a.
+		T* castComponent = dynamic_cast<T*>(component);
+		if (castComponent != nullptr)
+		{
+			return castComponent;
+		}
+
+		// b.
+		/*
 		if (component->getClassStringID() == T::getStringID())
+		{
+			// safety for bad class string IDs (use standard RTTI)
+			T* castComponent = dynamic_cast<T*>(component);
+			if (castComponent == nullptr)
+			{
+				LOGERRF("component is not of type T, T::getStringID() or component->getClassStringID() is wrong (both"
+					        " are %s)",
+				        T::getStringID().c_str());
+			}
+			// redundant
+			assert(castComponent != nullptr);
+
 			// we are pretty sure component is of type T now, so we static cast
 			return static_cast<T*>(component);
+		}
+		*/
 	}
 	return nullptr;
 }

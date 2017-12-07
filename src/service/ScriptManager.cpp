@@ -29,12 +29,12 @@ void ScriptManager::start()
     }
 }
 
-void ScriptManager::update()
+void ScriptManager::update(float dt)
 {
     for (auto script : scripts)
     {
         if (script)
-            script->update();
+	        script->update(dt);
     }
 }
 

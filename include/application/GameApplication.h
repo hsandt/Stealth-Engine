@@ -68,10 +68,10 @@ public:
     /// Run the game in the current scene
     void run();
 
-private:
+protected:
 	/// Post-process callback after new scene loading
-	/// You can use this to add custom game objects on every scene
-	virtual void onLoadNextScene() {}
+	/// In debug, you can use this to add custom game objects on every scene, but don't abuse it
+	virtual void onLoadNextScene();
 
 public:
 	/// Exit the game

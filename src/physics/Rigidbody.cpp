@@ -60,13 +60,12 @@ void Rigidbody::destroyBody()
 }
 
 
-void Rigidbody::addBoxShape(float width, float height, const Vector2& offset, float angle)
+void Rigidbody::addBoxShape(const Vector2& halfSize, const Vector2& offset, float angle, float density)
 {
 	b2PolygonShape groundBox;
-	groundBox.SetAsBox(width, height, (b2Vec2) offset, angle);
+	groundBox.SetAsBox(halfSize.x(), halfSize.y(), (b2Vec2) offset, angle);
 	// TODO: add density parameter (0 is ok for static objects, but need 1 or so for dynamic)
-	body->CreateFixture(&groundBox, 1.0f);  // support dynamic
-
+	body->CreateFixture(&groundBox, density);  // support dynamic
     // if you also need friction
 //    b2FixtureDef fixtureDef;
 //    fixtureDef.shape = &dynamicBox;
@@ -121,15 +120,15 @@ void Rigidbody::start()
     ActorComponent::start();
 
     // set initial position from game object
-    // (for now, rely on onAddedToGameObject initial position to check if it works,
+    // (for now, rely on onAddedToGameObject > createDynamicBody initial position to check if it works,
     // uncomment this later)
 //    Vector2 actorPosition = actor->transform->position;
 //    body->SetTransform((b2Vec2) actorPosition, body->GetAngle());
 }
 
-void Rigidbody::update()
+void Rigidbody::update(float dt)
 {
-    ActorComponent::update();
+	ActorComponent::update(dt);
 
     // set actor position to body's position (update must be called after physics step)
     actor->transform->setPosition(body->GetPosition());
@@ -138,5 +137,10 @@ void Rigidbody::update()
 void Rigidbody::setPosition(const Vector2 &position)
 {
     body->SetTransform((b2Vec2) position, body->GetAngle());
+}
+
+void Rigidbody::setVelocity(const Vector2 & velocity)
+{
+	body->SetLinearVelocity((b2Vec2) velocity);
 }
 

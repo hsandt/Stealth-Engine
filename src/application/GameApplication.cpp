@@ -164,6 +164,18 @@ void GameApplication::run() {
 
 }
 
+void GameApplication::onLoadNextScene()
+{
+	// now that scene has been loaded, actually start what you should
+	// TODO: don't start objects already started (when switching scene while having persistent game objects)
+
+	// Start all rigidbodies
+	EngineCore::getPhysicsManager()->start();
+
+	// Start all behavior scripts
+	EngineCore::getScriptManager()->start();
+}
+
 void GameApplication::stop() {
 	isRunning = false;
 }
@@ -183,11 +195,7 @@ void GameApplication::start()
     if (!initialized)
         throw std::runtime_error("[GameApplication] Cannot start in uninitialized game app.");
 
-	// Start all rigidbodies
-	EngineCore::getPhysicsManager()->start();
-
-	// Start all behavior scripts
-	EngineCore::getScriptManager()->start();
+	// don't call start here, scene is not loaded yet (this is not the game start)
 }
 
 void GameApplication::update(float dt) {
@@ -208,10 +216,10 @@ void GameApplication::update(float dt) {
 	}
 
     // apply physics step (this is done after custom script updates)
-    EngineCore::getPhysicsManager()->update();
+    EngineCore::getPhysicsManager()->update(dt);
 
 	// update all custom script components
-    EngineCore::getScriptManager()->update();
+    EngineCore::getScriptManager()->update(dt);
 }
 
 void GameApplication::render()

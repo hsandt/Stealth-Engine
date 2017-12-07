@@ -6,7 +6,7 @@
 
 #include <iosfwd>
 
-#define BUFFER_SIZE 100
+#define BUFFER_SIZE 300
 
 #define STR(value) #value
 

@@ -59,7 +59,7 @@ public:
     void start();
 
     /// Apply physics time step
-    void update();
+    void update(float dt);
 
     /// Register a new render component (weak pointer)
     void registerRigidbody(Rigidbody* rigidbody);

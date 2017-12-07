@@ -48,6 +48,10 @@ public:
 	/// Return the game object this component is attached to
 	GameObject* getGameObject() const { return gameObject; }
 
+	// REFACTOR: considering adding some OnAllComponentsAdded/Bind method that is called when all components have been
+	// added, so you can add pointers to the other components and even initialize stuff based on them (for now, this
+	// is done in start)
+
 	// REFACTOR? Only Behaviors should have start/update? Else, start calls OnStart which would be overridden in scripts
 	// to avoid calling super each time just in case
 	/// Game start callback: called on game start if this component is on an active object in the scene,
@@ -55,7 +59,8 @@ public:
 	virtual void start() {}
 
 	/// Update callback: called during play if this component is on an active object
-	virtual void update() {}
+	virtual void update(float dt)
+	{}
 
 protected:
     GameObject* gameObject = nullptr;

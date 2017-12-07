@@ -27,8 +27,10 @@ public:
 //    void addGameObject(std::unique_ptr<GameObject>&& go);
     void addGameObject(GameObject* go);
 //    void addGameObject(GameObject &&go);
-    /// Remove game object from the scene (caution: this does not delete the game object)
+    /// Remove and delete game object from the scene
     void removeGameObject(GameObject* go);
+    /// Remove and delete all the game objects from the scene
+    void clear();
 
 private:
     Scene(const Scene &) = delete;

@@ -109,5 +109,5 @@ void SmokeTestRunner::update(float dt) {
     }
 
     // apply physics step (this is done after custom script updates)
-    EngineCore::getPhysicsManager()->update();
+    EngineCore::getPhysicsManager()->update(dt);
 }

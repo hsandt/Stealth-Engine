@@ -27,10 +27,11 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-    // destroy all game objects in the scene
-    for (auto goPair : gameObjects) {
-        delete goPair.second;
-    }
+	// destroy all game objects in the scene
+	// (variant of clear without clearing map, since we don't care anymore)
+	for (auto goPair : gameObjects) {
+		delete goPair.second;
+	}
 
     LOG("[SCENE] Scene destroyed");
 }
@@ -81,7 +82,17 @@ void Scene::removeGameObject(GameObject* go) {
         if (nbErased == 0) {
 //            BOOST_LOG_TRIVIAL(warning) << boost::format("Could not remove game object with id %d: no game objects with this ID in the scene.") % go -> ID();
         }
+        delete go;
     }
+}
+
+void Scene::clear()
+{
+    // destroy all game objects in the scene
+    for (auto goPair : gameObjects) {
+        delete goPair.second;
+    }
+	gameObjects.clear();
 }
 
 void Scene::init() {

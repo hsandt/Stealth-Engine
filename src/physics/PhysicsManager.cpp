@@ -68,7 +68,7 @@ void PhysicsManager::start()
     }
 }
 
-void PhysicsManager::update()
+void PhysicsManager::update(float dt)
 {
 	world->Step(timeStep, velocityIterations, positionIterations);
 
@@ -76,7 +76,7 @@ void PhysicsManager::update()
     for (auto rigidbody : rigidbodies)
     {
         if (rigidbody)
-            rigidbody->update();
+            rigidbody->update(dt);
     }
 }
 

@@ -23,7 +23,7 @@ public:
     void start();
 
     /// Update all scripts
-    void update();
+    void update(float dt);
 
     /// Register a new script component (weak pointer)
     void registerScript(ScriptComponent* script);
