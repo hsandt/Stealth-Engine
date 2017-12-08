@@ -5,10 +5,10 @@
 #include <algorithm>
 #include <vector>
 
-#include "debug/Logger.h"
-#include "scene/Scene.h"
+#include "include/core/Logger.h"
+#include "include/world/Scene.h"
 
-#include "scene/SceneManager.h"
+#include "include/world/SceneManager.h"
 
 using namespace std;
 

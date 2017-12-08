@@ -12,10 +12,10 @@
 #include <string>
 
 #include "application/GameConfig.h"
-#include "scene/Scene.h"
-#include "service/InputManager.h"
+#include "world/Scene.h"
+#include "input/InputManager.h"
 #include "renderer/Renderer.h"
-#include "factory/Factory.h"
+#include "core/factory/Factory.h"
 #include "RunMode.h"
 
 class EngineCore;

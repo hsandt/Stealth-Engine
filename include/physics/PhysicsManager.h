@@ -9,8 +9,8 @@
 #include <Box2D/Box2D.h>
 
 #include "component/Transform.h"
-#include "entity/Actor.h"
-#include "geometry/Vector2.h"
+#include "world/Actor.h"
+#include "core/math/Vector2.h"
 
 class Rigidbody;
 

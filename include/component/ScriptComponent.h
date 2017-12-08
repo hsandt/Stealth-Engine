@@ -12,7 +12,7 @@
 // so make a ScriptComponent : Component and an ActorScript : ScriptComponent
 // if you want to avoid two parallel class inheritance families (this one and ActorComponent : Component)
 // doing the same thing, add some "interface" (a simple base class) IHasActor which simply adds the
-// game object to actor conversion on construction and getActor method
+// game world to actor conversion on construction and getActor method
 class ScriptComponent : public ActorComponent
 {
 private:

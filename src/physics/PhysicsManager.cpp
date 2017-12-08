@@ -6,10 +6,10 @@
 
 #include <Box2D/Box2D.h>
 
-#include "geometry/Vector2.h"
+#include "include/core/math/Vector2.h"
 #include "application/GameApplication.h"
 #include "physics/PhysicsManager.h"
-#include "physics/Rigidbody.h"
+#include "include/component/Rigidbody.h"
 
 using namespace std;
 
@@ -98,7 +98,7 @@ void PhysicsManager::unregisterRigidbody(Rigidbody *rigidbody)
     // REFACTOR: make a util function to remove element when present in container
     if (it != rigidbodies.end())
     {
-        // here, component == *it
+        // here, components == *it
         rigidbodies.erase(it);
     }
     else

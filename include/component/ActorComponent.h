@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Component.h"
+#include "world/Component.h"
 
 class Actor;
 class Renderer;

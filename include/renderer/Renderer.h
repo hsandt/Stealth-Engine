@@ -11,7 +11,7 @@
 #include <array>
 #include <vector>
 
-#include "utils/Color.h"
+#include "Color.h"
 
 class RenderComponent;
 class GameObject;

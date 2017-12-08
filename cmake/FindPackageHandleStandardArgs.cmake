@@ -255,7 +255,7 @@ function(FIND_PACKAGE_HANDLE_STANDARD_ARGS _NAME _FIRST_ARG)
     set(${_NAME_UPPER}_FOUND FALSE)
   endif()
 
-  # component handling
+  # components handling
   unset(FOUND_COMPONENTS_MSG)
   unset(MISSING_COMPONENTS_MSG)
 

@@ -21,17 +21,17 @@
 #include "component/Transform.h"
 #include "core/EngineCore.h"
 #include "core/EngineCore.h"
-#include "debug/Logger.h"
-#include "entity/GameObject.h"
-#include "factory/Factory.h"
-#include "geometry/Vector2.h"
+#include "include/core/Logger.h"
+#include "include/world/GameObject.h"
+#include "core/factory/Factory.h"
+#include "include/core/math/Vector2.h"
 #include "physics/PhysicsManager.h"
 #include "renderer/Renderer.h"
 #include "renderer/ShaderUtils.h"
-#include "scene/Scene.h"
-#include "scene/SceneManager.h"
-#include "service/InputManager.h"
-#include "service/ScriptManager.h"
+#include "include/world/Scene.h"
+#include "include/world/SceneManager.h"
+#include "include/input/InputManager.h"
+#include "include/gameplay/ScriptManager.h"
 
 using namespace std;
 
@@ -135,7 +135,7 @@ void GameApplication::run() {
         while (lag >= frameDuration) {
 			// TODO: add limit for number of iterations to catch back
 			// pass fixed deltaTime as update argument, in sec
-			// ALT: use a service locator for deltaTime (fixed)
+			// ALT: use a gameplay locator for deltaTime (fixed)
 			update((float)frameDuration);
 			// TODO: compute at once
 			lag -= frameDuration;
@@ -231,7 +231,7 @@ void GameApplication::render()
 	std::map<int, std::shared_ptr<GameObject>> gameObjects {currentScene->getGameObjects()};
 	for (auto goIt(gameObjects.begin()); goIt != gameObjects.end(); ++goIt) {
 		// do not use GameObject& which would be invalid if all shared_ptr
-		// to the game object disappeared in the meanwhile (~raw pointer issue)
+		// to the game world disappeared in the meanwhile (~raw pointer issue)
 		shared_ptr<GameObject> go {goIt->second};
 		go->render(renderer);
 	}

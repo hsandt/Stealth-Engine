@@ -6,7 +6,7 @@
 
 #include <vector>
 
-#include "component/Component.h"
+#include "world/Component.h"
 #include "input/AxisKeyBinding.h"
 #include "input/Key.h"
 #include "input/KeyEvent.h"
@@ -29,7 +29,7 @@ public:
 	void onRemovedFromGameObject() override;
 
 	// REFACTOR: pass "this" UserClass instance and use delegates (void* + cast, etc.) to be able
-	// to store any method of any object for later
+	// to store any method of any world for later
 
 	/// Bind a callback function to a key event
 //	template<class UserClass>

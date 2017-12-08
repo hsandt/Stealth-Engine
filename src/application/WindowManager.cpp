@@ -7,7 +7,7 @@
 //
 
 #include <iostream>
-#include <debug/Logger.h>
+#include <include/core/Logger.h>
 
 #include "application/WindowManager.h"
 

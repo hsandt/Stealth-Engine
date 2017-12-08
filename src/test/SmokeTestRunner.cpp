@@ -7,12 +7,12 @@
 
 #include "include/test/SmokeTestRunner.h"
 
-#include "debug/Logger.h"
+#include "include/core/Logger.h"
 #include "core/EngineCore.h"
-#include "entity/GameObject.h"
-#include "scene/SceneManager.h"
+#include "include/world/GameObject.h"
+#include "include/world/SceneManager.h"
 #include "physics/PhysicsManager.h"
-#include "scene/Scene.h"
+#include "include/world/Scene.h"
 #include "application/RunMode.h"
 #include "application/RunModeData.h"
 
@@ -51,7 +51,7 @@ void SmokeTestRunner::init(RunMode runMode)
 
 void SmokeTestRunner::skip(double duration) {
     if (!initialized)
-        throw std::runtime_error("[GameApplication] Cannot skip time in uninitialized smoke test runner.");
+        throw std::runtime_error("[GameApplication] Cannot skip time in uninitialized smoke tests runner.");
 
     double frameDuration = engineCore->getFrameDuration();
 
@@ -66,7 +66,7 @@ void SmokeTestRunner::skip(double duration) {
         // note that there is currently no config for an initial scene
         // queried in init(), so if you need to load an initial scene for testing,
         // you need to queryLoadScene manually (and you'll probably load only one scene
-        // for the smoke test, so you can move this outside the loop too!)
+        // for the smoke tests, so you can move this outside the loop too!)
         if (EngineCore::getSceneManager())
         {
             if (EngineCore::getSceneManager()->shouldLoadScene())
@@ -88,7 +88,7 @@ void SmokeTestRunner::stop() {
 void SmokeTestRunner::start()
 {
     if (!initialized)
-        throw std::runtime_error("[SmokeTestRunner] Cannot start in uninitialized smoke test runner.");
+        throw std::runtime_error("[SmokeTestRunner] Cannot start in uninitialized smoke tests runner.");
 
     // Start all behavior scripts
 

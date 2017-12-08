@@ -7,7 +7,7 @@
 #   Section 6. Trademarks. is deleted and replaced with:
 #
 #   6. Trademarks. This License does not grant permission to use the trade
-#      names, trademarks, service marks, or product names of the Licensor
+#      names, trademarks, gameplay marks, or product names of the Licensor
 #      and its affiliates, except as required to comply with Section 4(c) of
 #      the License and to reproduce the content of the NOTICE file.
 #

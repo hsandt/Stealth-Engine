@@ -7,7 +7,7 @@
 #include <memory>
 
 #include "component/ActorComponent.h"
-#include "geometry/Vector2.h"
+#include "core/math/Vector2.h"
 
 class Transform : public ActorComponent {
 

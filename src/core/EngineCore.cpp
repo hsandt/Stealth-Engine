@@ -6,16 +6,16 @@
 #include <stdexcept>
 
 #include "application/GLFWWindowManager.h"
-#include "debug/Logger.h"
+#include "include/core/Logger.h"
 #include "core/EngineCore.h"
 #include "application/GameApplication.h"
 #include "application/RunModeData.h"
 #include "application/ApplicationResult.h"
-#include "factory/Factory.h"
-#include "scene/SceneManager.h"
+#include "core/factory/Factory.h"
+#include "include/world/SceneManager.h"
 #include "renderer/Renderer.h"
 #include "physics/PhysicsManager.h"
-#include "service/ScriptManager.h"
+#include "include/gameplay/ScriptManager.h"
 
 EngineCore* EngineCore::instance = nullptr;
 

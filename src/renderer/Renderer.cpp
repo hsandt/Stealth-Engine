@@ -9,7 +9,7 @@
 #include <iostream>
 #include <renderer/ShaderUtils.h>
 
-#include "debug/Logger.h"
+#include "include/core/Logger.h"
 #include "renderer/Renderer.h"
 #include "core/EngineCore.h"
 #include "component/RenderComponent.h"
@@ -18,7 +18,7 @@
 using namespace std;
 
 // REFACTOR: split in 2 classes: Renderer for the Rendering layer above OpenGL and RenderManager to register
-// Render component and iterate on them
+// Render components and iterate on them
 
 /* future RenderManager */
 
@@ -50,7 +50,7 @@ void Renderer::unregisterRenderComponent(RenderComponent* renderComponent) {
 	// REFACTOR: make a util function to remove element when present in container
 	if (it != renderComponents.end())
 	{
-		// here, component == *it
+		// here, components == *it
 		renderComponents.erase(it);
 	}
 	else
