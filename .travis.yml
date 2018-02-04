@@ -1,0 +1,13 @@
+language: cpp
+
+os:
+  - linux
+  - osx
+  - windows
+
+script:
+  - mkdir -p build/release
+  - cd build/release
+  - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON ../..
+  - make "-j$(nproc)"
+  - make test

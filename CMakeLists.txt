@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.7)
 project(StealthEngine VERSION 0.1 LANGUAGES CXX)
 
+# Options
+
+option(BUILD_TESTS "Build tests" OFF)
+
 
 # Cmake modules
 
@@ -108,10 +112,6 @@ message(STATUS "Box2D libraries: ${BOX2D_LIBRARIES}")
 add_library(engine "${ENGINE_SOURCE_FILES}")
 target_include_directories(engine PUBLIC include)
 
-# Test engine executable
-add_executable(test_engine ${TEST_ENGINE_SOURCE_FILES})
-target_include_directories(test_engine PRIVATE test)
-
 # Scan through resource folder for updated files and copy if none existing or changed
 # http://qrikko.blogspot.fr/2016/05/cmake-and-how-to-copy-resources-during.html
 message(STATUS "Copying resources from ${PROJECT_SOURCE_DIR}...")
@@ -126,13 +126,28 @@ target_link_libraries(engine
         "${BOX2D_LIBRARIES}"
         )
 
-target_link_libraries(test_engine
-        engine
-        )
+if(BUILD_TESTS)
+    # CMake test support
+    enable_testing()
+    #    add_subdirectory(test)  # should include directory with CMakeLists containing block below:
 
-# Allow to run test_engine executable with "make run_test_engine"
-add_custom_target(run_test_engine
-        COMMAND test_engine
-        DEPENDS test_engine
-        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        )
+    # Test engine executable
+    add_executable(test_engine ${TEST_ENGINE_SOURCE_FILES})
+    target_include_directories(test_engine PRIVATE test)
+
+
+    target_link_libraries(test_engine
+            engine
+            )
+
+    # Allow to run test_engine executable with "make run_test_engine"
+    add_custom_target(run_test_engine
+            COMMAND test_engine
+            DEPENDS test_engine
+            WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+            )
+
+    # use the full syntax so CMake can recognize the command as the executable defined above and not a raw path
+    add_test(NAME test_engine COMMAND test_engine)
+
+endif()
