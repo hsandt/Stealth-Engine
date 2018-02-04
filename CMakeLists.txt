@@ -3,7 +3,9 @@ project(StealthEngine VERSION 0.1 LANGUAGES CXX)
 
 # Third-party dependencies
 
-add_subdirectory(third-party/glew/build/cmake)
+# deactivate build utils, we don't need them (glewinfo and visualinfo executables)
+set(BUILD_UTILS OFF)
+add_subdirectory(third-party/glew-2.1.0/build/cmake)
 
 
 # Options
@@ -32,7 +34,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG")
 
 # Output paths
 
-set(CMAKE_BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build-${CMAKE_BUILD_TYPE}")
+message(STATUS "CMake binary dir: ${CMAKE_BINARY_DIR}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")  # executable output directory
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # static libraries output directory
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # dynamic libraries output directory (unused)
@@ -85,11 +87,11 @@ message(STATUS "OpenGL gl library: ${OPENGL_gl_LIBRARY}")
 #find_package(GLEW 2.0 REQUIRED)  # version requirement does not work, left as a note only
 #include_directories($(GLEW_INCLUDE_DIR))
 #add_definitions(-DGLEW_STATIC)  # uncomment to use static library
-#add_definitions(-DGLEW_MX)  # uncomment to use thread-safe multiple GL contexts
-
-message(STATUS "GLEW found: ${GLEW_FOUND}")
-message(STATUS "GLEW include dir: ${GLEW_INCLUDE_DIR}")
-message(STATUS "GLEW libraries: ${GLEW_LIBRARIES}")
+##add_definitions(-DGLEW_MX)  # uncomment to use thread-safe multiple GL contexts
+#
+#message(STATUS "GLEW found: ${GLEW_FOUND}")
+#message(STATUS "GLEW include dir: ${GLEW_INCLUDE_DIR}")
+#message(STATUS "GLEW libraries: ${GLEW_LIBRARIES}")
 
 # FindGLFW.cmake
 find_package(GLFW 3.2 REQUIRED)  # version requirement does not work, left as a note only
@@ -126,7 +128,8 @@ add_copy_command(engine "resources")
 
 target_link_libraries(engine
         "${OPENGL_gl_LIBRARY}"  # We don't need _glu_ with GLEW
-        "${GLEW_LIBRARIES}"
+#        "${GLEW_LIBRARIES}"
+        "glew"
         "${GLFW_LIBRARIES}"
         "${BOX2D_LIBRARIES}"
         )
@@ -139,7 +142,6 @@ if(BUILD_TESTS)
     # Test engine executable
     add_executable(test_engine ${TEST_ENGINE_SOURCE_FILES})
     target_include_directories(test_engine PRIVATE test)
-
 
     target_link_libraries(test_engine
             engine

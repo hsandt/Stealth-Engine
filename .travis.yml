@@ -3,7 +3,6 @@ language: cpp
 os:
   - linux
   - osx
-  - windows
 
 script:
   - mkdir -p build/release
