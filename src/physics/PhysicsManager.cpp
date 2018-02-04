@@ -6,10 +6,10 @@
 
 #include <Box2D/Box2D.h>
 
-#include "include/core/math/Vector2.h"
+#include "core/math/Vector2.h"
 #include "application/GameApplication.h"
 #include "physics/PhysicsManager.h"
-#include "include/component/Rigidbody.h"
+#include "component/Rigidbody.h"
 
 using namespace std;
 

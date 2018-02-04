@@ -2,13 +2,13 @@
 // Created by wing on 15/09/06.
 //
 
-#include <test/catch.hpp>
-#include <include/test/SmokeTestRunner.h>
+#include "catch.hpp"
+#include "test/SmokeTestRunner.h"
 
 #include "component/Transform.h"
-#include "include/world/GameObject.h"
-#include "include/core/factory/Factory.h"
-#include "include/world/Scene.h"
+#include "world/GameObject.h"
+#include "core/factory/Factory.h"
+#include "world/Scene.h"
 #include "application/RunMode.h"
 
 using namespace std;

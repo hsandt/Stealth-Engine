@@ -11,7 +11,7 @@
 #include <stdexcept>
 
 #include "application/GameConfig.h"
-#include "include/core/Logger.h"
+#include "core/Logger.h"
 
 #include "application/GLFWWindowManager.h"
 

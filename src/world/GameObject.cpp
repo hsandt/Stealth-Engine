@@ -9,12 +9,12 @@
 #include <algorithm>
 #include <iostream>
 
-#include "include/world/Component.h"
-#include "include/core/Logger.h"
-#include "include/world/Object.h"
-#include "include/core/factory/FactoryUtils.h"
+#include "world/Component.h"
+#include "core/Logger.h"
+#include "world/Object.h"
+#include "core/factory/FactoryUtils.h"
 
-#include "include/world/GameObject.h"
+#include "world/GameObject.h"
 
 using namespace std;
 

@@ -4,7 +4,7 @@
 
 #include "catch.hpp"
 
-#include "include/core/math/Vector2.h"
+#include "core/math/Vector2.h"
 
 TEST_CASE( "Test Vec2f comparison", "[geometry]" )
 {

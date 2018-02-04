@@ -4,9 +4,9 @@
 
 #include <iostream>
 
-#include "include/world/Actor.h"
-#include "include/world/GameObject.h"
-#include "include/world/Component.h"
+#include "world/Actor.h"
+#include "world/GameObject.h"
+#include "world/Component.h"
 
 #include "component/ActorComponent.h"
 

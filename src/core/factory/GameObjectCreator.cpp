@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include "include/core/factory/GameObjectCreator.h"
+#include "core/factory/GameObjectCreator.h"
 
 using namespace std;
 

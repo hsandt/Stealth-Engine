@@ -3,8 +3,8 @@
 //
 
 #include "component/Transform.h"
-#include "include/world/Actor.h"
-#include "include/component/Rigidbody.h"
+#include "world/Actor.h"
+#include "component/Rigidbody.h"
 
 Transform::Transform() {
 

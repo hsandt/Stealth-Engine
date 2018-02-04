@@ -5,11 +5,11 @@
 // REFACTOR: maybe use a proxy class for Box2D physics, although we are sure to use this library only
 #include <Box2D/Box2D.h>
 
-#include "include/component/Transform.h"
-#include "include/world/Actor.h"
-#include "include/core/EngineCore.h"
-#include "include/physics/PhysicsManager.h"
-#include "include/component/Rigidbody.h"
+#include "component/Transform.h"
+#include "world/Actor.h"
+#include "core/EngineCore.h"
+#include "physics/PhysicsManager.h"
+#include "component/Rigidbody.h"
 
 Rigidbody::Rigidbody()
 {

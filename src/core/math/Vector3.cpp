@@ -1,6 +1,6 @@
 #include <GL/glew.h>
 
-#include "include/core/math/Vector3.h"
+#include "core/math/Vector3.h"
 
 void glVertex(Vector3 const &v) { glVertex3fv(v.coords);}
 void glNormal(Vector3 const & v) { glNormal3fv(v.coords);}

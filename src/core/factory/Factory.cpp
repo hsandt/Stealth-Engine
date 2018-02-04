@@ -2,13 +2,13 @@
 // Created by wing on 15/09/06.
 //
 
-#include "include/core/factory/Factory.h"
-#include "include/core/factory/GameObjectCreator.h"
-#include "include/core/factory/ComponentCreator.h"
+#include "core/factory/Factory.h"
+#include "core/factory/GameObjectCreator.h"
+#include "core/factory/ComponentCreator.h"
 
-#include "include/core/Logger.h"
-#include "include/world/GameObject.h"
-#include "include/world/Scene.h"
+#include "core/Logger.h"
+#include "world/GameObject.h"
+#include "world/Scene.h"
 
 
 using namespace std;

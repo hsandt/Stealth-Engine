@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include "include/core/factory/ComponentCreator.h"
+#include "core/factory/ComponentCreator.h"
 
 using namespace std;
 

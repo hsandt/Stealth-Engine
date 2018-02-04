@@ -4,11 +4,11 @@
 
 #include <stdexcept>
 
-#include "include/gameplay/ScriptManager.h"
+#include "gameplay/ScriptManager.h"
 
 #include "component/ScriptComponent.h"
-#include "include/core/Logger.h"
-#include "include/world/GameObject.h"
+#include "core/Logger.h"
+#include "world/GameObject.h"
 
 using namespace std;
 

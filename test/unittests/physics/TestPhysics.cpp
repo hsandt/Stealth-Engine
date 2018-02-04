@@ -2,18 +2,18 @@
 // Created by wing on 17/09/03.
 //
 
-#include <test/catch.hpp>
-#include <include/test/SmokeTestRunner.h>
+#include "catch.hpp"
+#include <test/SmokeTestRunner.h>
 
 // REFACTOR: make a generic header that contains itself headers
 // for the most common engine classes
 #include "application/RunMode.h"
-#include "include/world/Actor.h"
-#include "include/core/factory/Factory.h"
+#include "world/Actor.h"
+#include "core/factory/Factory.h"
 #include "physics/PhysicsManager.h"
-#include "include/component/Rigidbody.h"
-#include "include/world/Scene.h"
-#include "include/world/SceneManager.h"
+#include "component/Rigidbody.h"
+#include "world/Scene.h"
+#include "world/SceneManager.h"
 
 using namespace std;
 

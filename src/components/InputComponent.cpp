@@ -2,9 +2,9 @@
 // Created by wing on 17/02/12.
 //
 
-#include "include/world/Component.h"
+#include "world/Component.h"
 #include "core/EngineCore.h"
-#include "include/input/InputManager.h"
+#include "input/InputManager.h"
 
 #include "component/InputComponent.h"
 

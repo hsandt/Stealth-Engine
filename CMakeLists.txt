@@ -82,8 +82,8 @@ message(STATUS "OpenGL libraries: ${OPENGL_LIBRARIES}")
 message(STATUS "OpenGL gl library: ${OPENGL_gl_LIBRARY}")
 
 # FindGLEW.cmake
-find_package(GLEW 2.0 REQUIRED)  # version requirement does not work, left as a note only
-include_directories($(GLEW_INCLUDE_DIR))
+#find_package(GLEW 2.0 REQUIRED)  # version requirement does not work, left as a note only
+#include_directories($(GLEW_INCLUDE_DIR))
 #add_definitions(-DGLEW_STATIC)  # uncomment to use static library
 #add_definitions(-DGLEW_MX)  # uncomment to use thread-safe multiple GL contexts
 

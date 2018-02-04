@@ -9,7 +9,7 @@
 #include <iostream>
 #include <renderer/ShaderUtils.h>
 
-#include "include/core/Logger.h"
+#include "core/Logger.h"
 #include "renderer/Renderer.h"
 #include "core/EngineCore.h"
 #include "component/RenderComponent.h"

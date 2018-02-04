@@ -2,10 +2,10 @@
 // Created by wing on 17/09/03.
 //
 
-#include "include/component/ScriptComponent.h"
+#include "component/ScriptComponent.h"
 
-#include "include/core/EngineCore.h"
-#include "include/gameplay/ScriptManager.h"
+#include "core/EngineCore.h"
+#include "gameplay/ScriptManager.h"
 
 ScriptComponent::ScriptComponent()
 {

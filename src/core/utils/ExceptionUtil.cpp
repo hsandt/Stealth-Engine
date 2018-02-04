@@ -2,7 +2,7 @@
 // Created by wing on 17/03/12.
 //
 
-#include "include/core/ExceptionUtil.h"
+#include "core/ExceptionUtil.h"
 
 char regexErrorNames[][20] = {
 	"error_collate",

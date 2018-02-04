@@ -6,7 +6,7 @@
 
 #include "catch.hpp"
 
-#include "include/core/StringUtil.h"
+#include "core/StringUtil.h"
 
 using namespace std;
 

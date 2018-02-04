@@ -4,9 +4,9 @@
 
 #include <iostream>
 
-#include "include/world/Object.h"
+#include "world/Object.h"
 
-#include "include/world/Component.h"
+#include "world/Component.h"
 
 using namespace std;
 

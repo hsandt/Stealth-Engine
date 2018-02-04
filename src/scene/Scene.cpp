@@ -12,10 +12,10 @@
 //#include <boost/log/trivial.hpp>
 //#include <boost/chrono/floor.hpp>
 
-#include "include/core/Logger.h"
-#include "include/world/GameObject.h"
+#include "core/Logger.h"
+#include "world/GameObject.h"
 #include "core/factory/Factory.h"
-#include "include/world/Scene.h"
+#include "world/Scene.h"
 #include "core/EngineCore.h"
 
 using namespace std;

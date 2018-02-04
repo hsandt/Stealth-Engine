@@ -9,14 +9,14 @@
 #include <algorithm>
 #include <iostream>
 #include <utility>
-#include <include/core/Logger.h>
+#include <core/Logger.h>
 #include <core/EngineCore.h>
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
 #include "input/KeyStates.h"
 #include "input/Key.h"
-#include "include/input/InputManager.h"
+#include "input/InputManager.h"
 #include "application/WindowManager.h"
 
 using namespace std;

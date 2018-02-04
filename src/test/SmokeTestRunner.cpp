@@ -5,14 +5,14 @@
 #include <iostream>
 #include <map>
 
-#include "include/test/SmokeTestRunner.h"
+#include "test/SmokeTestRunner.h"
 
-#include "include/core/Logger.h"
+#include "core/Logger.h"
 #include "core/EngineCore.h"
-#include "include/world/GameObject.h"
-#include "include/world/SceneManager.h"
+#include "world/GameObject.h"
+#include "world/SceneManager.h"
 #include "physics/PhysicsManager.h"
-#include "include/world/Scene.h"
+#include "world/Scene.h"
 #include "application/RunMode.h"
 #include "application/RunModeData.h"
 

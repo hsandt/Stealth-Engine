@@ -6,7 +6,7 @@
 
 #include "component/RenderComponent.h"
 #include "component/Transform.h"
-#include "include/world/Actor.h"
+#include "world/Actor.h"
 #include "renderer/Renderer.h"
 
 #include "component/SquareRenderComponent.h"
