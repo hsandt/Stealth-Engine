@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.7)
 project(StealthEngine VERSION 0.1 LANGUAGES CXX)
 
+# Third-party dependencies
+
+add_subdirectory(third-party/glew/build/cmake)
+
+
 # Options
 
 option(BUILD_TESTS "Build tests" OFF)
