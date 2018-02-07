@@ -4,9 +4,40 @@ os:
   - linux
   - osx
 
+env:
+  - PREMAKE_VERSION="5.0.0-alpha12"
+
+cache:
+  directories:
+    - premake-${PREMAKE_VERSION}
+
+install:
+  - wget "https://github.com/premake/premake-core/releases/download/v${PREMAKE_VERSION}/premake-${PREMAKE_VERSION}-src.zip"
+  - unzip "premake-${PREMAKE_VERSION}-src.zip"
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      PREMAKE_BUILD_DIR="build/gmake.unix";
+    elif [ "$TRAVIS_OS_NAME" == "osx" ]; then
+      PREMAKE_BUILD_DIR="build/gmake.macosx";
+    fi
+  - pushd "premake-${PREMAKE_VERSION}/build/${PREMAKE_BUILD_DIR}"
+  - make
+  - popd
+  - cp "premake-${PREMAKE_VERSION}/bin/release/premake5" $HOME/bin/premake5
+
+# Have to cd into directory and back out since premake5 doesn't appear to accept a directory argument.
+before_script:
+  - pushd "third-party/Box2D/Box2D"
+  - premake5 gmake
+  - pushd "Build/gmake"
+  - export config=release
+  - make "-j$(nproc)"
+  - popd
+  - popd
+
 script:
   - mkdir -p build/release
   - cd build/release
   - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON ../..
   - make "-j$(nproc)"
   - make test
+

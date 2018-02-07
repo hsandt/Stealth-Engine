@@ -1,11 +1,18 @@
 cmake_minimum_required(VERSION 3.7)
 project(StealthEngine VERSION 0.1 LANGUAGES CXX)
+cmake_policy(SET CMP0048 NEW)
 
 # Third-party dependencies
 
 # deactivate build utils, we don't need them (glewinfo and visualinfo executables)
 set(BUILD_UTILS OFF)
 add_subdirectory(third-party/glew-2.1.0/build/cmake)
+
+set(GLFW_BUILD_EXAMPLES OFF)
+set(GLFW_BUILD_TESTS OFF)
+set(GLFW_BUILD_DOCS OFF)
+set(GLFW_INSTALL OFF)
+add_subdirectory(third-party/glfw)
 
 
 # Options
@@ -34,7 +41,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG")
 
 # Output paths
 
-message(STATUS "CMake binary dir: ${CMAKE_BINARY_DIR}")
+set(CMAKE_BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build-${CMAKE_BUILD_TYPE}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")  # executable output directory
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # static libraries output directory
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # dynamic libraries output directory (unused)
@@ -83,55 +90,45 @@ message(STATUS "OpenGL include dir: ${OPENGL_INCLUDE_DIR}")
 message(STATUS "OpenGL libraries: ${OPENGL_LIBRARIES}")
 message(STATUS "OpenGL gl library: ${OPENGL_gl_LIBRARY}")
 
-# FindGLEW.cmake
-#find_package(GLEW 2.0 REQUIRED)  # version requirement does not work, left as a note only
-#include_directories($(GLEW_INCLUDE_DIR))
-#add_definitions(-DGLEW_STATIC)  # uncomment to use static library
-##add_definitions(-DGLEW_MX)  # uncomment to use thread-safe multiple GL contexts
-#
-#message(STATUS "GLEW found: ${GLEW_FOUND}")
-#message(STATUS "GLEW include dir: ${GLEW_INCLUDE_DIR}")
-#message(STATUS "GLEW libraries: ${GLEW_LIBRARIES}")
-
-# FindGLFW.cmake
-find_package(GLFW 3.2 REQUIRED)  # version requirement does not work, left as a note only
-include_directories(${GLFW_INCLUDE_DIR})
-
-message(STATUS "GLFW found: ${GLFW_FOUND}")
-message(STATUS "GLFW include dir: ${GLFW_INCLUDE_DIR}")
-message(STATUS "GLFW libraries: ${GLFW_LIBRARIES}")
-#add_definitions(-DGLFW_DLL)  # uncomment if using dynamic library and linking fails
-
 
 # Physics library: Box2D
 
-find_package(Box2D  REQUIRED)  # version requirement does not work, left as a note only
-include_directories(${BOX2D_INCLUDE_DIRS})
+find_library(BOX2D_LIBRARY_RELEASE Box2D DIRECTORY ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D/Build/gmake/bin/Release)
+set(${BOX2D_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D)
 
-message(STATUS "Box2D found: ${BOX2D_FOUND}")
-message(STATUS "Box2D include dir: ${BOX2D_INCLUDE_DIR}")
-message(STATUS "Box2D libraries: ${BOX2D_LIBRARIES}")
+# Build Box2D library (WIP)
+#add_custom_command(
+#    OUTPUT ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D/Build/gmake/bin/Release/libBox2D.a
+#    WORKING_DIR ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D
+#    DEPENDS ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D/Box2D  # use a blob to get all the files in that directory
+#    COMMAND premake5 gmake
+#        # to be continued (see .travis.yml)
+#)
 
 
 # Targets
 
 # Stealth engine static library
 add_library(engine "${ENGINE_SOURCE_FILES}")
-target_include_directories(engine PUBLIC include)
+target_include_directories(engine
+        PUBLIC
+        include
+        ${BOX2D_INCLUDE_DIR}
+        )
 
 # Scan through resource folder for updated files and copy if none existing or changed
 # http://qrikko.blogspot.fr/2016/05/cmake-and-how-to-copy-resources-during.html
 message(STATUS "Copying resources from ${PROJECT_SOURCE_DIR}...")
 add_copy_command(engine "resources")
 
+
 # Linking
 
 target_link_libraries(engine
         "${OPENGL_gl_LIBRARY}"  # We don't need _glu_ with GLEW
-#        "${GLEW_LIBRARIES}"
-        "glew"
-        "${GLFW_LIBRARIES}"
-        "${BOX2D_LIBRARIES}"
+        "glew_s"
+        "glfw"
+        "${BOX2D_LIBRARY_RELEASE}"
         )
 
 if(BUILD_TESTS)

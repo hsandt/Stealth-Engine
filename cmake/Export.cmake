@@ -27,11 +27,11 @@ function(add_copy_command target folder_to_copy)
         # Add POST_BUILD command to copy resource file
         # http://stackoverflow.com/questions/13429656/cmake-how-to-copy-contents-of-a-directory-into-build-directory-after-make
         add_custom_command(
-                TARGET ${target} POST_BUILD COMMAND
-                ${CMAKE_COMMAND} -E copy_if_different
-                ${source_path}
-                ${target_path}
-                COMMENT "Moving updated resource-file '${filename}'"
+            TARGET ${target} POST_BUILD COMMAND
+            ${CMAKE_COMMAND} -E copy_if_different
+            ${source_path}
+            ${target_path}
+            COMMENT "Moving updated resource-file '${filename}'"
         )
     endforeach()
 endfunction()
