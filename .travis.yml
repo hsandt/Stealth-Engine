@@ -4,6 +4,16 @@ os:
   - linux
   - osx
 
+compiler:
+  - gcc
+  - clang
+
+addons:
+  apt:
+    packages:
+      - xorg-dev
+
+
 env:
   - PREMAKE_VERSION="5.0.0-alpha12"
 
@@ -22,6 +32,7 @@ install:
   - pushd "premake-${PREMAKE_VERSION}/build/${PREMAKE_BUILD_DIR}"
   - make
   - popd
+  - mkdir "$HOME/bin" -p
   - cp "premake-${PREMAKE_VERSION}/bin/release/premake5" "$HOME/bin/premake5"
 
 # Have to cd into directory and back out since premake5 doesn't appear to accept a directory argument.
