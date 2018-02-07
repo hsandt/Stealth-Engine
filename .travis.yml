@@ -15,9 +15,9 @@ install:
   - wget "https://github.com/premake/premake-core/releases/download/v${PREMAKE_VERSION}/premake-${PREMAKE_VERSION}-src.zip"
   - unzip "premake-${PREMAKE_VERSION}-src.zip"
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      PREMAKE_BUILD_DIR="build/gmake.unix";
+      PREMAKE_BUILD_DIR="gmake.unix";
     elif [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      PREMAKE_BUILD_DIR="build/gmake.macosx";
+      PREMAKE_BUILD_DIR="gmake.macosx";
     fi
   - pushd "premake-${PREMAKE_VERSION}/build/${PREMAKE_BUILD_DIR}"
   - make
