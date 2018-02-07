@@ -13,15 +13,13 @@ addons:
     packages:
       - xorg-dev
 
-
 env:
   global:
     - PREMAKE_VERSION="5.0.0-alpha12"
-    - MAKEFLAGS="-j 2"
-#  linux:
-#    - MAKEFLAGS="-j $(nproc)"  # should be ~2
-#  osx:
-#    - MAKEFLAGS="-j $(sysctl -n hw.ncpu)"  # should be 2
+  linux:
+    - MAKEFLAGS="-j $(nproc)"  # should be ~2
+  osx:
+    - MAKEFLAGS="-j $(sysctl -n hw.ncpu)"  # should be 2
 
 cache:
   directories:
@@ -32,6 +30,7 @@ install:
   # if premake source has not been downloaded or built with the right version, download it and build it now
   - |
     if [[ -z "$(ls -A premake-${PREMAKE_VERSION})" || ! -x "$HOME/bin/premake5" || "$(premake5 --version)" == *"${PREMAKE_VERSION}" ]]; then
+      rm -rf "premake-${PREMAKE_VERSION}"
       unzip "premake-${PREMAKE_VERSION}-src.zip"
       if [ "$TRAVIS_OS_NAME" == "linux" ]; then
         PREMAKE_BUILD_DIR="gmake.unix"
@@ -52,7 +51,6 @@ before_script:
   - pushd "Build/gmake"
   - export config=release
   - make ${MAKEFLAGS}
-  sysctl -n hw.ncpu
   - popd
   - popd
 
