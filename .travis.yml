@@ -17,10 +17,11 @@ addons:
 env:
   global:
     - PREMAKE_VERSION="5.0.0-alpha12"
-  linux:
-    - MAKEFLAGS="-j $(nproc)"  # should be ~2
-  osx:
-    - MAKEFLAGS="-j $(sysctl -n hw.ncpu)"  # should be 2
+    - MAKEFLAGS="-j 2"
+#  linux:
+#    - MAKEFLAGS="-j $(nproc)"  # should be ~2
+#  osx:
+#    - MAKEFLAGS="-j $(sysctl -n hw.ncpu)"  # should be 2
 
 cache:
   directories:

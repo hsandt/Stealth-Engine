@@ -44,11 +44,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG")
 set(CMAKE_BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build-${CMAKE_BUILD_TYPE}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")  # executable output directory
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # static libraries output directory
-#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # dynamic libraries output directory (unused)
-
-message(STATUS "${PROJECT_SOURCE_DIR}/libs")
-message(STATUS "GLFW_LOCATION: ${GLFW_LOCATION}")
-set(GLFW_LOCATION "${PROJECT_SOURCE_DIR}/libs/glfw")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # dynamic libraries output directory (unused)
 set(CMAKE_LIBRARY_PATH "${PROJECT_SOURCE_DIR}/libs")
 
 # Input files
