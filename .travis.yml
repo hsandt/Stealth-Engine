@@ -15,7 +15,12 @@ addons:
 
 
 env:
-  - PREMAKE_VERSION="5.0.0-alpha12"
+  global:
+    - PREMAKE_VERSION="5.0.0-alpha12"
+  linux:
+    - MAKEFLAGS="-j $(nproc)"  # should be ~2
+  osx:
+    - MAKEFLAGS="-j $(sysctl -n hw.ncpu)"  # should be 2
 
 cache:
   directories:
@@ -34,7 +39,7 @@ install:
       fi
     fi
   - pushd "premake-${PREMAKE_VERSION}/build/${PREMAKE_BUILD_DIR}"
-  - make
+  - make ${MAKEFLAGS}
   - popd
   - mkdir "$HOME/bin" -p
   - cp "premake-${PREMAKE_VERSION}/bin/release/premake5" "$HOME/bin/premake5"
@@ -45,7 +50,8 @@ before_script:
   - premake5 gmake
   - pushd "Build/gmake"
   - export config=release
-  - make "-j$(nproc)"
+  - make ${MAKEFLAGS}
+  sysctl -n hw.ncpu
   - popd
   - popd
 
@@ -53,6 +59,6 @@ script:
   - mkdir -p build/release
   - cd build/release
   - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON ../..
-  - make "-j$(nproc)"
-  - make test
+  - make ${MAKEFLAGS}
+  - make test ${MAKEFLAGS}
 
