@@ -104,6 +104,17 @@ set(${BOX2D_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D)
 #)
 
 
+# GLEW
+
+# it would be better to use find_package locally and get all the include paths at once...
+set(GLEW_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/third-party/glew-2.1.0/include)
+
+
+# GLFW
+
+set(GLFW_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/third-party/glfw/include)
+
+
 # Targets
 
 # Stealth engine static library
@@ -112,6 +123,8 @@ target_include_directories(engine
         PUBLIC
         include
         ${BOX2D_INCLUDE_DIR}
+        ${GLEW_INCLUDE_DIR}
+        ${GLFW_INCLUDE_DIR}
         )
 
 # Scan through resource folder for updated files and copy if none existing or changed
