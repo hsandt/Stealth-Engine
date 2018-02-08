@@ -22,19 +22,19 @@ include(Export)
 
 # C++17
 set(CMAKE_CXX_STANDARD 17)
-#if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-#    # using Clang
-#    set(CXX_VERSION_FLAG "-std=c++14")
-#elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-#    # using GCC
-#    set(CXX_VERSION_FLAG "-std=c++14")
-#elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
-#    # using Intel C++
-#    set(CXX_VERSION_FLAG "-std=c++14")
-#elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-#    # using Visual Studio C++
-#    set(CXX_VERSION_FLAG "-std=c++14")
-#endif()
+if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+    # using Clang
+    set(CXX_VERSION_FLAG "-std=c++17")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    # using GCC
+    set(CXX_VERSION_FLAG "-std=c++17")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+    # using Intel C++
+    set(CXX_VERSION_FLAG "-std=c++17")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    # using Visual Studio C++
+    set(CXX_VERSION_FLAG "-std=c++17")
+endif()
 message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER}")
 message(STATUS "CXX_VERSION_FLAG: ${CXX_VERSION_FLAG}")
