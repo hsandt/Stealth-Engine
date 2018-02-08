@@ -28,8 +28,9 @@ include(Export)
 
 # Flags
 
-# C++17
-set(CMAKE_CXX_STANDARD 17)  # more compatibility, as g++ uses -std=c++17 and clang uses -std=c++1z
+# C++14
+#set(CMAKE_CXX_STANDARD 17)  # more compatibility, as g++ uses -std=c++17 and clang uses -std=c++1z
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-logical-op-parentheses")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z -Wno-logical-op-parentheses")
 
