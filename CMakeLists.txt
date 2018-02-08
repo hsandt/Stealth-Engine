@@ -1,22 +1,14 @@
 cmake_minimum_required(VERSION 3.7)
+
+# Policies
+
+cmake_policy(SET CMP0025 NEW)  # AppleClang instead of Clang (may not work, so check both)
+cmake_policy(SET CMP0048 NEW)  # Project with version
+
+
+# Project
+
 project(StealthEngine VERSION 0.1 LANGUAGES CXX)
-cmake_policy(SET CMP0048 NEW)
-
-# Third-party dependencies
-
-# deactivate build utils, we don't need them (glewinfo and visualinfo executables)
-set(BUILD_UTILS OFF)
-add_subdirectory(third-party/glew-2.1.0/build/cmake)
-
-set(GLFW_BUILD_EXAMPLES OFF)
-set(GLFW_BUILD_TESTS OFF)
-set(GLFW_BUILD_DOCS OFF)
-set(GLFW_INSTALL OFF)
-add_subdirectory(third-party/glfw)
-
-
-# Options
-
 option(BUILD_TESTS "Build tests" OFF)
 
 
@@ -28,11 +20,25 @@ include(Export)
 
 # Flags
 
-# C++14
-#set(CMAKE_CXX_STANDARD 17)  # more compatibility, as g++ uses -std=c++17 and clang uses -std=c++1z
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-logical-op-parentheses")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z -Wno-logical-op-parentheses")
+# C++17
+set(CMAKE_CXX_STANDARD 17)
+#if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+#    # using Clang
+#    set(CXX_VERSION_FLAG "-std=c++14")
+#elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+#    # using GCC
+#    set(CXX_VERSION_FLAG "-std=c++14")
+#elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+#    # using Intel C++
+#    set(CXX_VERSION_FLAG "-std=c++14")
+#elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+#    # using Visual Studio C++
+#    set(CXX_VERSION_FLAG "-std=c++14")
+#endif()
+message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER}")
+message(STATUS "CXX_VERSION_FLAG: ${CXX_VERSION_FLAG}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAG} -Wno-logical-op-parentheses")
 
 # Produce debugging information on debug, optimize on release
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
@@ -76,6 +82,8 @@ set(TEST_ENGINE_SOURCE_FILES
         )
 
 
+# Third-party dependencies
+
 # Rendering libraries: OpenGL, GLEW, GLFW
 
 # FindOpenGL.cmake
@@ -89,6 +97,16 @@ message(STATUS "OpenGL include dir: ${OPENGL_INCLUDE_DIR}")
 message(STATUS "OpenGL libraries: ${OPENGL_LIBRARIES}")
 message(STATUS "OpenGL gl library: ${OPENGL_gl_LIBRARY}")
 
+# GLEW
+set(BUILD_UTILS OFF)  # we don't need glewinfo and visualinfo executables
+add_subdirectory(third-party/glew-2.1.0/build/cmake)
+
+# GLFW
+set(GLFW_BUILD_EXAMPLES OFF)
+set(GLFW_BUILD_TESTS OFF)
+set(GLFW_BUILD_DOCS OFF)
+set(GLFW_INSTALL OFF)
+add_subdirectory(third-party/glfw)
 
 # Physics library: Box2D
 

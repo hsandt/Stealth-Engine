@@ -22,12 +22,28 @@ env:
     - MAKEFLAGS="-j $(sysctl -n hw.ncpu)"  # should be 2
 
 cache:
+  apt: true  # private repositories only
   directories:
     - premake-${PREMAKE_VERSION}
 
+before_install:
+  # g++-5 for C++17
+  - |
+  if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    sudo apt-get update
+  fi
+
 install:
-  - wget "https://github.com/premake/premake-core/releases/download/v${PREMAKE_VERSION}/premake-${PREMAKE_VERSION}-src.zip"
+  # g++-5 for C++17
+  - |
+  if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    sudo apt-get install g++-6
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
+  fi
+
   # if premake source has not been downloaded or built with the right version, download it and build it now
+  - wget "https://github.com/premake/premake-core/releases/download/v${PREMAKE_VERSION}/premake-${PREMAKE_VERSION}-src.zip"
   - |
     if [[ -z "$(ls -A premake-${PREMAKE_VERSION})" || ! -x "$HOME/bin/premake5" || "$(premake5 --version)" == *"${PREMAKE_VERSION}" ]]; then
       rm -rf "premake-${PREMAKE_VERSION}"
@@ -44,13 +60,13 @@ install:
   - mkdir "$HOME/bin" -p
   - cp "premake-${PREMAKE_VERSION}/bin/release/premake5" "$HOME/bin/premake5"
 
-# Have to cd into directory and back out since premake5 doesn't appear to accept a directory argument.
 before_script:
+  # build Box2D
   - pushd "third-party/Box2D/Box2D"
   - premake5 gmake
   - pushd "Build/gmake"
   - export config=release
-  - make ${MAKEFLAGS}
+  - make Box2D ${MAKEFLAGS}  # we don't need to build the examples
   - popd
   - popd
 
