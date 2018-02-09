@@ -1,10 +1,5 @@
 language: cpp
 
-addons:
-  apt:
-    packages:
-      - xorg-dev
-
 # Clang version in log is 5.0.0, but I don't believe it as it doesn't support C++14 features like enable_if_t
 # https://stackoverflow.com/questions/35110123/travis-ci-with-c14-and-linux
 matrix:
@@ -12,20 +7,22 @@ matrix:
     - os: osx
       env: CMAKE_CXX_COMPILER_ID=GNU COMPILER_NAME=gcc CC=gcc-6 CXX=g++-6  # required to force osx to acknowledge GNU and use the correct std=c++17
     - os: osx
-      env: CMAKE_CXX_COMPILER_ID=AppleClang COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5.0
+      env: CMAKE_C_COMPILER="$(which clang)" CMAKE_CXX_COMPILER=$(which clang++) CMAKE_CXX_COMPILER_ID=AppleClang COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5.0
     - os: linux
-      env: CMAKE_C_COMPILER_ID=GNU CMAKE_CXX_COMPILER_ID=GNU COMPILER_NAME=gcc CC=gcc-6 CXX=g++-6
+      env: CMAKE_C_COMPILER="$(which gcc)" CMAKE_CXX_COMPILER=$(which g++) CMAKE_C_COMPILER_ID=GNU CMAKE_CXX_COMPILER_ID=GNU COMPILER_NAME=gcc CC=gcc-6 CXX=g++-6
       addons:
         apt:
           packages:
+            - xorg-dev
             - g++-6
           sources:
             - ubuntu-toolchain-r-test
     - os: linux
-      env: CMAKE_CXX_COMPILER_ID=AppleClang COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5.0
+      env: CMAKE_C_COMPILER=$(which clang) CMAKE_CXX_COMPILER=$(which clang++) CMAKE_CXX_COMPILER_ID=AppleClang COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5.0
       addons:
         apt:
           packages:
+            - xorg-dev
             - clang-3.8
           sources: sources
             - llvm-toolchain-precise-5.0
@@ -73,9 +70,14 @@ before_script:
   - popd
 
 script:
+#  - |
+#    set_compiler_paths () {
+#      CMAKE_C_COMPILER="$(which $C_COMPILE)"
+#      CMAKE_CXX_COMPILER="$(which g++)"
+#    }
   - mkdir -p build/release
   - cd build/release
-  - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER_ID=${CMAKE_CXX_COMPILER_ID} -DBUILD_TESTS=ON ../..
+  - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=${CC} -DCMAKE_CXX_COMPILER=${CXX} -DCMAKE_CXX_COMPILER_ID=${CMAKE_CXX_COMPILER_ID} -DBUILD_TESTS=ON ../..
   - make ${MAKEFLAGS}
   - make test ${MAKEFLAGS}
 
