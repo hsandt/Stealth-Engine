@@ -1,12 +1,5 @@
 language: cpp
 
-os:
-  - osx
-
-compiler:
-  - gcc
-  - clang
-
 addons:
   apt:
     packages:
@@ -16,6 +9,10 @@ addons:
 # https://stackoverflow.com/questions/35110123/travis-ci-with-c14-and-linux
 matrix:
   include:
+    - os: osx
+      env: CMAKE_CXX_COMPILER_ID=GNU COMPILER_NAME=gcc CC=gcc-6 CXX=g++-6  # required to force osx to acknowledge GNU and use the correct std=c++17
+    - os: osx
+      env: CMAKE_CXX_COMPILER_ID=AppleClang COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5.0
     - os: linux
       env: CMAKE_C_COMPILER_ID=GNU CMAKE_CXX_COMPILER_ID=GNU COMPILER_NAME=gcc CC=gcc-6 CXX=g++-6
       addons:
@@ -25,7 +22,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
     - os: linux
-      env: CMAKE_C_COMPILER_ID=AppleClang CMAKE_CXX_COMPILER_ID=AppleClang COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5.0
+      env: CMAKE_CXX_COMPILER_ID=AppleClang COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5.0
       addons:
         apt:
           packages:
@@ -46,22 +43,7 @@ cache:
   directories:
     - premake-${PREMAKE_VERSION}
 
-#before_install:
-#  # g++-6 for C++17
-#  - |
-#    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-#      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-#      sudo apt-get update
-#    fi
-
 install:
-#  # g++-6 for C++17
-#  - |
-#    if [[ "$TRAVIS_OS_NAME" == "linux" && "$CXX" == "g++" ]]; then
-#      sudo apt-get install g++-6
-#      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
-#    fi
-
   # if premake source has not been downloaded or built with the right version, download it and build it now
   - wget "https://github.com/premake/premake-core/releases/download/v${PREMAKE_VERSION}/premake-${PREMAKE_VERSION}-src.zip"
   - |
@@ -93,7 +75,7 @@ before_script:
 script:
   - mkdir -p build/release
   - cd build/release
-  - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON ../..
+  - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER_ID=${CMAKE_CXX_COMPILER_ID} -DBUILD_TESTS=ON ../..
   - make ${MAKEFLAGS}
   - make test ${MAKEFLAGS}
 
