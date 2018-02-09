@@ -111,7 +111,7 @@ add_subdirectory(third-party/glfw)
 # Physics library: Box2D
 
 find_library(BOX2D_LIBRARY_RELEASE Box2D DIRECTORY ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D/Build/gmake/bin/Release)
-set(${BOX2D_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D)
+set(BOX2D_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D)
 
 # Build Box2D library (WIP)
 #add_custom_command(

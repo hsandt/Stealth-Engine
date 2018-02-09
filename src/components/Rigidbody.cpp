@@ -3,7 +3,7 @@
 //
 
 // REFACTOR: maybe use a proxy class for Box2D physics, although we are sure to use this library only
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 
 #include "component/Transform.h"
 #include "world/Actor.h"
