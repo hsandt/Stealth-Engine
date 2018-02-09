@@ -1,7 +1,6 @@
 language: cpp
 
 os:
-  - linux
   - osx
 
 compiler:
@@ -12,6 +11,27 @@ addons:
   apt:
     packages:
       - xorg-dev
+
+# Clang version in log is 5.0.0, but I don't believe it as it doesn't support C++14 features like enable_if_t
+# https://stackoverflow.com/questions/35110123/travis-ci-with-c14-and-linux
+matrix:
+  include:
+    - os: linux
+      env: COMPILER_NAME=gcc CC=gcc-6 CXX=g++-6
+      addons:
+        apt:
+          packages:
+            - g++-6
+          sources:
+            - ubuntu-toolchain-r-test
+    - os: linux
+      env: COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5.0
+      addons:
+        apt:
+          packages:
+            - clang-3.8
+          sources: sources
+            - llvm-toolchain-precise-5.0
 
 env:
   global:
@@ -26,21 +46,21 @@ cache:
   directories:
     - premake-${PREMAKE_VERSION}
 
-before_install:
-  # g++-6 for C++17
-  - |
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-      sudo apt-get update
-    fi
+#before_install:
+#  # g++-6 for C++17
+#  - |
+#    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+#      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+#      sudo apt-get update
+#    fi
 
 install:
-  # g++-6 for C++17
-  - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" && "$CXX" == "g++" ]]; then
-      sudo apt-get install g++-6
-      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
-    fi
+#  # g++-6 for C++17
+#  - |
+#    if [[ "$TRAVIS_OS_NAME" == "linux" && "$CXX" == "g++" ]]; then
+#      sudo apt-get install g++-6
+#      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
+#    fi
 
   # if premake source has not been downloaded or built with the right version, download it and build it now
   - wget "https://github.com/premake/premake-core/releases/download/v${PREMAKE_VERSION}/premake-${PREMAKE_VERSION}-src.zip"
