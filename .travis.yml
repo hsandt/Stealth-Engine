@@ -17,7 +17,7 @@ addons:
 matrix:
   include:
     - os: linux
-      env: COMPILER_NAME=gcc CC=gcc-6 CXX=g++-6
+      env: CMAKE_C_COMPILER_ID=GNU CMAKE_CXX_COMPILER_ID=GNU COMPILER_NAME=gcc CC=gcc-6 CXX=g++-6
       addons:
         apt:
           packages:
@@ -25,7 +25,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
     - os: linux
-      env: COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5.0
+      env: CMAKE_C_COMPILER_ID=AppleClang CMAKE_CXX_COMPILER_ID=AppleClang COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5.0
       addons:
         apt:
           packages:
