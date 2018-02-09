@@ -21,13 +21,14 @@ include(Export)
 # Flags
 
 # C++17
-set(CMAKE_CXX_STANDARD 17)
+#set(CMAKE_CXX_STANDARD 17)
+message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     # using Clang
     set(CXX_VERSION_FLAG "-std=c++17")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     # using GCC
-    set(CXX_VERSION_FLAG "-std=c++17")
+    set(CXX_VERSION_FLAG "-std=c++1z")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
     # using Intel C++
     set(CXX_VERSION_FLAG "-std=c++17")
@@ -35,9 +36,6 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # using Visual Studio C++
     set(CXX_VERSION_FLAG "-std=c++17")
 endif()
-message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
-message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER}")
-message(STATUS "CXX_VERSION_FLAG: ${CXX_VERSION_FLAG}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAG} -Wno-logical-op-parentheses")
 
 # Produce debugging information on debug, optimize on release
@@ -58,10 +56,10 @@ set(CMAKE_LIBRARY_PATH "${PROJECT_SOURCE_DIR}/libs")
 
 # Input files
 
-# tests outside...
 file(GLOB_RECURSE ENGINE_SOURCE_FILES "include/*.h" "src/*.cpp")
 
-file(GLOB_RECURSE TEST_ENGINE_SOURCE_FILES2 "test/*.h" "test/*.cpp")
+# some tests outside the test folder...
+#file(GLOB_RECURSE TEST_ENGINE_SOURCE_FILES2 "test/*.h" "test/*.cpp")
 
 set(TEST_ENGINE_SOURCE_FILES
         # REFACTOR: move catch and Smoke tests framework to yet another SOURCE_FILES
@@ -138,6 +136,10 @@ set(GLFW_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/third-party/glfw/include)
 
 # Stealth engine static library
 add_library(engine "${ENGINE_SOURCE_FILES}")
+#set_target_properties(engine PROPERTIES
+#        CXX_STANDARD_REQUIRED 17
+#        )
+
 target_include_directories(engine
         PUBLIC
         include
