@@ -6,16 +6,16 @@ language: cpp
 matrix:
   include:
     - os: osx
-      env: COMPILER=g++-6
+      env: COMPILER=g++-7
     - os: osx
-      env: COMPILER=clang++-5.0
+      env: COMPILER=clang++  # osx simply names "clang" the latest clang installed with Xcode toolchain
     - os: linux
-      env: COMPILER=g++-6
+      env: COMPILER=g++-7
       addons:
         apt:
           packages:
             - xorg-dev
-            - g++-6
+            - g++-7
           sources:
             - ubuntu-toolchain-r-test
     - os: linux
@@ -41,15 +41,21 @@ cache:
   directories:
     - premake-${PREMAKE_VERSION}
 
-install:
-  # Set the ${CXX} variable properly (don't do it in env, it is too early and would be overriden by compiler settings just afterward)
-  - export CXX=${COMPILER}
-  - ${CXX} --version
+before_install:
+  # install g++-7 for OSX
+  # remove c++ include folder symlink from brew-cask oclint, we don't need it and Cask devs say they don't want
+  # to auto-link themselves anymore
+  - |
+    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+      rm /usr/local/include/c++
+      brew install gcc@7
+    fi
 
-  # if premake source has not been downloaded or built with the right version, download it and build it now
-  - wget "https://github.com/premake/premake-core/releases/download/v${PREMAKE_VERSION}/premake-${PREMAKE_VERSION}-src.zip"
+install:
+  # Install premake if not already downloaded, built and up-to-date
   - |
     if [[ -z "$(ls -A premake-${PREMAKE_VERSION})" || ! -x "$HOME/bin/premake5" || "$(premake5 --version)" == *"${PREMAKE_VERSION}" ]]; then
+      wget "https://github.com/premake/premake-core/releases/download/v${PREMAKE_VERSION}/premake-${PREMAKE_VERSION}-src.zip"
       rm -rf "premake-${PREMAKE_VERSION}"
       unzip "premake-${PREMAKE_VERSION}-src.zip"
       if [ "$TRAVIS_OS_NAME" == "linux" ]; then
@@ -65,7 +71,7 @@ install:
   - cp "premake-${PREMAKE_VERSION}/bin/release/premake5" "$HOME/bin/premake5"
 
 before_script:
-  # build Box2D
+  # Build Box2D
   - pushd "third-party/Box2D/Box2D"
   - premake5 gmake
   - pushd "Build/gmake"
@@ -75,9 +81,17 @@ before_script:
   - popd
 
 script:
+  # Set the ${CXX} variable properly (don't do it in env, it is too early and would be overriden by compiler settings
+  # just afterward)
+  # and do it after the initial package install to have g++-7 available if used
+  - export CXX=${COMPILER}
+  - ${CXX} --version
   - mkdir -p build/release
   - cd build/release
-  - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=${CC} -DCMAKE_CXX_COMPILER=${CXX} -DCMAKE_CXX_COMPILER_ID=${CMAKE_CXX_COMPILER_ID} -DBUILD_TESTS=ON ../.. -j${JOBS}
+  # Fail on first error
+  - set -e
+  # Optimization: consider cmake -GNinja and ninja
+  - cmake ../.. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON
   - make -j${JOBS}
-  - ctest --output-on-failure -j${JOBS}
+  - ctest --output-on-failure
 

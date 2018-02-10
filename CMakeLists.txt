@@ -5,6 +5,10 @@ cmake_minimum_required(VERSION 3.7)
 cmake_policy(SET CMP0025 NEW)  # AppleClang instead of Clang (may not work, so check both)
 cmake_policy(SET CMP0048 NEW)  # Project with version
 
+# Fix behavior of CMAKE_CXX_STANDARD when targeting macOS. (may not be required if CMake >= 3.0.0)
+if (POLICY CMP0025)
+    cmake_policy(SET CMP0025 NEW)
+endif ()
 
 # Project
 
@@ -22,6 +26,7 @@ include(Export)
 
 # C++17
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 message(STATUS "CMAKE_C_COMPILER_ID: ${CMAKE_C_COMPILER_ID}")
 message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "COMPILER_NAME: ${COMPILER_NAME}")
@@ -30,18 +35,26 @@ message(STATUS "CC: ${CC}")
 message(STATUS "CXX: ${CXX}")
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     # using Clang
-    set(CXX_VERSION_FLAG "-std=c++17")
+#    set(CXX_VERSION_FLAG "-std=c++17")
+#    add_compile_options(-std=c++17) # CMake 2.8.12 or newer
+     add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++17>")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     # using GCC
-    set(CXX_VERSION_FLAG "-std=c++1z")
+#    set(CXX_VERSION_FLAG "-std=c++1z")
+#    add_compile_options(-std=c++17) # CMake 2.8.12 or newer
+    add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++17>")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
     # using Intel C++
-    set(CXX_VERSION_FLAG "-std=c++17")
+#    set(CXX_VERSION_FLAG "-std=c++17")
+#    add_compile_options(-std=c++17) # CMake 2.8.12 or newer
+    add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++17>")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # using Visual Studio C++
-    set(CXX_VERSION_FLAG "-std=c++17")
+#    set(CXX_VERSION_FLAG "-std=c++17")
+#    add_compile_options(-std=c++17) # CMake 2.8.12 or newer
+    add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++17>")
 endif()
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAG} -Wno-logical-op-parentheses")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAG} -Wno-logical-op-parentheses")
 
 # Produce debugging information on debug, optimize on release
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
