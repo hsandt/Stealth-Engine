@@ -9,6 +9,7 @@ matrix:
       env: COMPILER=g++-7
     - os: osx
       env: COMPILER=clang++  # osx simply names "clang" the latest clang installed with Xcode toolchain
+      compiler: clang++
     - os: linux
       env: COMPILER=g++-7
       addons:
@@ -27,6 +28,7 @@ matrix:
             - clang-5.0
           sources:
             - llvm-toolchain-trusty-5.0
+      compiler: clang++
 
 env:
   global:
@@ -53,6 +55,17 @@ before_install:
     fi
 
 install:
+  # Set the ${CXX} variable properly (don't do it in env, it is too early and would be overriden
+  # by travis compiler settings just afterward)
+  # and do it after the initial package install to have g++-7 available if used
+  - export CXX=${COMPILER}
+  - ${CXX} --version
+
+  # Dependencies required by the CI are installed in ${TRAVIS_BUILD_DIR}/deps/
+  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+  - mkdir -p "${DEPS_DIR}"
+  - cd "${DEPS_DIR}"
+
   # Install premake if not already downloaded, built and up-to-date
   - |
     if [[ -z "$(ls -A premake-${PREMAKE_VERSION})" || ! -x "$HOME/bin/premake5" || "$(premake5 --version)" == *"${PREMAKE_VERSION}" ]]; then
@@ -71,7 +84,36 @@ install:
   - mkdir "$HOME/bin" -p
   - cp "premake-${PREMAKE_VERSION}/bin/release/premake5" "$HOME/bin/premake5"
 
+  ############################################################################
+  # [linux]: Install the right version of libc++
+  ############################################################################
+  - |
+    LLVM_INSTALL=${DEPS_DIR}/llvm/install
+    echo "TRAVIS_OS_NAME: ${TRAVIS_OS_NAME}"
+    echo "CXX%%+*: ${CXX%%+*}"
+    echo "ls -A ${LLVM_INSTALL}: $(ls -A ${LLVM_INSTALL})"
+    # if in linux and compiler clang and llvm not installed
+    #if [[ "${TRAVIS_OS_NAME}" == "linux" && "${CXX%%+*}" == "clang" && -n "$(ls -A ${LLVM_INSTALL})" ]]; then
+    if [[ "${TRAVIS_OS_NAME}" == "linux" && "${CXX%%+*}" == "clang" ]]; then
+      LLVM_VERSION="5.0.1"
+      LLVM_URL="http://llvm.org/releases/${LLVM_VERSION}/llvm-${LLVM_VERSION}.src.tar.xz"
+      LIBCXX_URL="http://llvm.org/releases/${LLVM_VERSION}/libcxx-${LLVM_VERSION}.src.tar.xz"
+      LIBCXXABI_URL="http://llvm.org/releases/${LLVM_VERSION}/libcxxabi-${LLVM_VERSION}.src.tar.xz"
+      mkdir -p llvm llvm/build llvm/projects/libcxx llvm/projects/libcxxabi
+      travis_retry wget -O - ${LLVM_URL} | tar --strip-components=1 -xJ -C llvm
+      travis_retry wget -O - ${LIBCXX_URL} | tar --strip-components=1 -xJ -C llvm/projects/libcxx
+      travis_retry wget -O - ${LIBCXXABI_URL} | tar --strip-components=1 -xJ -C llvm/projects/libcxxabi
+      (cd llvm/build && cmake .. -DCMAKE_INSTALL_PREFIX=${LLVM_INSTALL})
+      (cd llvm/build/projects/libcxx && make install -j2)
+      (cd llvm/build/projects/libcxxabi && make install -j2)
+      export CXXFLAGS="-isystem ${LLVM_INSTALL}/include/c++/v1"
+      export LDFLAGS="-L ${LLVM_INSTALL}/lib -l c++ -l c++abi"
+      export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${LLVM_INSTALL}/lib"
+    fi
+
 before_script:
+  - cd "${TRAVIS_BUILD_DIR}"
+
   # Build Box2D
   - pushd "third-party/Box2D/Box2D"
   - premake5 gmake
@@ -82,11 +124,6 @@ before_script:
   - popd
 
 script:
-  # Set the ${CXX} variable properly (don't do it in env, it is too early and would be overriden by compiler settings
-  # just afterward)
-  # and do it after the initial package install to have g++-7 available if used
-  - export CXX=${COMPILER}
-  - ${CXX} --version
   - mkdir -p build/Release
   - cd build/Release
   # Fail on first error
