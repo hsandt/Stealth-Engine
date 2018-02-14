@@ -31,6 +31,7 @@ matrix:
 env:
   global:
     - PREMAKE_VERSION="5.0.0-alpha12"
+    - CMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -std=c++17"
   linux:
     - JOBS="$(nproc)"  # should be ~2
   osx:
@@ -86,12 +87,13 @@ script:
   # and do it after the initial package install to have g++-7 available if used
   - export CXX=${COMPILER}
   - ${CXX} --version
-  - mkdir -p build/release
-  - cd build/release
+  - mkdir -p build/Release
+  - cd build/Release
   # Fail on first error
   - set -e
   # Optimization: consider cmake -GNinja and ninja
   - cmake ../.. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON
   - make -j${JOBS}
-  - ctest --output-on-failure
+  # ctest --output-on-failure groups all tests from the same target in one, and does not output colors
+  - bin/test_engine
 

@@ -14,7 +14,10 @@ endif ()
 
 project(StealthEngine VERSION 0.1 LANGUAGES CXX)
 option(BUILD_TESTS "Build tests" OFF)
-
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING
+            "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
 
 # Cmake modules
 
@@ -37,7 +40,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     # using Clang
 #    set(CXX_VERSION_FLAG "-std=c++17")
 #    add_compile_options(-std=c++17) # CMake 2.8.12 or newer
-     add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++17>")
+     add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++1z>")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     # using GCC
 #    set(CXX_VERSION_FLAG "-std=c++1z")
@@ -66,7 +69,8 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG")
 
 # Output paths
 
-set(CMAKE_BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build-${CMAKE_BUILD_TYPE}")
+message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
+set(CMAKE_BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/${CMAKE_BUILD_TYPE}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")  # executable output directory
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # static libraries output directory
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")  # dynamic libraries output directory (unused)
@@ -153,7 +157,7 @@ set(GLFW_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/third-party/glfw/include)
 # Targets
 
 # Stealth engine static library
-add_library(engine "${ENGINE_SOURCE_FILES}")
+add_library(engine STATIC "${ENGINE_SOURCE_FILES}")
 #set_target_properties(engine PROPERTIES
 #        CXX_STANDARD_REQUIRED 17
 #        )
