@@ -17,6 +17,7 @@ matrix:
           packages:
             - xorg-dev
             - g++-7
+            - lcov
           sources:
             - ubuntu-toolchain-r-test
     - os: linux
@@ -26,6 +27,7 @@ matrix:
           packages:
             - xorg-dev
             - clang-5.0
+            - lcov
           sources:
             - llvm-toolchain-trusty-5.0
       compiler: clang++
@@ -45,13 +47,14 @@ cache:
     - premake-${PREMAKE_VERSION}
 
 before_install:
-  # install g++-7 for OSX
+  # install g++-7 and lcov for OSX
   # remove c++ include folder symlink from brew-cask oclint, we don't need it and Cask devs say they don't want
   # to auto-link themselves anymore
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       rm /usr/local/include/c++
       brew install gcc@7
+      brew install lcov
     fi
 
 install:
@@ -85,7 +88,7 @@ install:
   - cp "premake-${PREMAKE_VERSION}/bin/release/premake5" "$HOME/bin/premake5"
 
   ############################################################################
-  # [linux]: Install the right version of libc++
+  # [linux]: Install the right version of libc++ (required for e.g. C++14)
   ############################################################################
   - |
     LLVM_INSTALL=${DEPS_DIR}/llvm/install
@@ -121,12 +124,19 @@ before_script:
 
 script:
   - mkdir -p build/Release
-  - cd build/Release
+  - pushd build/Release
   # Fail on first error
   - set -e
   # Optimization: consider cmake -GNinja and ninja
-  - cmake ../.. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON
+  - cmake ../.. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DENABLE_COVERAGE=ON
   - make -j${JOBS}
+  - popd
+  # Creating test report
+  - lcov --zerocounters  --directory .
   # ctest --output-on-failure groups all tests from the same target in one, and does not output colors
-  - bin/test_engine
-
+  - build/Release/bin/test_engine
+  - lcov --directory . --capture --output-file test_engine_coverage.info # capture coverage info
+  - lcov --remove test_engine_coverage.info '/usr/*' --output-file test_engine_coverage.info # filter out system
+  - lcov --list test_engine_coverage.info # debug info
+  # Uploading report to CodeCov
+  - bash <(curl -s https://codecov.io/bash)
