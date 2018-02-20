@@ -130,9 +130,12 @@ script:
   # Optimization: consider cmake -GNinja and ninja
   - cmake ../.. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DENABLE_COVERAGE=ON
   - make -j${JOBS}
+  - set +e
   - popd
   # Creating test report
   # ctest --output-on-failure groups all tests from the same target in one, and does not output colors
   - build/Release/bin/test_engine
+
+after_success:
   # Uploading report to CodeCov
   - bash <(curl -s https://codecov.io/bash)
