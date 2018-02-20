@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/hsandt/Stealth-Engine/branch/develop/graph/badge.svg)](https://codecov.io/gh/hsandt/Stealth-Engine)
 [![codecov](https://codecov.io/gh/hsandt/Stealth-Engine/branch/master/graph/badge.svg)](https://codecov.io/gh/hsandt/Stealth-Engine)
 
 # Stealth Engine
