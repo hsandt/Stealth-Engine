@@ -132,11 +132,7 @@ script:
   - make -j${JOBS}
   - popd
   # Creating test report
-  - lcov --zerocounters  --directory .
   # ctest --output-on-failure groups all tests from the same target in one, and does not output colors
   - build/Release/bin/test_engine
-  - lcov --directory . --capture --output-file test_engine_coverage.info # capture coverage info
-  - lcov --remove test_engine_coverage.info '/usr/*' --output-file test_engine_coverage.info # filter out system
-  - lcov --list test_engine_coverage.info # debug info
   # Uploading report to CodeCov
   - bash <(curl -s https://codecov.io/bash)
