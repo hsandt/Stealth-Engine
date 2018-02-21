@@ -1,0 +1,9 @@
+# Project
+/.project
+
+# Build
+/build*
+
+# Coverage
+/coverage
+/*.info

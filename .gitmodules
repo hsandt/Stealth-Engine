@@ -1,0 +1,6 @@
+[submodule "third-party/glfw"]
+	path = third-party/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "third-party/Box2D"]
+	path = third-party/Box2D
+	url = https://github.com/hsandt/Box2D.git
