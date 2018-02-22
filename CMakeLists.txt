@@ -3,26 +3,29 @@ cmake_minimum_required(VERSION 3.7)
 # Policies
 
 cmake_policy(SET CMP0025 NEW)  # AppleClang instead of Clang (may not work, so check both)
-cmake_policy(SET CMP0048 NEW)  # Project with version
+cmake_policy(SET CMP0048 NEW)  # Version in project definition
 
-# Fix behavior of CMAKE_CXX_STANDARD when targeting macOS. (may not be required if CMake >= 3.0.0)
-if (POLICY CMP0025)
-    cmake_policy(SET CMP0025 NEW)
-endif ()
 
 # Project
 
 project(StealthEngine VERSION 0.1 LANGUAGES CXX)
-option(BUILD_TESTS "Build tests" OFF)
+
+
+# CMake vars
+
+# Build type
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING
-            "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: Debug, Release." FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 # Cmake modules
-
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 include(Export)
+
+
+# Options
+
+option(BUILD_TESTS "Build tests" OFF)
 
 
 # Flags
@@ -40,22 +43,22 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     # using Clang
 #    set(CXX_VERSION_FLAG "-std=c++17")
 #    add_compile_options(-std=c++17) # CMake 2.8.12 or newer
-     add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++1z>")
+#     add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++1z>")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     # using GCC
 #    set(CXX_VERSION_FLAG "-std=c++1z")
 #    add_compile_options(-std=c++17) # CMake 2.8.12 or newer
-    add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++17>")
+#    add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++17>")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
     # using Intel C++
 #    set(CXX_VERSION_FLAG "-std=c++17")
 #    add_compile_options(-std=c++17) # CMake 2.8.12 or newer
-    add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++17>")
+#    add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++17>")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # using Visual Studio C++
 #    set(CXX_VERSION_FLAG "-std=c++17")
 #    add_compile_options(-std=c++17) # CMake 2.8.12 or newer
-    add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++17>")
+#    add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-std=c++17>")
 endif()
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAG} -Wno-logical-op-parentheses")
 
