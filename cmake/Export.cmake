@@ -6,9 +6,7 @@ function(add_copy_command target folder_to_copy)
         get_filename_component(filename ${source_path} NAME)
         get_filename_component(dir ${source_path} DIRECTORY)
         get_filename_component(dirname ${dir} NAME)
-
-        # DEBUG
-        message(STATUS "(${source_path}) filename: ${filename}, dir: ${dir}, dirname: ${dirname}")
+        message(STATUS "Exporting (${source_path}) filename: ${filename}, dir: ${dir}, dirname: ${dirname}")
 
         set (target_path "")
 
@@ -17,8 +15,7 @@ function(add_copy_command target folder_to_copy)
             set (target_path "${path_component}/${target_path}")
             get_filename_component(dir ${dir} DIRECTORY)
             get_filename_component(dirname ${dir} NAME)
-            # DEBUG
-            message(STATUS "(${dirname}) target_path: ${target_path}, path_component: ${path_component}, dir: ${dir}, dirname: ${dirname}")
+            message(STATUS "Exporting target_path: ${target_path}, path_component: ${path_component}, dir: ${dir}, dirname: ${dirname}")
         endwhile()
 
         set(target_path "${CMAKE_BINARY_DIR}/bin/resources/${target_path}${filename}")
