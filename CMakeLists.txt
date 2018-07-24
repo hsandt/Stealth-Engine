@@ -140,17 +140,19 @@ add_subdirectory(third-party/glfw)
 
 # Physics library: Box2D
 
-find_library(BOX2D_LIBRARY_RELEASE Box2D DIRECTORY ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D/Build/gmake/bin/Release)
-set(BOX2D_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D)
+# Build Box2D with premake with a custom script
+# The better way is to prepare an included CMakeLists that does the job locally as the full build command,
+# and make sure this step is triggered first via add_subdirectory.
+execute_process(COMMAND bash -c
+        "cd \"${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D\" &&
+        premake5 gmake &&
+        cd \"Build/gmake\" &&
+        export config=release &&
+        make Box2D ${MAKEFLAGS}")
 
-# Build Box2D library (WIP)
-#add_custom_command(
-#    OUTPUT ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D/Build/gmake/bin/Release/libBox2D.a
-#    WORKING_DIR ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D
-#    DEPENDS ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D/Box2D  # use a blob to get all the files in that directory
-#    COMMAND premake5 gmake
-#        # to be continued (see .travis.yml)
-#)
+# Get the library built with premake
+find_library(BOX2D_LIBRARY_RELEASE Box2D DIRECTORY ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D/Build/gmake/bin/Release)
+set(BOX2D_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/third-party/Box2D)
 
 
 # GLEW
