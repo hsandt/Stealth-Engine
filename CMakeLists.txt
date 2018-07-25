@@ -91,25 +91,7 @@ set(CMAKE_LIBRARY_PATH "${PROJECT_SOURCE_DIR}/libs")
 file(GLOB_RECURSE ENGINE_SOURCE_FILES "include/*.h" "src/*.cpp")
 
 # some tests outside the test folder...
-#file(GLOB_RECURSE TEST_ENGINE_SOURCE_FILES2 "test/*.h" "test/*.cpp")
-
-set(TEST_ENGINE_SOURCE_FILES
-        # REFACTOR: move catch and Smoke tests framework to yet another SOURCE_FILES
-        test/catch.hpp
-        test/catch_with_main.hpp
-        test/testmain.cpp
-        test/TestFriend.h
-
-        src/test/SmokeTestRunner.cpp
-        include/test/SmokeTestRunner.h
-
-        # All actual tests cpp files added from here
-        test/unittests/factory/TestFactory.cpp
-        test/unittests/geometry/TestVec2.cpp
-        test/unittests/geometry/TestVec3.cpp
-        test/unittests/physics/TestPhysics.cpp
-        test/unittests/utils/TestStringUtils.cpp
-        )
+file(GLOB_RECURSE TEST_ENGINE_SOURCE_FILES "test/*.h" "test/*.cpp" "include/test/*.h" "src/test/*.cpp")
 
 
 # Third-party dependencies
