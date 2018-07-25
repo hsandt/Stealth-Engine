@@ -79,6 +79,11 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG")
 
 # Output paths
 
+# preserve original cmake binary dir (current directory in terminal, cmake-build-[config] in CLion)
+# to know intermediate source path and find coverage information
+set(ORIGINAL_CMAKE_BINARY_DIR "${CMAKE_BINARY_DIR}")
+message(STATUS "ORIGINAL_CMAKE_BINARY_DIR: ${ORIGINAL_CMAKE_BINARY_DIR}")
+
 message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 set(CMAKE_BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/${CMAKE_BUILD_TYPE}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")  # executable output directory
@@ -181,10 +186,26 @@ target_link_libraries(engine
 
 if(BUILD_TESTS)
     message(STATUS "Adding test configuration...")
+
     if(ENABLE_COVERAGE)
         message(STATUS "Adding coverage configuration...")
         target_compile_options(engine PRIVATE --coverage)  # works without, but may be risky
         target_link_libraries(engine --coverage)
+
+        # A custom target triggered with: "make run_test_engine"
+        # it will run the engine tests and generate a cover HTML report
+        add_custom_target(cover_test_engine
+                # reset coverage
+                COMMAND lcov -z -d ${ORIGINAL_CMAKE_BINARY_DIR}
+                # run tests, creating .gcda and .gcno
+                COMMAND test_engine
+                # generate coverage
+                COMMAND lcov -c -d ${ORIGINAL_CMAKE_BINARY_DIR} -o ${CMAKE_BINARY_DIR}/.coverage
+                # generate HTML report
+                COMMAND genhtml ${CMAKE_BINARY_DIR}/.coverage -o ${CMAKE_BINARY_DIR}/coverage_report
+                DEPENDS test_engine
+                WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+                )
     endif()
 
     # CMake test support
@@ -197,13 +218,6 @@ if(BUILD_TESTS)
 
     target_link_libraries(test_engine
             engine
-            )
-
-    # Allow to run test_engine executable with "make run_test_engine"
-    add_custom_target(run_test_engine
-            COMMAND test_engine
-            DEPENDS test_engine
-            WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
             )
 
     # use the full syntax so CMake can recognize the command as the executable defined above and not a raw path
