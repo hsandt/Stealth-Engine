@@ -10,10 +10,9 @@
 
 #include <map>
 
-//#include "GameObject.h"
-
 class GameObject;
 class SceneData;
+
 
 class Scene
 {

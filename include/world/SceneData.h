@@ -6,7 +6,6 @@
 
 #include <string>
 
-
 struct SceneData
 {
 public:

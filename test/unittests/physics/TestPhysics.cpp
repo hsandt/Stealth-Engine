@@ -12,8 +12,7 @@
 #include "core/factory/Factory.h"
 #include "physics/PhysicsManager.h"
 #include "component/Rigidbody.h"
-#include "world/Scene.h"
-#include "world/SceneManager.h"
+#include "test/SmokeTestRunner.h"
 
 using namespace std;
 
@@ -60,8 +59,6 @@ TEST_CASE("Physics: use rigidbody", "[physics]")
 			}
 		}
 	}
-
-	EngineCore::getSceneManager()->getCurrentScene()->clear();
 
 	GIVEN("2 actors with Rigidbodies close to each other [collider box half-size 5, distance 50]")
 	{

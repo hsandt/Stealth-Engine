@@ -5,8 +5,8 @@
 #pragma once
 
 #include <stdexcept>
-#include <application/RunMode.h>
-#include <application/RunModeData.h>
+#include "application/RunMode.h"
+#include "application/RunModeData.h"
 
 #include "application/GameConfig.h"
 

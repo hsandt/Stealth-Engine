@@ -12,13 +12,13 @@
 #include <string>
 
 #include "application/GameConfig.h"
-#include "world/Scene.h"
 #include "input/InputManager.h"
 #include "renderer/Renderer.h"
 #include "core/factory/Factory.h"
 #include "RunMode.h"
 
 class EngineCore;
+class Scene;
 
 class GameApplication
 {

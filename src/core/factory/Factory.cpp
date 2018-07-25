@@ -7,8 +7,6 @@
 #include "core/factory/ComponentCreator.h"
 
 #include "core/Logger.h"
-#include "world/GameObject.h"
-#include "world/Scene.h"
 
 
 using namespace std;

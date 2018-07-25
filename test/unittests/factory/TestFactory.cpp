@@ -8,7 +8,6 @@
 #include "component/Transform.h"
 #include "world/GameObject.h"
 #include "core/factory/Factory.h"
-#include "world/Scene.h"
 #include "application/RunMode.h"
 
 using namespace std;
@@ -26,15 +25,12 @@ TEST_CASE("Factory", "[factory]")
 	SmokeTestRunner testRunner;
 	testRunner.init(RunMode::TestWithInput);
 
-    SECTION("create first game world")
+    SECTION("create first game object")
     {
         auto* go = EngineCore::getFactory()->CreateGameObject<GameObject>();
-        // Sorry other things seem to be created on the way, not reliable
-//        REQUIRE(go->ID() == 0);
-//	    REQUIRE(EngineCore::getSceneManager()->getCurrentScene()->getGameObjects().at(0)->ID() == 0);
         REQUIRE(go->name == "GameObject");
 
-	    SECTION("add input components to game world")
+	    SECTION("add input components to game object")
 	    {
 		    InputComponent* inputComponent = go->addComponent<InputComponent>();
 			REQUIRE(inputComponent != nullptr);
