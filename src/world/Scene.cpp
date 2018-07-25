@@ -16,6 +16,7 @@
 #include "world/GameObject.h"
 #include "core/factory/Factory.h"
 #include "world/Scene.h"
+#include "world/SceneData.h"
 #include "core/EngineCore.h"
 
 using namespace std;
@@ -36,8 +37,17 @@ Scene::~Scene()
     LOG("[SCENE] Scene destroyed");
 }
 
-map<int, GameObject*> Scene::getGameObjects() const {
+const map<int, GameObject*>& Scene::getGameObjects() const {
     return gameObjects;
+}
+
+
+void Scene::init(const SceneData &data) {
+    name = data.name;
+
+    // TODO: initialize scene with data
+
+    LOGF("[Scene] Scene %s is initialized", "scene name");  // TODO: give a name to all objects!
 }
 
 /*
@@ -93,8 +103,4 @@ void Scene::clear()
         delete goPair.second;
     }
 	gameObjects.clear();
-}
-
-void Scene::init() {
-	LOGF("[Scene] Scene %s is initialized", "scene name");  // TODO: give a name to all objects!
 }

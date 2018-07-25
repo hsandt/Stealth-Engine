@@ -13,6 +13,7 @@
 //#include "GameObject.h"
 
 class GameObject;
+class SceneData;
 
 class Scene
 {
@@ -20,10 +21,11 @@ public:
     Scene();
     virtual ~Scene();
     
-    // getter
-    std::map<int, GameObject*> getGameObjects() const;
+    // getters
+    std::string getName() const { return name; }
+    const std::map<int, GameObject*>& getGameObjects() const;
 
-    void init();
+    void init(const SceneData &data);
 //    void addGameObject(std::unique_ptr<GameObject>&& go);
     void addGameObject(GameObject* go);
 //    void addGameObject(GameObject &&go);
@@ -37,6 +39,9 @@ private:
     Scene &operator=(const Scene &) & = delete;
     Scene(Scene&&) = delete;
     Scene &operator=(Scene&&) & = delete;
+
+    /// ID name
+    std::string name;
 
     // OPTIMIZE: usually, the best is an array of a vector of GameObject instances (not pointers)
     // for locality / cache efficiency + slot / handle mapping. For now, we support GameObject

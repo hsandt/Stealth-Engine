@@ -6,10 +6,6 @@
 
 #include <iostream>
 
-#include "core/EngineCore.h"
-#include "world/SceneManager.h"
-#include "world/Scene.h"
-
 class GameObjectCreator {
 public:
 
@@ -20,20 +16,8 @@ public:
 		go->id = id;
 		go->setNameToDefault();
 		go->init();
-
-		Scene* currentScene = EngineCore::getSceneManager()->getCurrentScene();
-		if (currentScene != nullptr)
-		{
-			// add the created game world to the current scene (shared pointer)
-			currentScene->addGameObject(go);
-			std::cout << "Game world created and added to current scene" << std::endl;
-			return go;
-		}
-		else
-		{
-			std::cout << "Current scene has expired, don't create game world" << std::endl;
-			return nullptr;
-		}
+		return go;
 	}
+
 };
 

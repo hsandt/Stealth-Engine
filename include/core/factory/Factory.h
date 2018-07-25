@@ -9,8 +9,9 @@
 // required if defining template here; else include templ_impl.cpp at the end of the file
 #include "GameObjectCreator.h"
 #include "ComponentCreator.h"
-
-class Scene;
+#include "core/EngineCore.h"
+#include "world/SceneManager.h"
+#include "world/Scene.h"
 
 class Factory {
 public:
@@ -28,6 +29,13 @@ public:
 	template<class T>
 	T* CreateGameObject() {
 		T* newGameObject = gameObjectCreator->Create<T>(last_id);
+		bool addedToScene = AddGameObjectToCurrentScene(newGameObject);
+		if (!addedToScene)
+		{
+			delete newGameObject;
+			return nullptr;
+		}
+
 		++last_id;
 		return newGameObject;
 	}
@@ -44,6 +52,23 @@ public:
 	}
 
 private:
+
+    bool AddGameObjectToCurrentScene(GameObject* go) {
+        Scene* currentScene = EngineCore::getSceneManager()->getCurrentScene();
+        if (currentScene != nullptr)
+        {
+            // add the created game world to the current scene (shared pointer)
+            currentScene->addGameObject(go);
+            std::cout << "Game world created and added to current scene" << std::endl;
+            return true;
+        }
+        else
+        {
+            std::cout << "Current scene has expired, don't create game world" << std::endl;
+            return false;
+        }
+    }
+
     static int last_id;
 
 	GameObjectCreator* gameObjectCreator;

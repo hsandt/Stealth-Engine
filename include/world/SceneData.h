@@ -4,17 +4,19 @@
 
 #pragma once
 
+#include <string>
 
-class SceneData
+
+struct SceneData
 {
-private:
-
 public:
 	SceneData();
 	virtual ~SceneData();
 
 //	SceneData(const SceneData &) = default;
 //	SceneData & operator=(const SceneData &) = default;
+
+	std::string name;
 };
 
 

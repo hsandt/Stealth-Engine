@@ -7,6 +7,7 @@
 
 #include "core/Logger.h"
 #include "world/Scene.h"
+#include "world/SceneData.h"
 
 #include "world/SceneManager.h"
 
@@ -59,9 +60,12 @@ void SceneManager::loadNextScene()
 void SceneManager::loadScene(std::string name)
 {
 	// 1. TODO: open the scene asset file corresponding to name
-	// 2. TODO: parse it and create a new Scene with the corresponding game objects
-	// 3. TODO: set nextScene pointer to that new scene
+	// 2. TODO: parse it and create a Scene Data with the corresponding game objects
+	SceneData sceneData;
+	sceneData.name = name;
+	// 3. TODO: set nextScene to a new Scene, initialized with said Scene Data
 	nextScene = new Scene();
+	nextScene->init(sceneData);
 	// 4. TODO: at the last moment, delete currentScene and set it to nextScene
 	delete currentScene;  // does nothing if currentScene was nullptr ie on initial scene loading
 	currentScene = nextScene;
