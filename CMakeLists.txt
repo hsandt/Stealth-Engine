@@ -198,7 +198,9 @@ target_link_libraries(engine
         )
 
 if(BUILD_TESTS)
+    message(STATUS "Adding test configuration...")
     if(ENABLE_COVERAGE)
+        message(STATUS "Adding coverage configuration...")
         target_compile_options(engine PRIVATE --coverage)  # works without, but may be risky
         target_link_libraries(engine --coverage)
     endif()

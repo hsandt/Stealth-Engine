@@ -6,4 +6,5 @@
 
 # Coverage
 /coverage
+.coverage
 /*.info
