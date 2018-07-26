@@ -133,12 +133,12 @@ add_subdirectory(third-party/glfw)
 execute_process(COMMAND bash -c
         "cd \"${PROJECT_SOURCE_DIR}/third-party/Box2D\" &&
         premake5 gmake &&
-        cd \"Build/gmake\" &&
-        export config=release &&
-        make Box2D ${MAKEFLAGS}")
+        cd Build &&
+        export config=release_x86_64 &&
+        make Box2D -j 4")
 
 # Get the library built with premake
-find_library(BOX2D_LIBRARY_RELEASE Box2D DIRECTORY ${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D/Build/gmake/bin/Release)
+find_library(BOX2D_LIBRARY_RELEASE Box2D DIRECTORY ${PROJECT_SOURCE_DIR}/third-party/Box2D/Build/bin/x86_64/Release)
 set(BOX2D_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/third-party/Box2D)
 
 

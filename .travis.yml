@@ -110,18 +110,6 @@ install:
       export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${LLVM_INSTALL}/lib"
     fi
 
-before_script:
-  - cd "${TRAVIS_BUILD_DIR}"
-
-  # Build Box2D
-  - pushd "third-party/Box2D"
-  - premake5 gmake
-  - pushd "Build/gmake"
-  - export config=release
-  - make Box2D ${MAKEFLAGS}  # we don't need to build the examples
-  - popd
-  - popd
-
 script:
   - mkdir -p build/Release
   - pushd build/Release
