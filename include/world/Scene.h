@@ -13,8 +13,6 @@
 class GameObject;
 class SceneData;
 
-
-
 class Scene
 {
 public:
@@ -31,9 +29,7 @@ public:
     const std::map<int, GameObject*>& getGameObjects() const;
 
     void init(const SceneData &data);
-//    void addGameObject(std::unique_ptr<GameObject>&& go);
     void addGameObject(GameObject* go);
-//    void addGameObject(GameObject &&go);
     /// Remove and delete game object from the scene
     void removeGameObject(GameObject* go);
     /// Remove and delete all the game objects from the scene
