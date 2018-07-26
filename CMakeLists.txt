@@ -187,27 +187,6 @@ target_link_libraries(engine
 if(BUILD_TESTS)
     message(STATUS "Adding test configuration...")
 
-    if(ENABLE_COVERAGE)
-        message(STATUS "Adding coverage configuration...")
-        target_compile_options(engine PRIVATE --coverage)  # works without, but may be risky
-        target_link_libraries(engine --coverage)
-
-        # A custom target triggered with: "make run_test_engine"
-        # it will run the engine tests and generate a cover HTML report
-        add_custom_target(cover_test_engine
-                # reset coverage
-                COMMAND lcov -z -d ${ORIGINAL_CMAKE_BINARY_DIR}
-                # run tests, creating .gcda and .gcno
-                COMMAND test_engine
-                # generate coverage
-                COMMAND lcov -c -d ${ORIGINAL_CMAKE_BINARY_DIR} -o ${CMAKE_BINARY_DIR}/.coverage
-                # generate HTML report
-                COMMAND genhtml ${CMAKE_BINARY_DIR}/.coverage -o ${CMAKE_BINARY_DIR}/coverage_report
-                DEPENDS test_engine
-                WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-                )
-    endif()
-
     # CMake test support
     enable_testing()
     #    add_subdirectory(test)  # should include directory with CMakeLists containing block below:
@@ -222,5 +201,26 @@ if(BUILD_TESTS)
 
     # use the full syntax so CMake can recognize the command as the executable defined above and not a raw path
     add_test(NAME test_engine COMMAND test_engine)
+
+    if(ENABLE_COVERAGE)
+        message(STATUS "Adding coverage configuration...")
+        target_compile_options(engine PRIVATE --coverage)  # works without, but may be risky
+        target_link_libraries(engine --coverage)
+
+        # A custom target triggered with: "make run_test_engine"
+        # it will run the engine tests and generate a cover HTML report
+        add_custom_command(TARGET test_engine POST_BUILD
+                # reset coverage
+                COMMAND lcov -z -d ${ORIGINAL_CMAKE_BINARY_DIR}
+                # run tests, creating .gcda and .gcno
+                COMMAND test_engine
+                # generate coverage
+                COMMAND lcov -c -d ${ORIGINAL_CMAKE_BINARY_DIR} -o ${CMAKE_BINARY_DIR}/.coverage
+                # generate HTML report
+                COMMAND genhtml ${CMAKE_BINARY_DIR}/.coverage -o ${CMAKE_BINARY_DIR}/coverage_report
+                DEPENDS test_engine
+                WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+                )
+    endif()
 
 endif()
