@@ -7,7 +7,6 @@
 #include "world/Component.h"
 
 class Actor;
-class Renderer;
 
 /// Abstract base class for all actor components
 class ActorComponent : public Component {
