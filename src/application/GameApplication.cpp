@@ -24,6 +24,7 @@
 #include "core/Logger.h"
 #include "world/GameObject.h"
 #include "core/factory/Factory.h"
+#include "core/factory/GameManagerFactory.h"
 #include "core/math/Vector2.h"
 #include "physics/PhysicsManager.h"
 #include "renderer/Renderer.h"
@@ -72,7 +73,7 @@ void GameApplication::init(RunMode runMode) {
 	// initialize Engine Core, which will initialize all the modules
 	engineCore = EngineCore::getOrCreateInstance();
 	engineCore->bindGameApplication(this);  // currently, ref to GameApplication is unused
-	engineCore->init(runModeData, config);
+	engineCore->init(runModeData, config, GameManagerFactory());
 
 	// query loading of initial scene
 	EngineCore::getSceneManager()->queryLoadScene(config.initialSceneName);

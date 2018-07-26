@@ -12,17 +12,13 @@
 #include "application/RunModeData.h"
 #include "application/ApplicationResult.h"
 #include "core/factory/Factory.h"
+#include "interfaces/core/factory/ManagerFactory.h"
 #include "world/SceneManager.h"
 #include "renderer/Renderer.h"
 #include "physics/PhysicsManager.h"
 #include "gameplay/ScriptManager.h"
 
 EngineCore* EngineCore::instance = nullptr;
-
-EngineCore::EngineCore()
-{
-
-}
 
 void EngineCore::bindGameApplication(GameApplication* pApplication)
 {
@@ -34,7 +30,7 @@ void EngineCore::bindSmokeTestRunner(SmokeTestRunner *pTestRunner)
     smokeTestRunner = pTestRunner;
 }
 
-void EngineCore::init(const RunModeData* runModeData, const GameConfig &gameConfig)
+void EngineCore::init(const RunModeData* runModeData, const GameConfig &gameConfig, const ManagerFactory& managerFactory)
 {
     frameDuration = 1. / (double)gameConfig.fps;
 

@@ -9,6 +9,7 @@
 
 #include "core/Logger.h"
 #include "core/EngineCore.h"
+#include "core/factory/GameManagerFactory.h"
 #include "world/GameObject.h"
 #include "world/SceneManager.h"
 #include "physics/PhysicsManager.h"
@@ -36,7 +37,7 @@ void SmokeTestRunner::init(RunMode runMode)
     engineCore->bindSmokeTestRunner(this);  // currently, ref to GameApplication is unused
     GameConfig config;
     config.fps = 60;  // optional: default anyway
-    engineCore->init(runModeData, config);
+    engineCore->init(runModeData, config, GameManagerFactory());
 
     // immediately load first scene
     engineCore->getSceneManager()->queryLoadScene(config.initialSceneName);

@@ -199,7 +199,10 @@ if(BUILD_TESTS)
     # Test engine executable
     add_executable(test_engine ${TEST_ENGINE_SOURCE_FILES})
     target_include_directories(test_engine PRIVATE test)
-
+    # unlock BUILD_TESTS methods only in engine (! don't use this for in-source definitions!
+    # even when using PUBLIC, it will fail linking with "undefined reference")
+    target_compile_definitions(engine INTERFACE BUILD_TESTS)
+    target_compile_definitions(test_engine PRIVATE BUILD_TESTS)
     target_link_libraries(test_engine
             engine
             )

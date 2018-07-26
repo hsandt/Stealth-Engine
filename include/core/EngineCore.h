@@ -10,6 +10,7 @@
 
 #include "application/GameConfig.h"
 
+class ManagerFactory;
 class GameApplication;
 class SmokeTestRunner;
 class WindowManager;
@@ -61,7 +62,7 @@ private:
     double frameDuration = 0.;
 
 private:
-	EngineCore();
+	EngineCore() = default;
 public:
 	virtual ~EngineCore();
 
@@ -89,11 +90,27 @@ public:
 		return instance;
 	}
 
+#if BUILD_TESTS
+// This #if is tricky, it will only work for definitions inline in the header.
+// Trying the same with a definition in the source will result in undefined reference.
+
+    /// In unit tests, always get a new instance at the beginning
+    /// to avoid side effects of previous tests
+	inline static EngineCore* getNewInstance()
+	{
+		if (instance)
+			delete instance;
+
+		instance = new EngineCore;
+		return instance;
+	}
+#endif
+
 	void bindGameApplication(GameApplication* gameApplication);
 	void bindSmokeTestRunner(SmokeTestRunner* pTestRunner);
 
 	/// Initialize all the modules
-    void init(const RunModeData* runModeData, const GameConfig &gameConfig);
+    void init(const RunModeData* runModeData, const GameConfig &gameConfig, const ManagerFactory& managerFactory);
 
 	/// Return the game application
 	inline static GameApplication* getGameApplication() { return requireInstance()->gameApplication; }
