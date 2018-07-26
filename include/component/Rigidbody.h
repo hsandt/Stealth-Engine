@@ -12,6 +12,7 @@
 class Rigidbody : public ActorComponent
 {
 private:
+	// TODO: extract interface and implement Box2DRigidbody so that all references to Box2D disappear from Rigidbody
 	class b2Body* body;
 
 public:

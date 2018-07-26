@@ -7,15 +7,15 @@
 
 #include "test/SmokeTestRunner.h"
 
-#include "core/Logger.h"
-#include "core/EngineCore.h"
-#include "core/factory/GameManagerFactory.h"
-#include "world/GameObject.h"
-#include "world/SceneManager.h"
-#include "physics/PhysicsManager.h"
-#include "world/Scene.h"
 #include "application/RunMode.h"
 #include "application/RunModeData.h"
+#include "core/EngineCore.h"
+#include "core/factory/GameManagerFactory.h"
+#include "core/Logger.h"
+#include "interfaces/physics/PhysicsManager.h"
+#include "world/GameObject.h"
+#include "world/Scene.h"
+#include "world/SceneManager.h"
 
 using namespace std;
 

@@ -16,7 +16,7 @@
 #include "interfaces/application/WindowManager.h"
 #include "interfaces/core/factory/ManagerFactory.h"
 #include "interfaces/renderer/Renderer.h"
-#include "physics/PhysicsManager.h"
+#include "interfaces/physics/PhysicsManager.h"
 #include "world/SceneManager.h"
 #include "world/SceneManager.h"
 
@@ -60,7 +60,7 @@ void EngineCore::init(const RunModeData* runModeData, const GameConfig &gameConf
 		renderer->init();
 	}
 
-	physicsManager = new PhysicsManager();
+	physicsManager = managerFactory.createPhysicsManager();
 	scriptManager = new ScriptManager();
 
 	factory = new Factory();

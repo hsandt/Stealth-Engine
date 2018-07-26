@@ -6,6 +6,8 @@
 
 #include "component/ActorComponent.h"
 
+class Renderer;
+
 class RenderComponent : public ActorComponent {
 public:
     RenderComponent();

@@ -8,11 +8,12 @@
 // REFACTOR: make a generic header that contains itself headers
 // for the most common engine classes
 #include "application/RunMode.h"
-#include "world/Actor.h"
-#include "core/factory/Factory.h"
-#include "physics/PhysicsManager.h"
 #include "component/Rigidbody.h"
+#include "component/Transform.h"
+#include "core/factory/Factory.h"
+#include "interfaces/physics/PhysicsManager.h"
 #include "test/SmokeTestRunner.h"
+#include "world/Actor.h"
 
 using namespace std;
 

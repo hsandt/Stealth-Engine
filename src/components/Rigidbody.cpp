@@ -8,7 +8,7 @@
 #include "component/Transform.h"
 #include "world/Actor.h"
 #include "core/EngineCore.h"
-#include "physics/PhysicsManager.h"
+#include "interfaces/physics/PhysicsManager.h"
 #include "component/Rigidbody.h"
 
 Rigidbody::Rigidbody()

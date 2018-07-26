@@ -27,7 +27,7 @@
 #include "input/InputManager.h"
 #include "interfaces/application/WindowManager.h"
 #include "interfaces/renderer/Renderer.h"
-#include "physics/PhysicsManager.h"
+#include "interfaces/physics/PhysicsManager.h"
 #include "renderer/ShaderUtils.h"
 #include "world/GameObject.h"
 #include "world/Scene.h"

@@ -4,16 +4,20 @@
 
 #include <stdexcept>
 
+#include "physics/Box2DPhysicsManager.h"
+
 #include <Box2D/Box2D.h>
 
-#include "core/math/Vector2.h"
 #include "application/GameApplication.h"
-#include "physics/PhysicsManager.h"
 #include "component/Rigidbody.h"
+#include "component/Transform.h"
+#include "core/Logger.h"
+#include "core/math/Vector2.h"
+#include "world/Actor.h"
 
 using namespace std;
 
-PhysicsManager::PhysicsManager() {
+Box2DPhysicsManager::Box2DPhysicsManager() {
 	// Initialize the world with no gravity, since the PhysicsManager
 	// is constructed immediately by the EngineCore and therefore we don't have
 	// scene information yet, including gravity
@@ -26,14 +30,34 @@ PhysicsManager::PhysicsManager() {
 	LOG("[PHYSICS MANAGER] Physics manager created");
 }
 
-PhysicsManager::~PhysicsManager() {
+Box2DPhysicsManager::~Box2DPhysicsManager() {
 	LOG("[PHYSICS MANAGER] Destroying world...");
 	delete world;
 
 	LOG("[PHYSICS MANAGER] Physics manager destroyed");
 }
 
-b2Body* PhysicsManager::createBody(Actor* actor)
+
+Vector2 Box2DPhysicsManager::getGravity() const
+{
+    return world->GetGravity();
+}
+
+
+void Box2DPhysicsManager::setGravity(Vector2 gravity)
+{
+    world->SetGravity(gravity);
+}
+
+void Box2DPhysicsManager::destroyBody(b2Body* body)
+{
+    if (body == nullptr)
+        throw std::invalid_argument("[PHYSICS MANAGER] Cannot destroy body: nullptr");
+
+    world->DestroyBody(body);
+}
+
+b2Body* Box2DPhysicsManager::createBody(Actor* actor)
 {
 	if (actor == nullptr)
 		throw invalid_argument("[PHYSICS MANAGER] Cannot create body on actor: nullptr");
@@ -46,7 +70,7 @@ b2Body* PhysicsManager::createBody(Actor* actor)
     return body;
 }
 
-b2Body *PhysicsManager::createDynamicBody(Actor *actor)
+b2Body *Box2DPhysicsManager::createDynamicBody(Actor *actor)
 {
     if (actor == nullptr)
         throw invalid_argument("[PHYSICS MANAGER] Cannot create body on actor: nullptr");
@@ -59,7 +83,7 @@ b2Body *PhysicsManager::createDynamicBody(Actor *actor)
     return body;
 }
 
-void PhysicsManager::start()
+void Box2DPhysicsManager::start()
 {
     for (auto rigidbody : rigidbodies)
     {
@@ -68,7 +92,7 @@ void PhysicsManager::start()
     }
 }
 
-void PhysicsManager::update(float dt)
+void Box2DPhysicsManager::update(float dt)
 {
 	world->Step(timeStep, velocityIterations, positionIterations);
 
@@ -80,7 +104,7 @@ void PhysicsManager::update(float dt)
     }
 }
 
-void PhysicsManager::registerRigidbody(Rigidbody *rigidbody)
+void Box2DPhysicsManager::registerRigidbody(Rigidbody* rigidbody)
 {
     if (!rigidbody)
         throw invalid_argument("[PhysicsManager] Cannot register rigidbody: nullptr");
@@ -88,7 +112,7 @@ void PhysicsManager::registerRigidbody(Rigidbody *rigidbody)
     rigidbodies.push_back(rigidbody);  // shared to weak pointer conversion
 }
 
-void PhysicsManager::unregisterRigidbody(Rigidbody *rigidbody)
+void Box2DPhysicsManager::unregisterRigidbody(Rigidbody* rigidbody)
 {
     if (!rigidbody)
         throw invalid_argument("[PhysicsManager] Cannot unregister rigidbody: nullptr");

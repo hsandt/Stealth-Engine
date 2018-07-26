@@ -2,7 +2,7 @@
 
 #include "application/GLFWWindowManager.h"
 #include "renderer/GLRenderer.h"
-#include "physics/PhysicsManager.h"
+#include "physics/Box2DPhysicsManager.h"
 #include "gameplay/ScriptManager.h"
 #include "core/factory/Factory.h"
 #include "world/SceneManager.h"
@@ -20,7 +20,7 @@ Renderer* GameManagerFactory::createRenderer() const
 
 PhysicsManager* GameManagerFactory::createPhysicsManager() const
 {
-    return new PhysicsManager();
+    return new Box2DPhysicsManager();
 }
 
 ScriptManager* GameManagerFactory::createScriptManager() const
