@@ -214,9 +214,11 @@ if(BUILD_TESTS)
                 COMMAND lcov -z -d ${ORIGINAL_CMAKE_BINARY_DIR}
                 # run tests, creating .gcda and .gcno
                 COMMAND test_engine
-                # generate coverage
+                # generate coverage info without external libs
                 COMMAND lcov -c -d ${ORIGINAL_CMAKE_BINARY_DIR} -o ${CMAKE_BINARY_DIR}/.coverage
-                # generate HTML report
+                COMMAND lcov --remove ${CMAKE_BINARY_DIR}/.coverage '/usr/include/*' '*/third-party/*' -o ${CMAKE_BINARY_DIR}/.coverage
+                # regenerate HTML report
+                COMMAND rm -rf ${CMAKE_BINARY_DIR}/coverage_report
                 COMMAND genhtml ${CMAKE_BINARY_DIR}/.coverage -o ${CMAKE_BINARY_DIR}/coverage_report
                 DEPENDS test_engine
                 WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
