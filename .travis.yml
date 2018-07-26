@@ -88,11 +88,11 @@ install:
   - cp "premake-${PREMAKE_VERSION}/bin/release/premake5" "$HOME/bin/premake5"
 
   ############################################################################
-  # [linux]: Install the right version of libc++ (required for e.g. C++14)
+  # [linux]: Install the right version of libc++ (required for e.g. C++14, when using clang only)
   ############################################################################
+  # always use (cd ... && ...) to avoid changing directory in the main prompt
   - |
     LLVM_INSTALL=${DEPS_DIR}/llvm/install
-    # if in linux and compiler clang and llvm not installed
     if [[ "${TRAVIS_OS_NAME}" == "linux" && "${CXX%%+*}" == "clang" && ( ! -d "${LLVM_INSTALL}" || -z "$(ls -A ${LLVM_INSTALL})" ) ]]; then
       LLVM_VERSION="5.0.1"
       LLVM_URL="http://llvm.org/releases/${LLVM_VERSION}/llvm-${LLVM_VERSION}.src.tar.xz"

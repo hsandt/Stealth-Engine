@@ -25,7 +25,12 @@ include(Export)
 
 # Options
 
-option(BUILD_TESTS "Build tests" OFF)
+option(BUILD_TESTS          "Build tests"                                                       OFF)
+option(ENABLE_COVERAGE      "Enable coverage on test run"                                       OFF)
+option(POST_BUILD_COVERAGE  "Generate test coverage report on post-build (if ENABLE_COVERAGE)"  OFF)
+
+# to activate full coverage in your IDE locally, add CMake options:
+# -DBUILD_TESTS=ON -DENABLE_COVERAGE=ON -DPOST_BUILD_COVERAGE=ON
 
 
 # Flags
@@ -207,22 +212,25 @@ if(BUILD_TESTS)
         target_compile_options(engine PRIVATE --coverage)  # works without, but may be risky
         target_link_libraries(engine --coverage)
 
-        # A custom target triggered with: "make run_test_engine"
-        # it will run the engine tests and generate a cover HTML report
-        add_custom_command(TARGET test_engine POST_BUILD
-                # reset coverage
-                COMMAND lcov -z -d ${ORIGINAL_CMAKE_BINARY_DIR}
-                # run tests, creating .gcda and .gcno
-                COMMAND test_engine
-                # generate coverage info without external libs
-                COMMAND lcov --capture -d ${ORIGINAL_CMAKE_BINARY_DIR} -o ${CMAKE_BINARY_DIR}/.coverage -q
-                COMMAND lcov --remove ${CMAKE_BINARY_DIR}/.coverage '/usr/include/*' '*/third-party/*' -o ${CMAKE_BINARY_DIR}/.coverage -q
-                # regenerate HTML report
-                COMMAND rm -rf ${CMAKE_BINARY_DIR}/coverage_report
-                COMMAND genhtml ${CMAKE_BINARY_DIR}/.coverage -o ${CMAKE_BINARY_DIR}/coverage_report | grep -v "Processing"
-                DEPENDS test_engine
-                WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        if(POST_BUILD_COVERAGE)
+            # on post-build, run the engine tests and generate a coverage report (don't fail the build even if this fails)
+            add_custom_command(TARGET test_engine POST_BUILD
+                    # reset coverage
+                    COMMAND lcov -z -d ${ORIGINAL_CMAKE_BINARY_DIR}
+                    # run tests, creating .gcda and .gcno
+                    COMMAND test_engine &&
+                        # generate coverage info without external libs
+                        lcov --capture -d ${ORIGINAL_CMAKE_BINARY_DIR} -o ${CMAKE_BINARY_DIR}/.coverage -q &&
+                        lcov --remove ${CMAKE_BINARY_DIR}/.coverage '/usr/include/*' '*/third-party/*' -o ${CMAKE_BINARY_DIR}/.coverage -q &&
+                        # regenerate HTML report
+                        rm -rf ${CMAKE_BINARY_DIR}/coverage_report &&
+                        genhtml ${CMAKE_BINARY_DIR}/.coverage -o ${CMAKE_BINARY_DIR}/coverage_report | grep -v "Processing" ||
+                    echo "Post-build test_engine failed, but build considered successful."
+                    DEPENDS test_engine
+                    WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
                 )
+        endif()
+
     endif()
 
 endif()
