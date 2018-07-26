@@ -54,7 +54,9 @@ void GLFWWindowManager::init(const GameConfig & gameConfig)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPEN_GL_VERSION_MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPEN_GL_VERSION_MINOR);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
+#ifndef TRAVIS_BUILD
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL, but this can cause some issues
+#endif
 //	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
 
 	// On OSX, we may need to set the Stencil bits if issues arise. For now, using OpenGL 3.3 works, even with integrated graphics.

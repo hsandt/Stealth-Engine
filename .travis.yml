@@ -120,7 +120,7 @@ script:
   - set -e
   # Optimization: consider cmake -GNinja and ninja
   - cmake ../.. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DENABLE_COVERAGE=ON
-  - make -j${JOBS}
+  - make -j${JOBS} CXXFLAGS=-DTRAVIS_BUILD
   - set +e
   - popd
   # Creating test report
