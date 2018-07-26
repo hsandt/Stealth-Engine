@@ -8,9 +8,6 @@
 
 #include <algorithm>
 #include <iostream>
-//#include <boost/format.hpp>
-//#include <boost/log/trivial.hpp>
-//#include <boost/chrono/floor.hpp>
 
 #include "core/Logger.h"
 #include "world/GameObject.h"
@@ -20,7 +17,6 @@
 #include "core/EngineCore.h"
 
 using namespace std;
-//using namespace boost::log;
 
 Scene::Scene()
 {
@@ -50,27 +46,6 @@ void Scene::init(const SceneData &data) {
     LOGF("[Scene] Scene %s is initialized", "scene name");  // TODO: give a name to all objects!
 }
 
-/*
-void Scene::addGameObject(unique_ptr<GameObject>&& go) {
-
-	// COMPILE ERROR: shared_ptr doesn't have a constructor unique_ptr<GameObject>&& ??
-    shared_ptr<GameObject> shGo{move(go)};
-
-    //cout << "Adding world at " << sGo -> GetPosition().x() << " from unique_ptr &go" << endl;
-
-    auto emplacePair = gameObjects.emplace(shGo->ID(), shGo);
-    if (emplacePair.second) {
-        cout << "[SCENE] Added game world #" << shGo->ID() << " " << shGo->getName() << endl;
-    }
-    else {
-        cout << "Could not add game world with id: " << shGo->ID() << ": game world with same ID already exists in the scene." << endl;
-//        BOOST_LOG_VERSION_NAMESPACE;
-//        BOOST_LOG_TRIVIAL(warning) << boost::format("Could not add game world with id %d: game world with same ID already exists in the scene.") % go -> ID();
-//        BOOST_CHRONO_STATIC;
-    }
-}
- */
-
 // REFACTOR: just use a vector to store all objects...
 // sice hard for us to set ID inside game world creation, we do it in the factory
 /// Add a game object to this scene. You need to set the ID
@@ -90,7 +65,7 @@ void Scene::removeGameObject(GameObject* go) {
     if (go != nullptr) {
         int nbErased = (int) gameObjects.erase(go->ID());
         if (nbErased == 0) {
-//            BOOST_LOG_TRIVIAL(warning) << boost::format("Could not remove game world with id %d: no game objects with this ID in the scene.") % go -> ID();
+            LOGWARNF("Could not remove game world with id %d: no game objects with this ID in the scene.", go->ID());
         }
         delete go;
     }

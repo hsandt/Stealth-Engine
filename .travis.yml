@@ -49,7 +49,7 @@ cache:
 before_install:
   # install g++-7 and lcov for OSX
   # remove c++ include folder symlink from brew-cask oclint, we don't need it and Cask devs say they don't want
-  # to auto-link themselves anymore
+  #  to auto-link themselves anymore
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       rm /usr/local/include/c++

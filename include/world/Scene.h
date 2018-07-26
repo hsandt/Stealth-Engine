@@ -14,12 +14,18 @@ class GameObject;
 class SceneData;
 
 
+
 class Scene
 {
 public:
     Scene();
     virtual ~Scene();
     
+    Scene(const Scene &) = delete;
+    Scene &operator=(const Scene &) & = delete;
+    Scene(Scene&&) = delete;
+    Scene &operator=(Scene&&) & = delete;
+
     // getters
     std::string getName() const { return name; }
     const std::map<int, GameObject*>& getGameObjects() const;
@@ -34,11 +40,6 @@ public:
     void clear();
 
 private:
-    Scene(const Scene &) = delete;
-    Scene &operator=(const Scene &) & = delete;
-    Scene(Scene&&) = delete;
-    Scene &operator=(Scene&&) & = delete;
-
     /// ID name
     std::string name;
 
