@@ -2,16 +2,13 @@
 // Created by wing on 15/10/13.
 //
 
-#include <iostream>
+#include "component/SquareRenderComponent.h"
 
 #include "component/RenderComponent.h"
 #include "component/Transform.h"
+#include "core/Logger.h"
+#include "interfaces/renderer/Renderer.h"
 #include "world/Actor.h"
-#include "renderer/Renderer.h"
-
-#include "component/SquareRenderComponent.h"
-
-using namespace std;
 
 SquareRenderComponent::SquareRenderComponent() : RenderComponent() {}
 
@@ -26,7 +23,7 @@ void SquareRenderComponent::render(Renderer *renderer) {
     }
     else
     {
-	    cout << "[SquareRenderComponent] no game world" << endl;
+	    LOG("[SquareRenderComponent] no game world");
     }
 
 }

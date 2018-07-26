@@ -9,14 +9,15 @@
 
 #include "application/ApplicationResult.h"
 #include "application/RunModeData.h"
-#include "core/Logger.h"
 #include "core/factory/Factory.h"
-#include "interfaces/core/factory/ManagerFactory.h"
-#include "world/SceneManager.h"
-#include "renderer/Renderer.h"
-#include "physics/PhysicsManager.h"
+#include "core/Logger.h"
 #include "gameplay/ScriptManager.h"
+#include "input/InputManager.h"
 #include "interfaces/application/WindowManager.h"
+#include "interfaces/core/factory/ManagerFactory.h"
+#include "interfaces/renderer/Renderer.h"
+#include "physics/PhysicsManager.h"
+#include "world/SceneManager.h"
 #include "world/SceneManager.h"
 
 EngineCore* EngineCore::instance = nullptr;
@@ -55,7 +56,7 @@ void EngineCore::init(const RunModeData* runModeData, const GameConfig &gameConf
         windowManager = managerFactory.createWindowManager();
         windowManager->init(gameConfig);
 
-		renderer = new Renderer();
+		renderer = managerFactory.createRenderer();
 		renderer->init();
 	}
 

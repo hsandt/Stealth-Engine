@@ -1,7 +1,7 @@
 #include "core/factory/GameManagerFactory.h"
 
 #include "application/GLFWWindowManager.h"
-#include "renderer/Renderer.h"
+#include "renderer/GLRenderer.h"
 #include "physics/PhysicsManager.h"
 #include "gameplay/ScriptManager.h"
 #include "core/factory/Factory.h"
@@ -15,7 +15,7 @@ WindowManager* GameManagerFactory::createWindowManager() const
 
 Renderer* GameManagerFactory::createRenderer() const
 {
-    return new Renderer();
+    return new GLRenderer();
 }
 
 PhysicsManager* GameManagerFactory::createPhysicsManager() const

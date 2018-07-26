@@ -3,14 +3,13 @@
 //
 
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 #include <memory>
 #include <iostream>
 #include <renderer/ShaderUtils.h>
 
 #include "core/Logger.h"
-#include "renderer/Renderer.h"
+#include "renderer/GLRenderer.h"
 #include "core/EngineCore.h"
 #include "component/RenderComponent.h"
 #include "interfaces/application/WindowManager.h"
@@ -22,17 +21,17 @@ using namespace std;
 
 /* future RenderManager */
 
-Renderer::Renderer()
+GLRenderer::GLRenderer()
 {
 	LOG("[RENDERER] Renderer created");
 }
 
-Renderer::~Renderer()
+GLRenderer::~GLRenderer()
 {
 	LOG("[RENDERER] Renderer destroyed");
 }
 
-void Renderer::init()
+void GLRenderer::init()
 {
 	// Create and compile our GLSL program from the shaders
 
@@ -40,11 +39,11 @@ void Renderer::init()
 	shaderProgramIDs[0] = loadShaders( "resources/shaders/SimpleVertexShader.glsl", "resources/shaders/SimpleFragmentShader.glsl" );
 }
 
-void Renderer::registerRenderComponent(RenderComponent* renderComponent) {
+void GLRenderer::registerRenderComponent(RenderComponent* renderComponent) {
 	renderComponents.push_back(renderComponent);  // shared to weak pointer conversion
 }
 
-void Renderer::unregisterRenderComponent(RenderComponent* renderComponent) {
+void GLRenderer::unregisterRenderComponent(RenderComponent* renderComponent) {
 	auto it = find(renderComponents.begin(), renderComponents.end(), renderComponent);
 
 	// REFACTOR: make a util function to remove element when present in container
@@ -61,18 +60,18 @@ void Renderer::unregisterRenderComponent(RenderComponent* renderComponent) {
 
 /* future Renderer */
 
-void Renderer::clear() const {
+void GLRenderer::clear() const {
 	glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::render() {
+void GLRenderer::render() {
 	for (auto renderComponent : renderComponents) {
 		renderComponent->render(this);
 	}
 }
 
-void Renderer::drawSquare(float x, float y, float w, float h) {
+void GLRenderer::drawSquare(float x, float y, float w, float h) {
 
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);

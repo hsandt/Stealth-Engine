@@ -6,33 +6,32 @@
 //  Copyright (c) 27 Heisei L Nguyen Huu. All rights reserved.
 //
 
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
-
 #include <iostream>
 #include <memory>
 #include <vector>
 
-// Engine
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
+
 #include "application/GameApplication.h"
 #include "application/RunMode.h"
 #include "application/RunModeData.h"
-#include "interfaces/application/WindowManager.h"
 #include "component/Transform.h"
 #include "core/EngineCore.h"
 #include "core/EngineCore.h"
-#include "core/Logger.h"
-#include "world/GameObject.h"
 #include "core/factory/Factory.h"
 #include "core/factory/GameManagerFactory.h"
+#include "core/Logger.h"
 #include "core/math/Vector2.h"
+#include "gameplay/ScriptManager.h"
+#include "input/InputManager.h"
+#include "interfaces/application/WindowManager.h"
+#include "interfaces/renderer/Renderer.h"
 #include "physics/PhysicsManager.h"
-#include "renderer/Renderer.h"
 #include "renderer/ShaderUtils.h"
+#include "world/GameObject.h"
 #include "world/Scene.h"
 #include "world/SceneManager.h"
-#include "input/InputManager.h"
-#include "gameplay/ScriptManager.h"
 
 using namespace std;
 

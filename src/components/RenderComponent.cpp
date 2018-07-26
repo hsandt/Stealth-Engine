@@ -2,11 +2,11 @@
 // Created by wing on 15/10/13.
 //
 
-#include "component/ActorComponent.h"
-#include "renderer/Renderer.h"
-#include "core/EngineCore.h"
-
 #include "component/RenderComponent.h"
+
+#include "core/EngineCore.h"
+#include "component/ActorComponent.h"
+#include "interfaces/renderer/Renderer.h"
 
 using namespace std;
 

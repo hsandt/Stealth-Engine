@@ -12,29 +12,35 @@
 #include <vector>
 
 #include "Color.h"
+#include "interfaces/renderer/Renderer.h"
 
 class RenderComponent;
 class GameObject;
 
-class Renderer
-{
+class GLRenderer : public Renderer {
 public:
-	Renderer();
-	virtual ~Renderer();
+	GLRenderer();
+	virtual ~GLRenderer();
 
 	/// Initialize renderer:
 	/// - load all shaders
 	/// Call it after constructing the single instance
-	void init();
+	void init() override;
+
+	/// Register a new render component (weak pointer)
+	void registerRenderComponent(RenderComponent* renderComponent) override;
+
+	/// Unregister a render component (weak pointer)
+	void unregisterRenderComponent(RenderComponent* renderComponent) override;
 
 	/// Clear screen buffer
-	void clear() const;
+	void clear() const override;
 
 	/// Render through all render components
-	void render();
+	void render() override;
 
 	/// Draw a square from corner (x, y) and size (w, h) toward bottom-right
-	void drawSquare(float x, float y, float w, float h);
+	void drawSquare(float x, float y, float w, float h) override;
 
 private:
 	/// Array of shaders loaded
@@ -46,12 +52,5 @@ private:
 	// REFACTOR: move to future RenderManager
 	/// All Render components in the current scene (weak pointers)
 	std::vector<RenderComponent*> renderComponents;
-
-public:
-	/// Register a new render component (weak pointer)
-	void registerRenderComponent(RenderComponent* renderComponent);
-
-	/// Unregister a render component (weak pointer)
-	void unregisterRenderComponent(RenderComponent* renderComponent);
 };
 

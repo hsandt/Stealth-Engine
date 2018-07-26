@@ -5,10 +5,11 @@
 #include "catch.hpp"
 #include "test/SmokeTestRunner.h"
 
-#include "component/Transform.h"
-#include "world/GameObject.h"
-#include "core/factory/Factory.h"
 #include "application/RunMode.h"
+#include "component/InputComponent.h"
+#include "component/Transform.h"
+#include "core/factory/Factory.h"
+#include "world/GameObject.h"
 
 using namespace std;
 
