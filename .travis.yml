@@ -18,6 +18,7 @@ matrix:
             - xorg-dev
             - g++-7
             - lcov
+            - xvfb
           sources:
             - ubuntu-toolchain-r-test
     - os: linux
@@ -28,6 +29,7 @@ matrix:
             - xorg-dev
             - clang-5.0
             - lcov
+            - xvfb
           sources:
             - llvm-toolchain-trusty-5.0
       compiler: clang++
@@ -112,6 +114,10 @@ install:
 
   # leave DEPS_DIR
   - popd
+
+  # setup virtual X11 with xvfb (see ex at https://electronjs.org/docs/tutorial/testing-on-headless-ci)
+  - export DISPLAY=':99.0'
+  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
 script:
   - mkdir -p build/Release
