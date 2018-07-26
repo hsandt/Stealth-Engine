@@ -5,18 +5,19 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "application/GLFWWindowManager.h"
-#include "core/Logger.h"
 #include "core/EngineCore.h"
-#include "application/GameApplication.h"
-#include "application/RunModeData.h"
+
 #include "application/ApplicationResult.h"
+#include "application/RunModeData.h"
+#include "core/Logger.h"
 #include "core/factory/Factory.h"
 #include "interfaces/core/factory/ManagerFactory.h"
 #include "world/SceneManager.h"
 #include "renderer/Renderer.h"
 #include "physics/PhysicsManager.h"
 #include "gameplay/ScriptManager.h"
+#include "interfaces/application/WindowManager.h"
+#include "world/SceneManager.h"
 
 EngineCore* EngineCore::instance = nullptr;
 
@@ -51,7 +52,7 @@ void EngineCore::init(const RunModeData* runModeData, const GameConfig &gameConf
 	// create and initialize Renderer (will load all standard shaders)
 	if (runModeData->renderingActive)
 	{
-        windowManager = new GLFWWindowManager();
+        windowManager = managerFactory.createWindowManager();
         windowManager->init(gameConfig);
 
 		renderer = new Renderer();

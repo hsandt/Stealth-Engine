@@ -10,10 +10,15 @@
 #include <memory>
 #include <stdexcept>
 
-#include "application/GameConfig.h"
-#include "core/Logger.h"
+// Include GLEW. Always include it before gl.h and glfw.h, since it's a bit magic.
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
 
 #include "application/GLFWWindowManager.h"
+
+#include "application/GameConfig.h"
+#include "core/Logger.h"
+#include "input/KeyStates.h"
 
 using namespace std;
 
@@ -29,12 +34,6 @@ GLFWWindowManager::~GLFWWindowManager()
 
 	// Terminate application
 	glfwTerminate();
-}
-
-void error_callback(int error, const char* message)
-{
-//	cout << "error callback: " << message << endl;
-	EngineCore::getWindowManager()->errorCallback(error, message);
 }
 
 void GLFWWindowManager::init(const GameConfig & gameConfig)
@@ -133,7 +132,7 @@ void GLFWWindowManager::keyCallback(GLFWwindow *window, int key, int scancode, i
 void GLFWWindowManager::errorCallback(int error, const char* description)
 {
 	// store error number and log error immediately
-	WindowManager::errorCallback(error, description);
+    LOGERR("[GLFWWindowManager] Error: ", description);
 	glfwError = error;
 }
 
@@ -155,6 +154,19 @@ void GLFWWindowManager::swapBuffers()
 int GLFWWindowManager::getKey(int key)
 {
 	return glfwGetKey(window, key);
+}
+
+KeyStaticState GLFWWindowManager::toKeyStaticState(int glfwCode) const
+{
+	switch (glfwCode)
+	{
+		case GLFW_RELEASE:
+			return KeyStaticState::UP;
+		case GLFW_PRESS:
+			return KeyStaticState::DOWN;
+		default:
+			return KeyStaticState::NONE;
+	}
 }
 
 void GLFWWindowManager::getFramebufferSize(int* screenWidth, int* screenHeight)

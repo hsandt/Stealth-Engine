@@ -17,7 +17,7 @@
 #include "application/GameApplication.h"
 #include "application/RunMode.h"
 #include "application/RunModeData.h"
-#include "application/WindowManager.h"
+#include "interfaces/application/WindowManager.h"
 #include "component/Transform.h"
 #include "core/EngineCore.h"
 #include "core/EngineCore.h"

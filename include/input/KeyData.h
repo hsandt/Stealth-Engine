@@ -7,6 +7,8 @@
 
 struct KeyData
 {
+	// TODO: remove references to GLFW
+
 	int glfwCode;
 
 	KeyData(int glfwCode) : glfwCode(glfwCode) {}

@@ -17,14 +17,17 @@
 	#define OPEN_GL_VERSION_MINOR 5
 #endif
 
-// Include GLEW. Always include it before gl.h and glfw.h, since it's a bit magic.
-#include <input/KeyStates.h>
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
-#include "application/GameConfig.h"
+#define FALLBACK_WINDOW_WIDTH 1280
+#define FALLBACK_WINDOW_HEIGHT 720
 
-#include "application/WindowManager.h"
+#include "interfaces/application/WindowManager.h"
+
 #include "core/EngineCore.h"
+
+enum class KeyStaticState;
+
+struct GameConfig;
+struct GLFWwindow;
 
 class GameApplication;
 
@@ -44,8 +47,6 @@ public:
 
     GLFWWindowManager(const GLFWWindowManager &) = delete;
     GLFWWindowManager &operator=(const GLFWWindowManager &) & = delete;
-//    GLFWWindowManager (GLFWWindowManager &&) = default;
-//    GLFWWindowManager &operator=(GLFWWindowManager &&) & = default;
 
     /// Initialize window manager with game config
     void init(const GameConfig & gameConfig) override;
@@ -56,24 +57,13 @@ private:
 
 public:
 	/// Callback on GLFW error
-	virtual void errorCallback(int error, const char* description) override;
+	void errorCallback(int error, const char* description);
 
-	virtual void pollEvents() override;
-	virtual int windowShouldClose() override;
-	virtual void swapBuffers() override;
-	virtual int getKey(int key) override;
-	virtual KeyStaticState toKeyStaticState(int glfwCode) const override
-	{
-		switch (glfwCode)
-		{
-			case GLFW_RELEASE:
-				return KeyStaticState::UP;
-			case GLFW_PRESS:
-				return KeyStaticState::DOWN;
-			default:
-				return KeyStaticState::NONE;
-		}
-	}
+	void pollEvents() override;
+	int windowShouldClose() override;
+	void swapBuffers() override;
+	int getKey(int key) override;
+	KeyStaticState toKeyStaticState(int glfwCode) const override;
 
 	void getFramebufferSize(int* screenWidth, int* screenHeight) override;
 

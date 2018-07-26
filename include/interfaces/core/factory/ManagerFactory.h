@@ -12,11 +12,11 @@ class InputManager;
 /// Factory to create concrete manager instances
 class ManagerFactory {
 public:
-    virtual WindowManager* createWindowManager() = 0;
-    virtual Renderer* createRenderer() = 0;
-    virtual PhysicsManager* createPhysicsManager() = 0;
-    virtual ScriptManager* createScriptManager() = 0;
-    virtual Factory* createFactory() = 0;
-    virtual SceneManager* createSceneManager() = 0;
-    virtual InputManager* createInputManager() = 0;
+    virtual WindowManager* createWindowManager() const = 0;
+    virtual Renderer* createRenderer() const = 0;
+    virtual PhysicsManager* createPhysicsManager() const = 0;
+    virtual ScriptManager* createScriptManager() const = 0;
+    virtual Factory* createFactory() const = 0;
+    virtual SceneManager* createSceneManager() const = 0;
+    virtual InputManager* createInputManager() const = 0;
 };

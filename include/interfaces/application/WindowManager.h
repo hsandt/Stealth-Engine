@@ -8,43 +8,20 @@
 
 #pragma once
 
-// Include GLEW. Always include it before gl.h and glfw.h, since it's a bit magic.
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
+enum class KeyStaticState;
 
-#include "application/ApplicationResult.h"
-#include "application/GameClass.h"
-#include "input/KeyStates.h"
-
-#define FALLBACK_WINDOW_WIDTH 1280
-#define FALLBACK_WINDOW_HEIGHT 720
+struct GameConfig;
 
 class GameApplication;
 
 class WindowManager
 {
 public:
-    WindowManager();
-    virtual ~WindowManager();
-
-    WindowManager(const WindowManager &) = delete;
-    WindowManager &operator=(const WindowManager &) & = delete;
+    /// Generic callback method on error
+    virtual void errorCallback(int error, const char* description) = 0;
 
     /// Initialize window manager with game config
     virtual void init(const GameConfig & gameConfig) = 0;
-
-private:
-    // Destroy application, called by destructor, don't call manually.
-    void destroy();
-    
-    // Called to process SDL event.
-    static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
-    
-    /// Contained game application
-    GameApplication* game = nullptr;
-
-public:
-	virtual void errorCallback(int error, const char* description);
 
 	/// Process all the pending events
 	virtual void pollEvents() = 0;

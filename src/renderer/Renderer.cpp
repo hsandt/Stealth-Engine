@@ -13,7 +13,7 @@
 #include "renderer/Renderer.h"
 #include "core/EngineCore.h"
 #include "component/RenderComponent.h"
-#include "application/WindowManager.h"
+#include "interfaces/application/WindowManager.h"
 
 using namespace std;
 

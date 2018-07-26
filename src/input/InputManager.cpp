@@ -17,7 +17,7 @@
 #include "input/KeyStates.h"
 #include "input/Key.h"
 #include "input/InputManager.h"
-#include "application/WindowManager.h"
+#include "interfaces/application/WindowManager.h"
 
 using namespace std;
 

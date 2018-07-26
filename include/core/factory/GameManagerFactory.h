@@ -13,11 +13,11 @@ class InputManager;
 /// Factory to create concrete manager instances
 class GameManagerFactory : public ManagerFactory {
 public:
-    WindowManager* createWindowManager() override;
-    Renderer* createRenderer() override;
-    PhysicsManager* createPhysicsManager() override;
-    ScriptManager* createScriptManager() override;
-    Factory* createFactory() override;
-    SceneManager* createSceneManager() override;
-    InputManager* createInputManager() override;
+    WindowManager* createWindowManager() const override;
+    Renderer* createRenderer() const override;
+    PhysicsManager* createPhysicsManager() const override;
+    ScriptManager* createScriptManager() const override;
+    Factory* createFactory() const override;
+    SceneManager* createSceneManager() const override;
+    InputManager* createInputManager() const override;
 };
