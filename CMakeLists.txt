@@ -131,7 +131,7 @@ add_subdirectory(third-party/glfw)
 # The better way is to prepare an included CMakeLists that does the job locally as the full build command,
 # and make sure this step is triggered first via add_subdirectory.
 execute_process(COMMAND bash -c
-        "cd \"${PROJECT_SOURCE_DIR}/third-party/Box2D/Box2D\" &&
+        "cd \"${PROJECT_SOURCE_DIR}/third-party/Box2D\" &&
         premake5 gmake &&
         cd \"Build/gmake\" &&
         export config=release &&
@@ -215,11 +215,11 @@ if(BUILD_TESTS)
                 # run tests, creating .gcda and .gcno
                 COMMAND test_engine
                 # generate coverage info without external libs
-                COMMAND lcov -c -d ${ORIGINAL_CMAKE_BINARY_DIR} -o ${CMAKE_BINARY_DIR}/.coverage
-                COMMAND lcov --remove ${CMAKE_BINARY_DIR}/.coverage '/usr/include/*' '*/third-party/*' -o ${CMAKE_BINARY_DIR}/.coverage
+                COMMAND lcov --capture -d ${ORIGINAL_CMAKE_BINARY_DIR} -o ${CMAKE_BINARY_DIR}/.coverage -q
+                COMMAND lcov --remove ${CMAKE_BINARY_DIR}/.coverage '/usr/include/*' '*/third-party/*' -o ${CMAKE_BINARY_DIR}/.coverage -q
                 # regenerate HTML report
                 COMMAND rm -rf ${CMAKE_BINARY_DIR}/coverage_report
-                COMMAND genhtml ${CMAKE_BINARY_DIR}/.coverage -o ${CMAKE_BINARY_DIR}/coverage_report
+                COMMAND genhtml ${CMAKE_BINARY_DIR}/.coverage -o ${CMAKE_BINARY_DIR}/coverage_report | grep -v "Processing"
                 DEPENDS test_engine
                 WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
                 )
