@@ -15,17 +15,22 @@ This is a personal project I am working on for training purpose. This project st
 * Scene-actor
 * Entity-components
 
-## Current work
+# Continuous integration
 
-Integrating CodeCov
+* Travis for build
+* Codecov for code coverage
 
-## Build dependencies
+# Current work
+
+Refactoring project to add more unit tests
+
+# Build dependencies
 
 Here are some build dependencies detailed for Linux Ubuntu, and a bit of OS X.
 
 In doubt, you can also check the .travis.yml file for the most important parts of the setup.
 
-### Box2D
+## Box2D
 
 Box2D requires premake5 to be built.
 Install premake from [the website](https://premake.github.io/download.html#v5) or use that snippet based on .travis.yml:
@@ -45,7 +50,7 @@ Install premake from [the website](https://premake.github.io/download.html#v5) o
    - mkdir "/usr/local/bin" -p
    - sudo ln -s "$(pwd)/premake-${PREMAKE_VERSION}/bin/release/premake5" /usr/local/premake5`
 
-### GLFW
+## GLFW
 
 To load CMake project, if using X11:
 
@@ -55,16 +60,34 @@ To build, if using X11:
 
 `sudo apt-get install libxi-dev`
 
-### OpenGL / GLU
+## OpenGL / GLU
 
 Install the appropriate graphics packages.
 
-MESA:
+### MESA
 
 `sudo apt-get install libglu1-mesa-dev`
 
 This will also install `libgl1-mesa-dev` and `mesa-common-dev` as a dependency. GLU is required for GLEW.
 
-NVIDIA:
+### NVIDIA
 
 Install NVIDIA packages for your graphics card.
+
+# Development
+
+## Compiler options
+
+It's up to you to apply your favorite compiler options locally.
+
+Personally, I use the following in CLion's Cmake options:
+
+*Debug*
+
+`-DCMAKE_C_COMPILER=/usr/bin/clang-6.0 -DCMAKE_CXX_COMPILER=/usr/bin/clang++-6.0 -DBUILD_TESTS=ON -Wno-logical-op-parentheses`
+
+*Release*
+
+`-DCMAKE_C_COMPILER=/usr/bin/clang-6.0 -DCMAKE_CXX_COMPILER=/usr/bin/clang++-6.0 -Wno-logical-op-parentheses`
+
+as I found `clang` offers better compiler error messages than `gcc`.
