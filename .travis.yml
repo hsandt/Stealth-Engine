@@ -42,7 +42,9 @@ env:
     - JOBS="$(sysctl -n hw.ncpu)"  # should be 2
 
 cache:
-  apt: true  # private repositories only
+  # removed, see:
+  # https://github.com/travis-ci/travis-ci/issues/5876#issuecomment-207661127
+  # apt: true  # private repositories only
   directories:
     - premake-${PREMAKE_VERSION}
 
